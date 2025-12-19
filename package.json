@@ -19,32 +19,17 @@
   "keywords": [
     "jest",
     "reporter",
-    "html",
-    "html-reporter",
-    "bootstrap",
-    "test",
-    "testing",
-    "test-report",
-    "report",
-    "coverage",
-    "typescript",
-    "theme",
-    "dark-mode",
-    "light-mode",
-    "dracula",
-    "monokai",
-    "nord",
-    "github"
+    "html"
   ],
   "author": "Alexander Marquis",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/awmarquis/jest-html-reporter.git"
+    "url": "https://github.com/alexwmarquis/jest-html-reporter.git"
   },
-  "homepage": "https://github.com/awmarquis/jest-html-reporter#readme",
+  "homepage": "https://github.com/alexwmarquis/jest-html-reporter#readme",
   "bugs": {
-    "url": "https://github.com/awmarquis/jest-html-reporter/issues"
+    "url": "https://github.com/alexwmarquis/jest-html-reporter/issues"
   },
   "engines": {
     "node": ">=14.0.0"
