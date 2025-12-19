@@ -123,12 +123,16 @@ ${customCss ? `\n${customCss}` : ''}
       ${testSuites.map((suite, idx) => generateSuiteHtml(suite, idx, renderOptions)).join('')}
     </div>
 
-    ${testSuites.length === 0 ? `
+    ${
+      testSuites.length === 0
+        ? `
       <div class="empty-state">
         <i class="bi bi-inbox"></i>
         <p>No test results found</p>
       </div>
-    ` : ''}
+    `
+        : ''
+    }
   </div>
 
   ${enableThemeToggle ? generateThemeToggle(theme) : ''}
@@ -145,7 +149,7 @@ function generateReportHeader(
   title: string,
   subtitle?: string,
   logo?: string,
-  logoHeight = 32
+  logoHeight = 32,
 ): string {
   if (!subtitle && !logo) {
     return '';
@@ -162,7 +166,13 @@ function generateReportHeader(
   `;
 }
 
-function generateProgressBar(summary: { passedTests: number; failedTests: number; pendingTests: number; todoTests: number; totalTests: number }): string {
+function generateProgressBar(summary: {
+  passedTests: number;
+  failedTests: number;
+  pendingTests: number;
+  todoTests: number;
+  totalTests: number;
+}): string {
   const total = summary.totalTests || 1;
   const passedPct = (summary.passedTests / total) * 100;
   const failedPct = (summary.failedTests / total) * 100;
@@ -222,12 +232,16 @@ function generateThemeToggle(currentTheme: ThemePreset): string {
       <i class="bi bi-palette"></i>
     </button>
     <div class="theme-menu" id="theme-menu">
-      ${themes.map(t => `
+      ${themes
+        .map(
+          t => `
         <div class="theme-option${t === currentTheme ? ' active' : ''}" data-theme="${t}">
           <span class="color-preview" style="background: ${THEME_PREVIEWS[t]}"></span>
           ${t.charAt(0).toUpperCase() + t.slice(1)}
         </div>
-      `).join('')}
+      `,
+        )
+        .join('')}
     </div>
   `;
 }
@@ -273,24 +287,24 @@ function generateSuiteHtml(
     collapsePassed: boolean;
     collapseAll: boolean;
     expandLevel: number;
-  }
+  },
 ): string {
-  const hasFailed = suite.tests.some((t) => t.status === 'failed');
-  
+  const hasFailed = suite.tests.some(t => t.status === 'failed');
+
   let shouldCollapse = false;
-  
+
   if (options.collapseAll) {
     shouldCollapse = true;
   }
-  
+
   if (options.collapsePassed && suite.status === 'passed') {
     shouldCollapse = true;
   }
-  
+
   if (!options.collapseAll && options.expandLevel >= 0 && index >= options.expandLevel) {
     shouldCollapse = true;
   }
-  
+
   if (hasFailed) {
     shouldCollapse = false;
   }
@@ -305,14 +319,18 @@ function generateSuiteHtml(
         ${options.showDuration ? `<span class="test-duration" style="margin-left: auto">${formatDuration(suite.duration)}</span>` : ''}
       </div>
       <div class="suite-body">
-        ${suite.failureMessage ? `
+        ${
+          suite.failureMessage
+            ? `
           <div class="test-item">
             <div class="test-content">
               <div class="error-block">${escapeHtml(suite.failureMessage)}</div>
             </div>
           </div>
-        ` : ''}
-        ${suite.tests.map((test) => generateTestHtml(test, suite, options)).join('')}
+        `
+            : ''
+        }
+        ${suite.tests.map(test => generateTestHtml(test, suite, options)).join('')}
       </div>
     </div>
   `;
@@ -321,11 +339,20 @@ function generateSuiteHtml(
 function generateTestHtml(
   test: ProcessedTest,
   suite: ProcessedTestSuite,
-  options: { showPassed: boolean; showFailed: boolean; showPending: boolean; showDuration: boolean; showFilePath: 'full' | 'filename' }
+  options: {
+    showPassed: boolean;
+    showFailed: boolean;
+    showPending: boolean;
+    showDuration: boolean;
+    showFilePath: 'full' | 'filename';
+  },
 ): string {
   if (test.status === 'passed' && !options.showPassed) return '';
   if (test.status === 'failed' && !options.showFailed) return '';
-  if ((test.status === 'pending' || test.status === 'skipped' || test.status === 'todo') && !options.showPending)
+  if (
+    (test.status === 'pending' || test.status === 'skipped' || test.status === 'todo') &&
+    !options.showPending
+  )
     return '';
 
   const statusIcon: Record<string, string> = {
@@ -339,7 +366,7 @@ function generateTestHtml(
   const fileName = options.showFilePath === 'full' ? suite.name : getFileName(suite.name);
 
   const ancestorTags = test.ancestorTitles
-    .map((title) => {
+    .map(title => {
       const colorIndex = hashString(title) % 8;
       return `<span class="test-tag test-tag-${colorIndex}">${escapeHtml(title)}</span>`;
     })
@@ -354,9 +381,13 @@ function generateTestHtml(
           ${ancestorTags}
         </div>
         <div class="test-location">${escapeHtml(fileName)}</div>
-        ${test.failureMessages.length > 0 ? `
-          <div class="error-block">${test.failureMessages.map((msg) => escapeHtml(msg)).join('\n\n')}</div>
-        ` : ''}
+        ${
+          test.failureMessages.length > 0
+            ? `
+          <div class="error-block">${test.failureMessages.map(msg => escapeHtml(msg)).join('\n\n')}</div>
+        `
+            : ''
+        }
       </div>
       ${options.showDuration ? `<span class="test-duration">${formatDuration(test.duration)}</span>` : ''}
     </div>
@@ -419,7 +450,9 @@ function generateScript(options: {
       });
     });
 
-    ${options.enableThemeToggle ? `
+    ${
+      options.enableThemeToggle
+        ? `
     const themeToggle = document.getElementById('theme-toggle');
     const themeMenu = document.getElementById('theme-menu');
     let currentTheme = '${options.currentTheme}';
@@ -458,7 +491,9 @@ function generateScript(options: {
         });
       }
     } catch (e) {}
-    ` : ''}
+    `
+        : ''
+    }
   `;
 }
 
@@ -485,7 +520,7 @@ function escapeHtml(text: string | null | undefined): string {
     '"': '&quot;',
     "'": '&#39;',
   };
-  return String(text).replace(/[&<>"']/g, (char) => htmlEntities[char]);
+  return String(text).replace(/[&<>"']/g, char => htmlEntities[char]);
 }
 
 function formatDuration(ms: number | null | undefined): string {

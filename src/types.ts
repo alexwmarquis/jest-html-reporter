@@ -11,13 +11,7 @@ export interface CustomColors {
   colorAccent?: string;
 }
 
-export type ThemePreset = 
-  | 'dark'
-  | 'light'
-  | 'github'
-  | 'monokai'
-  | 'dracula'
-  | 'nord';
+export type ThemePreset = 'dark' | 'light' | 'github' | 'monokai' | 'dracula' | 'nord';
 
 export interface ReporterOptions {
   outputPath?: string;

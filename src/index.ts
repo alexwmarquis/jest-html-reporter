@@ -205,7 +205,7 @@ class JestHtmlReporter {
       endTime: new Date(endTime).toISOString(),
     };
 
-    const testSuites = results.testResults.map((suite) => this.processSuite(suite));
+    const testSuites = results.testResults.map(suite => this.processSuite(suite));
 
     return { summary, testSuites };
   }
@@ -219,7 +219,7 @@ class JestHtmlReporter {
       path: suitePath,
       status: this.getSuiteStatus(suite),
       duration: suite.perfStats ? suite.perfStats.end - suite.perfStats.start : 0,
-      tests: suite.testResults.map((test) => this.processTest(test)),
+      tests: suite.testResults.map(test => this.processTest(test)),
       failureMessage: suite.failureMessage || null,
     };
   }
