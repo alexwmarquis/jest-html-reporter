@@ -7,6 +7,7 @@ import type {
   EnvironmentInfo,
   CustomColors,
   ThemePreset,
+  TestTreeNode,
 } from './types';
 
 const COMPILED_CSS = `/* __INJECT_CSS__ */`;
@@ -311,6 +312,17 @@ function generateSuiteHtml(
 
   const displayName = options.showFilePath === 'full' ? suite.name : getFileName(suite.name);
 
+  const testTree = buildTestTree(suite.tests);
+
+  const treeOptions = {
+    showPassed: options.showPassed,
+    showFailed: options.showFailed,
+    showPending: options.showPending,
+    showDuration: options.showDuration,
+    collapsePassed: options.collapsePassed,
+    collapseAll: options.collapseAll,
+  };
+
   return `
     <div class="suite${shouldCollapse ? ' collapsed' : ''}" data-status="${suite.status}" data-has-failed="${hasFailed}" data-name="${escapeHtml(suite.name)}">
       <div class="suite-header">
@@ -330,21 +342,177 @@ function generateSuiteHtml(
         `
             : ''
         }
-        ${suite.tests.map(test => generateTestHtml(test, suite, options)).join('')}
+        ${generateTreeHtml(testTree, treeOptions)}
       </div>
     </div>
   `;
 }
 
-function generateTestHtml(
-  test: ProcessedTest,
-  suite: ProcessedTestSuite,
+function buildTestTree(tests: ProcessedTest[]): TestTreeNode[] {
+  const root: TestTreeNode[] = [];
+
+  for (const test of tests) {
+    let currentLevel = root;
+
+    for (const ancestorTitle of test.ancestorTitles) {
+      let describeNode = currentLevel.find(
+        node => node.type === 'describe' && node.name === ancestorTitle,
+      );
+
+      if (!describeNode) {
+        describeNode = {
+          type: 'describe',
+          name: ancestorTitle,
+          children: [],
+        };
+        currentLevel.push(describeNode);
+      }
+
+      currentLevel = describeNode.children;
+    }
+
+    currentLevel.push({
+      type: 'test',
+      name: test.title,
+      children: [],
+      test,
+    });
+  }
+
+  calculateDescribeStatus(root);
+
+  return root;
+}
+
+function calculateDescribeStatus(nodes: TestTreeNode[]): void {
+  for (const node of nodes) {
+    if (node.type === 'describe') {
+      calculateDescribeStatus(node.children);
+
+      const statuses = collectStatuses(node.children);
+      if (statuses.includes('failed')) {
+        node.status = 'failed';
+      } else if (statuses.every(s => s === 'pending' || s === 'skipped' || s === 'todo')) {
+        node.status = 'pending';
+      } else {
+        node.status = 'passed';
+      }
+    }
+  }
+}
+
+function collectStatuses(nodes: TestTreeNode[]): string[] {
+  const statuses: string[] = [];
+  for (const node of nodes) {
+    if (node.type === 'test' && node.test) {
+      statuses.push(node.test.status);
+    } else if (node.type === 'describe' && node.status) {
+      statuses.push(node.status);
+    }
+  }
+  return statuses;
+}
+
+function generateTreeHtml(
+  nodes: TestTreeNode[],
   options: {
     showPassed: boolean;
     showFailed: boolean;
     showPending: boolean;
     showDuration: boolean;
-    showFilePath: 'full' | 'filename';
+    collapsePassed: boolean;
+    collapseAll: boolean;
+  },
+  depth: number = 0,
+): string {
+  return nodes
+    .map(node => {
+      if (node.type === 'describe') {
+        return generateDescribeGroupHtml(node, options, depth);
+      } else if (node.type === 'test' && node.test) {
+        return generateTestItemHtml(node.test, options);
+      }
+      return '';
+    })
+    .join('');
+}
+
+function generateDescribeGroupHtml(
+  node: TestTreeNode,
+  options: {
+    showPassed: boolean;
+    showFailed: boolean;
+    showPending: boolean;
+    showDuration: boolean;
+    collapsePassed: boolean;
+    collapseAll: boolean;
+  },
+  depth: number,
+): string {
+  const hasVisibleTests = hasVisibleTestsInTree(node, options);
+  if (!hasVisibleTests) return '';
+
+  const hasFailed = hasFailedTestsInTree(node);
+  let shouldCollapse = false;
+
+  if (options.collapseAll) {
+    shouldCollapse = true;
+  }
+  if (options.collapsePassed && node.status === 'passed') {
+    shouldCollapse = true;
+  }
+  if (hasFailed) {
+    shouldCollapse = false;
+  }
+
+  return `
+    <div class="describe-group${shouldCollapse ? ' collapsed' : ''}" data-status="${node.status || 'passed'}" data-depth="${depth}">
+      <div class="describe-header">
+        <i class="bi bi-chevron-down describe-chevron"></i>
+        <span class="describe-name">${escapeHtml(node.name)}</span>
+        <span class="describe-count">${countTestsInTree(node)} tests</span>
+      </div>
+      <div class="describe-body">
+        ${generateTreeHtml(node.children, options, depth + 1)}
+      </div>
+    </div>
+  `;
+}
+
+function countTestsInTree(node: TestTreeNode): number {
+  if (node.type === 'test') return 1;
+  return node.children.reduce((sum, child) => sum + countTestsInTree(child), 0);
+}
+
+function hasVisibleTestsInTree(
+  node: TestTreeNode,
+  options: { showPassed: boolean; showFailed: boolean; showPending: boolean },
+): boolean {
+  if (node.type === 'test' && node.test) {
+    const { status } = node.test;
+    if (status === 'passed' && options.showPassed) return true;
+    if (status === 'failed' && options.showFailed) return true;
+    if ((status === 'pending' || status === 'skipped' || status === 'todo') && options.showPending)
+      return true;
+    return false;
+  }
+  return node.children.some(child => hasVisibleTestsInTree(child, options));
+}
+
+function hasFailedTestsInTree(node: TestTreeNode): boolean {
+  if (node.type === 'test' && node.test) {
+    return node.test.status === 'failed';
+  }
+  return node.children.some(child => hasFailedTestsInTree(child));
+}
+
+function generateTestItemHtml(
+  test: ProcessedTest,
+  options: {
+    showPassed: boolean;
+    showFailed: boolean;
+    showPending: boolean;
+    showDuration: boolean;
   },
 ): string {
   if (test.status === 'passed' && !options.showPassed) return '';
@@ -363,24 +531,11 @@ function generateTestHtml(
     todo: 'bi-skip-forward-fill',
   };
 
-  const fileName = options.showFilePath === 'full' ? suite.name : getFileName(suite.name);
-
-  const ancestorTags = test.ancestorTitles
-    .map(title => {
-      const colorIndex = hashString(title) % 8;
-      return `<span class="test-tag test-tag-${colorIndex}">${escapeHtml(title)}</span>`;
-    })
-    .join('');
-
   return `
     <div class="test-item" data-status="${test.status}">
       <i class="bi ${statusIcon[test.status] || 'bi-circle'} test-status-icon ${test.status}"></i>
       <div class="test-content">
-        <div class="test-title-row">
-          <span class="test-title">${escapeHtml(test.title)}</span>
-          ${ancestorTags}
-        </div>
-        <div class="test-location">${escapeHtml(fileName)}</div>
+        <span class="test-title">${escapeHtml(test.title)}</span>
         ${
           test.failureMessages.length > 0
             ? `
@@ -409,6 +564,14 @@ function generateScript(options: {
       });
     });
 
+    document.querySelectorAll('.describe-header').forEach(header => {
+      header.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const group = header.closest('.describe-group');
+        group.classList.toggle('collapsed');
+      });
+    });
+
     document.querySelectorAll('.filter-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         const filter = chip.dataset.filter;
@@ -428,6 +591,12 @@ function generateScript(options: {
           }
         });
 
+        document.querySelectorAll('.describe-group').forEach(group => {
+          const hasVisible = Array.from(group.querySelectorAll(':scope > .describe-body > .test-item')).some(t => t.style.display !== 'none');
+          const hasVisibleNested = Array.from(group.querySelectorAll(':scope > .describe-body > .describe-group')).some(g => g.style.display !== 'none');
+          group.style.display = (hasVisible || hasVisibleNested) ? 'block' : 'none';
+        });
+
         document.querySelectorAll('.suite').forEach(suite => {
           const hasVisible = Array.from(suite.querySelectorAll('.test-item')).some(t => t.style.display !== 'none');
           suite.style.display = hasVisible ? 'block' : 'none';
@@ -441,6 +610,12 @@ function generateScript(options: {
       document.querySelectorAll('.test-item').forEach(item => {
         const text = item.textContent.toLowerCase();
         item.style.display = text.includes(query) || !query ? 'flex' : 'none';
+      });
+
+      document.querySelectorAll('.describe-group').forEach(group => {
+        const hasVisible = Array.from(group.querySelectorAll('.test-item')).some(t => t.style.display !== 'none');
+        group.style.display = hasVisible ? 'block' : 'none';
+        if (hasVisible && query) group.classList.remove('collapsed');
       });
 
       document.querySelectorAll('.suite').forEach(suite => {
@@ -506,7 +681,7 @@ function hashString(str: string): number {
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
     hash = (hash << 5) - hash + char;
-    hash = hash & hash;
+    hash &= hash;
   }
   return Math.abs(hash);
 }

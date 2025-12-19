@@ -115,3 +115,11 @@ export interface EnvironmentInfo {
   cpuCores: number;
   totalMemory: string;
 }
+
+export interface TestTreeNode {
+  type: 'describe' | 'test';
+  name: string;
+  children: TestTreeNode[];
+  test?: ProcessedTest;
+  status?: 'passed' | 'failed' | 'pending' | 'skipped' | 'todo';
+}
