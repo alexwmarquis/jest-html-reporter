@@ -1,0 +1,17 @@
+node_modules/
+dist/
+*.html
+jest-report.json
+!README.md
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+coverage/
+*.tgz
+src/template.built.ts

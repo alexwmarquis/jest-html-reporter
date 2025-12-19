@@ -1,0 +1,13 @@
+@use 'variables' as *;
+
+.empty-state {
+  text-align: center;
+  padding: 60px $spacing-xxl;
+  color: var(--text-muted);
+
+  i {
+    font-size: 48px;
+    margin-bottom: $spacing-lg;
+    opacity: 0.5;
+  }
+}

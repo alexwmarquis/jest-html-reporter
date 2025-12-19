@@ -1,0 +1,84 @@
+{
+  "name": "@awmarquis/jest-html-reporter",
+  "version": "1.0.0",
+  "description": "A beautiful Jest HTML reporter with Bootstrap styling, 6 built-in themes, and extensive customization options",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "require": "./dist/types.js",
+      "default": "./dist/types.js"
+    }
+  },
+  "keywords": [
+    "jest",
+    "reporter",
+    "html",
+    "html-reporter",
+    "bootstrap",
+    "test",
+    "testing",
+    "test-report",
+    "report",
+    "coverage",
+    "typescript",
+    "theme",
+    "dark-mode",
+    "light-mode",
+    "dracula",
+    "monokai",
+    "nord",
+    "github"
+  ],
+  "author": "Alexander Marquis",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/awmarquis/jest-html-reporter.git"
+  },
+  "homepage": "https://github.com/awmarquis/jest-html-reporter#readme",
+  "bugs": {
+    "url": "https://github.com/awmarquis/jest-html-reporter/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "peerDependencies": {
+    "jest": ">=26.0.0"
+  },
+  "devDependencies": {
+    "@jest/reporters": "^29.7.0",
+    "@jest/test-result": "^30.2.0",
+    "@types/node": "^20.10.0",
+    "jest": "^29.7.0",
+    "sass": "^1.69.5",
+    "typescript": "^5.3.2"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "node scripts/dev.js",
+    "watch": "npx tsc --watch",
+    "prepublishOnly": "npm run build && npm run test:unit",
+    "test": "npm run build && npx jest --config jest.config.js",
+    "test:unit": "npm run build && npx jest --config jest.config.unit.js",
+    "test:demo": "npm run build && npx jest --config jest.config.js",
+    "test:all": "npm run test:unit && npm run test:demo",
+    "test:only": "npx jest",
+    "clean": "rm -rf dist",
+    "prepack": "npm run build"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,48 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.suite {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: $border-radius;
+  margin-bottom: $spacing-sm;
+  overflow: hidden;
+
+  &.collapsed .suite-body {
+    display: none;
+  }
+
+  &.collapsed .suite-chevron {
+    transform: rotate(-90deg);
+  }
+}
+
+.suite-header {
+  @include flex-center;
+  padding: $spacing-md $spacing-lg;
+  cursor: pointer;
+  gap: $spacing-sm;
+  @include transition(background);
+
+  &:hover {
+    background: var(--bg-hover);
+  }
+}
+
+.suite-chevron {
+  color: var(--text-muted);
+  font-size: $font-size-xs;
+  @include transition(transform, 0.2s);
+  width: $spacing-lg;
+  flex-shrink: 0;
+}
+
+.suite-name {
+  font-size: $font-size-base;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.suite-body {
+  border-top: 1px solid var(--border-color);
+}

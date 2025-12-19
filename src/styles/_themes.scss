@@ -1,0 +1,133 @@
+@use 'sass:map';
+
+$theme-dark: (
+  'bg-primary': #1e1e1e,
+  'bg-secondary': #252526,
+  'bg-hover': #2d2d2d,
+  'bg-input': #3c3c3c,
+  'text-primary': #d4d4d4,
+  'text-secondary': #a0a0a0,
+  'text-muted': #707070,
+  'border-color': #404040,
+  'color-passed': #4ec950,
+  'color-passed-bg': rgba(78, 201, 80, 0.15),
+  'color-failed': #e5534b,
+  'color-failed-bg': rgba(229, 83, 75, 0.15),
+  'color-skipped': #cca700,
+  'color-skipped-bg': rgba(204, 167, 0, 0.15),
+  'color-accent': #0078d4,
+  'error-bg': rgba(229, 83, 75, 0.1),
+  'error-border': rgba(229, 83, 75, 0.25),
+  'error-text': #f48771,
+);
+
+$theme-light: (
+  'bg-primary': #ffffff,
+  'bg-secondary': #f6f8fa,
+  'bg-hover': #eaeef2,
+  'bg-input': #ffffff,
+  'text-primary': #1f2328,
+  'text-secondary': #656d76,
+  'text-muted': #8b949e,
+  'border-color': #d0d7de,
+  'color-passed': #1a7f37,
+  'color-passed-bg': rgba(26, 127, 55, 0.12),
+  'color-failed': #cf222e,
+  'color-failed-bg': rgba(207, 34, 46, 0.12),
+  'color-skipped': #9a6700,
+  'color-skipped-bg': rgba(154, 103, 0, 0.12),
+  'color-accent': #0969da,
+  'error-bg': rgba(207, 34, 46, 0.08),
+  'error-border': rgba(207, 34, 46, 0.2),
+  'error-text': #a40e26,
+);
+
+$theme-github: (
+  'bg-primary': #0d1117,
+  'bg-secondary': #161b22,
+  'bg-hover': #21262d,
+  'bg-input': #0d1117,
+  'text-primary': #c9d1d9,
+  'text-secondary': #8b949e,
+  'text-muted': #6e7681,
+  'border-color': #30363d,
+  'color-passed': #3fb950,
+  'color-passed-bg': rgba(63, 185, 80, 0.15),
+  'color-failed': #f85149,
+  'color-failed-bg': rgba(248, 81, 73, 0.15),
+  'color-skipped': #d29922,
+  'color-skipped-bg': rgba(210, 153, 34, 0.15),
+  'color-accent': #58a6ff,
+  'error-bg': rgba(248, 81, 73, 0.1),
+  'error-border': rgba(248, 81, 73, 0.4),
+  'error-text': #f85149,
+);
+
+$theme-monokai: (
+  'bg-primary': #272822,
+  'bg-secondary': #2d2e27,
+  'bg-hover': #3e3d32,
+  'bg-input': #1e1f1c,
+  'text-primary': #f8f8f2,
+  'text-secondary': #a6a69c,
+  'text-muted': #75715e,
+  'border-color': #49483e,
+  'color-passed': #a6e22e,
+  'color-passed-bg': rgba(166, 226, 46, 0.15),
+  'color-failed': #f92672,
+  'color-failed-bg': rgba(249, 38, 114, 0.15),
+  'color-skipped': #e6db74,
+  'color-skipped-bg': rgba(230, 219, 116, 0.15),
+  'color-accent': #66d9ef,
+  'error-bg': rgba(249, 38, 114, 0.1),
+  'error-border': rgba(249, 38, 114, 0.4),
+  'error-text': #f92672,
+);
+
+$theme-dracula: (
+  'bg-primary': #282a36,
+  'bg-secondary': #21222c,
+  'bg-hover': #343746,
+  'bg-input': #1e1f29,
+  'text-primary': #f8f8f2,
+  'text-secondary': #bfbfbf,
+  'text-muted': #6272a4,
+  'border-color': #44475a,
+  'color-passed': #50fa7b,
+  'color-passed-bg': rgba(80, 250, 123, 0.15),
+  'color-failed': #ff5555,
+  'color-failed-bg': rgba(255, 85, 85, 0.15),
+  'color-skipped': #f1fa8c,
+  'color-skipped-bg': rgba(241, 250, 140, 0.15),
+  'color-accent': #bd93f9,
+  'error-bg': rgba(255, 85, 85, 0.1),
+  'error-border': rgba(255, 85, 85, 0.4),
+  'error-text': #ff5555,
+);
+
+$theme-nord: (
+  'bg-primary': #2e3440,
+  'bg-secondary': #3b4252,
+  'bg-hover': #434c5e,
+  'bg-input': #2e3440,
+  'text-primary': #eceff4,
+  'text-secondary': #d8dee9,
+  'text-muted': #4c566a,
+  'border-color': #4c566a,
+  'color-passed': #a3be8c,
+  'color-passed-bg': rgba(163, 190, 140, 0.15),
+  'color-failed': #bf616a,
+  'color-failed-bg': rgba(191, 97, 106, 0.15),
+  'color-skipped': #ebcb8b,
+  'color-skipped-bg': rgba(235, 203, 139, 0.15),
+  'color-accent': #88c0d0,
+  'error-bg': rgba(191, 97, 106, 0.1),
+  'error-border': rgba(191, 97, 106, 0.4),
+  'error-text': #bf616a,
+);
+
+@mixin apply-theme($theme) {
+  @each $key, $value in $theme {
+    --#{$key}: #{$value};
+  }
+}

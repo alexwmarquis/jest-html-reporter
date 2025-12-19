@@ -1,0 +1,110 @@
+@use 'sass:map';
+@use 'sass:list';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.test-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px $spacing-lg 10px 40px;
+  gap: 10px;
+  @include transition(background);
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  @include mobile {
+    padding-left: $spacing-lg;
+  }
+}
+
+.test-status-icon {
+  flex-shrink: 0;
+  font-size: $font-size-lg;
+  margin-top: 1px;
+  width: 18px;
+
+  &.passed {
+    color: var(--color-passed);
+  }
+
+  &.failed {
+    color: var(--color-failed);
+  }
+
+  &.pending,
+  &.skipped,
+  &.todo {
+    color: var(--color-skipped);
+  }
+}
+
+.test-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.test-title-row {
+  @include flex-center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.test-title {
+  font-size: $font-size-base;
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.test-tag {
+  @include flex-center;
+  padding: 2px $spacing-sm;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+@each $index, $colors in $tag-colors {
+  .test-tag-#{$index} {
+    background: list.nth($colors, 2);
+    color: list.nth($colors, 1);
+  }
+}
+
+.test-location {
+  font-size: $font-size-xs;
+  font-family: $font-family-mono;
+  color: var(--text-muted);
+}
+
+.test-duration {
+  flex-shrink: 0;
+  font-size: $font-size-sm;
+  color: var(--text-secondary);
+  font-family: $font-family-mono;
+  margin-top: 1px;
+}
+
+.error-block {
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  border-radius: $border-radius;
+  padding: $spacing-md;
+  margin-top: $spacing-sm;
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  color: var(--error-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+  line-height: $line-height-base;
+  @include custom-scrollbar;
+}
