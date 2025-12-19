@@ -8,9 +8,11 @@ This project adheres to semantic versioning.
 ## v1.0.1
 
 ### Changed
+
 - Added Prettier for consistent code formatting.
 
 ## v1.0.0
 
 ### Added
+
 - Configurable HTML reporter for Jest tests.
