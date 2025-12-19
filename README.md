@@ -34,12 +34,15 @@ Add to your `jest.config.js`:
 module.exports = {
   reporters: [
     'default',
-    ['@awmarquis/jest-html-reporter', {
-      outputPath: 'reports/test-report.html',
-      pageTitle: 'My Test Report',
-      theme: 'dark',
-    }]
-  ]
+    [
+      '@awmarquis/jest-html-reporter',
+      {
+        outputPath: 'reports/test-report.html',
+        pageTitle: 'My Test Report',
+        theme: 'dark',
+      },
+    ],
+  ],
 };
 ```
 
@@ -47,52 +50,52 @@ module.exports = {
 
 ### Output Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `outputPath` | `string` | `'jest-report.html'` | Path where the HTML report will be saved |
-| `outputJson` | `boolean` | `false` | Also output a JSON file with test data |
-| `openOnFailure` | `boolean` | `false` | Open report in browser when tests fail |
+| Option          | Type      | Default              | Description                              |
+| --------------- | --------- | -------------------- | ---------------------------------------- |
+| `outputPath`    | `string`  | `'jest-report.html'` | Path where the HTML report will be saved |
+| `outputJson`    | `boolean` | `false`              | Also output a JSON file with test data   |
+| `openOnFailure` | `boolean` | `false`              | Open report in browser when tests fail   |
 
 ### Branding & Display
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `pageTitle` | `string` | `'Jest Test Report'` | Title in the report header and browser tab |
-| `subtitle` | `string` | - | Subtitle shown below the main title |
-| `logo` | `string` | - | URL or base64 data URI for header logo |
-| `logoHeight` | `number` | `32` | Logo height in pixels |
+| Option       | Type     | Default              | Description                                |
+| ------------ | -------- | -------------------- | ------------------------------------------ |
+| `pageTitle`  | `string` | `'Jest Test Report'` | Title in the report header and browser tab |
+| `subtitle`   | `string` | -                    | Subtitle shown below the main title        |
+| `logo`       | `string` | -                    | URL or base64 data URI for header logo     |
+| `logoHeight` | `number` | `32`                 | Logo height in pixels                      |
 
 ### Visibility Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `showPassed` | `boolean` | `true` | Show passed tests |
-| `showFailed` | `boolean` | `true` | Show failed tests |
-| `showPending` | `boolean` | `true` | Show pending/skipped tests |
-| `showDuration` | `boolean` | `true` | Show duration times |
-| `showFilePath` | `'full' \| 'filename'` | `'filename'` | Display full path or just filename |
-| `showProgressBar` | `boolean` | `true` | Show the progress bar section |
-| `includeEnvironment` | `boolean` | `false` | Show environment info section |
+| Option               | Type                   | Default      | Description                        |
+| -------------------- | ---------------------- | ------------ | ---------------------------------- |
+| `showPassed`         | `boolean`              | `true`       | Show passed tests                  |
+| `showFailed`         | `boolean`              | `true`       | Show failed tests                  |
+| `showPending`        | `boolean`              | `true`       | Show pending/skipped tests         |
+| `showDuration`       | `boolean`              | `true`       | Show duration times                |
+| `showFilePath`       | `'full' \| 'filename'` | `'filename'` | Display full path or just filename |
+| `showProgressBar`    | `boolean`              | `true`       | Show the progress bar section      |
+| `includeEnvironment` | `boolean`              | `false`      | Show environment info section      |
 
 ### Behavior Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `sort` | `'default' \| 'status' \| 'duration' \| 'name'` | `'default'` | Sort order for test suites and tests |
-| `collapsePassed` | `boolean` | `false` | Auto-collapse passing test suites |
-| `collapseAll` | `boolean` | `false` | Collapse all suites by default |
-| `expandLevel` | `number` | `-1` | Number of suites to expand (-1 = all) |
-| `dateFormat` | `'locale' \| 'iso' \| 'relative'` | `'locale'` | Timestamp format |
+| Option           | Type                                            | Default     | Description                           |
+| ---------------- | ----------------------------------------------- | ----------- | ------------------------------------- |
+| `sort`           | `'default' \| 'status' \| 'duration' \| 'name'` | `'default'` | Sort order for test suites and tests  |
+| `collapsePassed` | `boolean`                                       | `false`     | Auto-collapse passing test suites     |
+| `collapseAll`    | `boolean`                                       | `false`     | Collapse all suites by default        |
+| `expandLevel`    | `number`                                        | `-1`        | Number of suites to expand (-1 = all) |
+| `dateFormat`     | `'locale' \| 'iso' \| 'relative'`               | `'locale'`  | Timestamp format                      |
 
 ### Theming Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `theme` | `ThemePreset` | `'dark'` | Built-in theme preset |
-| `customColors` | `CustomColors` | - | Custom color overrides |
-| `enableThemeToggle` | `boolean` | `false` | Show theme toggle button |
-| `customCssPath` | `string` | - | Path to custom CSS file |
-| `customJsPath` | `string` | - | Path to custom JavaScript file |
+| Option              | Type           | Default  | Description                    |
+| ------------------- | -------------- | -------- | ------------------------------ |
+| `theme`             | `ThemePreset`  | `'dark'` | Built-in theme preset          |
+| `customColors`      | `CustomColors` | -        | Custom color overrides         |
+| `enableThemeToggle` | `boolean`      | `false`  | Show theme toggle button       |
+| `customCssPath`     | `string`       | -        | Path to custom CSS file        |
+| `customJsPath`      | `string`       | -        | Path to custom JavaScript file |
 
 #### Available Themes
 
@@ -120,6 +123,7 @@ Override any theme color:
 ```
 
 Available color keys:
+
 - `bgPrimary`, `bgSecondary`, `bgHover`
 - `textPrimary`, `textSecondary`
 - `borderColor`
@@ -133,35 +137,38 @@ module.exports = {
   testEnvironment: 'node',
   reporters: [
     'default',
-    ['@awmarquis/jest-html-reporter', {
-      outputPath: './reports/test-report.html',
-      outputJson: true,
-      openOnFailure: true,
-      
-      pageTitle: 'My Awesome Project',
-      subtitle: 'Test Results',
-      logo: 'https://example.com/logo.png',
-      logoHeight: 40,
-      
-      showPassed: true,
-      showFailed: true,
-      showPending: true,
-      showDuration: true,
-      showProgressBar: true,
-      includeEnvironment: true,
-      showFilePath: 'filename',
-      
-      sort: 'status',
-      collapsePassed: true,
-      dateFormat: 'relative',
-      
-      theme: 'github',
-      enableThemeToggle: true,
-      customColors: {
-        colorAccent: '#58a6ff',
+    [
+      '@awmarquis/jest-html-reporter',
+      {
+        outputPath: './reports/test-report.html',
+        outputJson: true,
+        openOnFailure: true,
+
+        pageTitle: 'My Awesome Project',
+        subtitle: 'Test Results',
+        logo: 'https://example.com/logo.png',
+        logoHeight: 40,
+
+        showPassed: true,
+        showFailed: true,
+        showPending: true,
+        showDuration: true,
+        showProgressBar: true,
+        includeEnvironment: true,
+        showFilePath: 'filename',
+
+        sort: 'status',
+        collapsePassed: true,
+        dateFormat: 'relative',
+
+        theme: 'github',
+        enableThemeToggle: true,
+        customColors: {
+          colorAccent: '#58a6ff',
+        },
       },
-    }]
-  ]
+    ],
+  ],
 };
 ```
 
@@ -183,28 +190,36 @@ const options: ReporterOptions = {
 ## Report Features
 
 ### Progress Bar
+
 Visual indicator showing the ratio of passed/failed/skipped tests with a percentage.
 
 ### Interactive Filters
+
 Click filter buttons to show only:
+
 - All tests
 - Passed tests
 - Failed tests
 - Skipped/pending tests
 
 ### Search
+
 Type to filter tests by name in real-time.
 
 ### Theme Toggle
+
 When `enableThemeToggle: true`, a palette button appears in the bottom-right corner allowing users to switch themes and save their preference.
 
 ### Collapsible Suites
+
 - Click any suite header to expand/collapse
 - Failed suites are automatically expanded
 - Use `collapsePassed: true` to auto-collapse passing suites
 
 ### Environment Info
+
 When `includeEnvironment: true`, displays:
+
 - Node.js version
 - Platform/OS
 - CPU cores

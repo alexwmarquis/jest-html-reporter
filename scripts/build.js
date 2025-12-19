@@ -37,10 +37,10 @@ function ensureDistDir() {
 
 function compileSass() {
   step('Compiling SCSS');
-  
+
   const inputFile = path.join(STYLES, 'main.scss');
   const outputFile = path.join(DIST, 'styles.css');
-  
+
   try {
     execSync(`npx sass "${inputFile}" "${outputFile}" --style=compressed --no-source-map`, {
       cwd: ROOT,
@@ -56,32 +56,29 @@ function compileSass() {
 
 function injectCssIntoTemplate(css) {
   step('Injecting CSS into template');
-  
+
   const templatePath = path.join(SRC, 'template.ts');
   const backupPath = path.join(SRC, 'template.ts.backup');
-  
+
   const originalContent = fs.readFileSync(templatePath, 'utf8');
   fs.writeFileSync(backupPath, originalContent);
-  
-  const escapedCss = css
-    .replace(/\\/g, '\\\\')
-    .replace(/`/g, '\\`')
-    .replace(/\$\{/g, '\\${');
-  
+
+  const escapedCss = css.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
+
   const modifiedContent = originalContent.replace(
     /const COMPILED_CSS = `\/\* __INJECT_CSS__ \*\/`;/,
-    `const COMPILED_CSS = \`${escapedCss}\`;`
+    `const COMPILED_CSS = \`${escapedCss}\`;`,
   );
-  
+
   fs.writeFileSync(templatePath, modifiedContent);
   success('Injected CSS into template.ts');
-  
+
   return backupPath;
 }
 
 function compileTypeScript() {
   step('Compiling TypeScript');
-  
+
   try {
     execSync('npx tsc', {
       cwd: ROOT,
@@ -96,9 +93,9 @@ function compileTypeScript() {
 
 function restoreTemplate(backupPath) {
   step('Restoring source files');
-  
+
   const templatePath = path.join(SRC, 'template.ts');
-  
+
   if (fs.existsSync(backupPath)) {
     fs.copyFileSync(backupPath, templatePath);
     fs.unlinkSync(backupPath);
@@ -108,7 +105,7 @@ function restoreTemplate(backupPath) {
 
 function createExports() {
   step('Creating package exports');
-  
+
   const indexDts = path.join(DIST, 'index.d.ts');
   if (fs.existsSync(indexDts)) {
     success('Type definitions generated');
@@ -117,16 +114,16 @@ function createExports() {
 
 function build() {
   log('\n🔨 Building @awmarquis/jest-html-reporter\n', colors.yellow);
-  
+
   let backupPath = null;
-  
+
   try {
     ensureDistDir();
     const css = compileSass();
     backupPath = injectCssIntoTemplate(css);
     compileTypeScript();
     createExports();
-    
+
     log('\n✨ Build complete!\n', colors.green);
   } finally {
     if (backupPath && fs.existsSync(backupPath)) {

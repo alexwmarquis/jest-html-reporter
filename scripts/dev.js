@@ -16,22 +16,22 @@ if (!fs.existsSync(DIST)) {
 }
 
 console.log('▶ Compiling SCSS (expanded)...');
-execSync(`npx sass "${path.join(STYLES, 'main.scss')}" "${path.join(DIST, 'styles.css')}" --style=expanded`, {
-  cwd: ROOT,
-  stdio: 'inherit',
-});
+execSync(
+  `npx sass "${path.join(STYLES, 'main.scss')}" "${path.join(DIST, 'styles.css')}" --style=expanded`,
+  {
+    cwd: ROOT,
+    stdio: 'inherit',
+  },
+);
 
 const css = fs.readFileSync(path.join(DIST, 'styles.css'), 'utf8');
 let template = fs.readFileSync(path.join(SRC, 'template.ts'), 'utf8');
 
-const escapedCss = css
-  .replace(/\\/g, '\\\\')
-  .replace(/`/g, '\\`')
-  .replace(/\$\{/g, '\\${');
+const escapedCss = css.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
 
 template = template.replace(
   /const COMPILED_CSS = `\/\* __INJECT_CSS__ \*\/`;/,
-  `const COMPILED_CSS = \`${escapedCss}\`;`
+  `const COMPILED_CSS = \`${escapedCss}\`;`,
 );
 
 fs.writeFileSync(path.join(SRC, 'template.built.ts'), template);

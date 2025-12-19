@@ -52,20 +52,26 @@
 .progress-bar-stats {
   display: flex;
   gap: vars.$spacing-lg;
-  
+
   .stat {
     display: flex;
     align-items: center;
     gap: vars.$spacing-xs;
-    
+
     .dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      
-      &.passed { background: var(--color-passed); }
-      &.failed { background: var(--color-failed); }
-      &.skipped { background: var(--color-skipped); }
+
+      &.passed {
+        background: var(--color-passed);
+      }
+      &.failed {
+        background: var(--color-failed);
+      }
+      &.skipped {
+        background: var(--color-skipped);
+      }
     }
   }
 }
@@ -76,14 +82,20 @@
   border-radius: 4px;
   overflow: hidden;
   display: flex;
-  
+
   .segment {
     height: 100%;
     transition: width 0.3s ease;
-    
-    &.passed { background: var(--color-passed); }
-    &.failed { background: var(--color-failed); }
-    &.skipped { background: var(--color-skipped); }
+
+    &.passed {
+      background: var(--color-passed);
+    }
+    &.failed {
+      background: var(--color-failed);
+    }
+    &.skipped {
+      background: var(--color-skipped);
+    }
   }
 }
 
@@ -105,17 +117,17 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
   z-index: 1000;
-  
+
   &:hover {
     background: var(--bg-hover);
     color: var(--text-primary);
     transform: scale(1.05);
   }
-  
+
   &:active {
     transform: scale(0.95);
   }
-  
+
   i {
     pointer-events: none;
   }
@@ -136,13 +148,13 @@
   visibility: hidden;
   transform: translateY(10px);
   transition: all 0.2s ease;
-  
+
   &.visible {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
   }
-  
+
   .theme-option {
     display: flex;
     align-items: center;
@@ -152,21 +164,21 @@
     cursor: pointer;
     font-size: vars.$font-size-sm;
     transition: background 0.15s ease;
-    
+
     &:hover {
       background: var(--bg-hover);
       color: var(--text-primary);
     }
-    
+
     &.active {
       color: var(--color-accent);
-      
+
       &::before {
         content: '✓';
         margin-right: vars.$spacing-xs;
       }
     }
-    
+
     .color-preview {
       width: 12px;
       height: 12px;
@@ -178,19 +190,19 @@
 
 .report-header {
   margin-bottom: vars.$spacing-lg;
-  
+
   .report-title-row {
     display: flex;
     align-items: center;
     gap: vars.$spacing-md;
     margin-bottom: vars.$spacing-xs;
-    
+
     .header-logo {
       height: 32px;
       width: auto;
       flex-shrink: 0;
     }
-    
+
     .report-title {
       font-size: 24px;
       font-weight: 600;
@@ -198,7 +210,7 @@
       margin: 0;
     }
   }
-  
+
   .report-subtitle {
     font-size: vars.$font-size-sm;
     color: var(--text-secondary);
@@ -211,19 +223,19 @@
     flex-wrap: wrap;
     gap: vars.$spacing-sm vars.$spacing-md;
   }
-  
+
   .theme-toggle {
     bottom: vars.$spacing-md;
     right: vars.$spacing-md;
     width: 40px;
     height: 40px;
   }
-  
+
   .theme-menu {
     bottom: calc(#{vars.$spacing-md} + 48px);
     right: vars.$spacing-md;
   }
-  
+
   .report-header {
     .report-title-row {
       flex-direction: column;
