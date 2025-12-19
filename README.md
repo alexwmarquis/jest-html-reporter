@@ -209,7 +209,6 @@ When `includeEnvironment: true`, displays:
 - Platform/OS
 - CPU cores
 - Available memory
-- Working directory
 
 ## Development
 

@@ -256,10 +256,6 @@ function generateEnvironmentHtml(env: EnvironmentInfo): string {
           <span class="env-label">Memory</span>
           <span class="env-value">${escapeHtml(env.totalMemory)}</span>
         </div>
-        <div class="env-item">
-          <span class="env-label">Working Directory</span>
-          <span class="env-value">${escapeHtml(env.cwd)}</span>
-        </div>
       </div>
     </div>
   `;
