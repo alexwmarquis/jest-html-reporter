@@ -5,6 +5,12 @@ This project adheres to semantic versioning.
 
 ## Unreleased
 
+## v1.0.2
+
+### Changed
+
+- Improved grouping of test results by describe block.
+
 ## v1.0.1
 
 ### Changed
