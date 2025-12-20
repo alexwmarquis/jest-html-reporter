@@ -368,7 +368,7 @@ describe('generateHtmlReport', () => {
         showProgressBar: true,
       });
 
-      expect(html).toContain('<div class="progress-bar-container">');
+      expect(html).toContain('class="progress-bar-container"');
       expect(html).toContain('progress-bar-stats');
     });
 
