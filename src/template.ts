@@ -611,7 +611,7 @@ function generateScript(options: {
           }
         });
 
-        document.querySelectorAll('.describe-group').forEach(group => {
+        Array.from(document.querySelectorAll('.describe-group')).reverse().forEach(group => {
           const hasVisible = Array.from(group.querySelectorAll(':scope > .describe-body > .test-item')).some(t => t.style.display !== 'none');
           const hasVisibleNested = Array.from(group.querySelectorAll(':scope > .describe-body > .describe-group')).some(g => g.style.display !== 'none');
           group.style.display = (hasVisible || hasVisibleNested) ? 'block' : 'none';
@@ -632,7 +632,7 @@ function generateScript(options: {
         item.style.display = text.includes(query) || !query ? 'flex' : 'none';
       });
 
-      document.querySelectorAll('.describe-group').forEach(group => {
+      Array.from(document.querySelectorAll('.describe-group')).reverse().forEach(group => {
         const hasVisible = Array.from(group.querySelectorAll('.test-item')).some(t => t.style.display !== 'none');
         group.style.display = hasVisible ? 'block' : 'none';
         if (hasVisible && query) group.classList.remove('collapsed');
