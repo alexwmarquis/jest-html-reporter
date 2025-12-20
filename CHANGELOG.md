@@ -5,6 +5,18 @@ This project adheres to semantic versioning.
 
 ## Unreleased
 
+## v1.0.4
+
+### Fixed
+
+- Fixed inconsistent filter chip behavior where clicking between status filters (All, Passed, Failed, etc.) sometimes required multiple clicks to show correct results. The issue was caused by nested describe-groups being evaluated in the wrong order.
+
+## v1.0.3
+
+### Added
+
+- Added support for tracking and displaying flaky tests with retry attempt counts.
+
 ## v1.0.2
 
 ### Changed
