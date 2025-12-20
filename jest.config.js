@@ -1,6 +1,6 @@
 module.exports = {
   testEnvironment: 'node',
-  testMatch: ['**/__tests__/example.test.js'],
+  testMatch: ['**/__tests__/**/*.test.js'],
   reporters: [
     'default',
     [
@@ -8,8 +8,8 @@ module.exports = {
       {
         outputPath: 'jest-report.html',
         outputJson: true,
-        pageTitle: 'Jest HTML Reporter - Demo',
-        subtitle: 'A beautiful, customizable test reporter for Jest',
+        pageTitle: 'Jest HTML Reporter',
+        subtitle: 'Unit tests for Jest HTML Reporter',
         showPassed: true,
         showFailed: true,
         showPending: true,
@@ -17,10 +17,11 @@ module.exports = {
         showProgressBar: true,
         includeEnvironment: true,
         sort: 'default',
-        collapsePassed: false,
+        collapsePassed: true,
         theme: 'dark',
         enableThemeToggle: true,
       },
     ],
   ],
+  verbose: true,
 };
