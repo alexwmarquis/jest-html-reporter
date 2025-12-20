@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 
-const JestHtmlReporter = require('../dist/index');
-const { generateHtmlReport } = require('../dist/template');
+const JestHtmlReporter = require('../../dist/index');
+const { generateHtmlReport } = require('../../dist/template');
 
 const createMockGlobalConfig = () => ({
   rootDir: '/mock/project',
@@ -23,7 +23,7 @@ const createMockResults = (overrides = {}) => ({
   startTime: Date.now() - 1000,
   testResults: [
     {
-      testFilePath: '/mock/project/__tests__/passing.test.js',
+      testFilePath: '/mock/project/tests/unit/passing.test.js',
       numFailingTests: 0,
       numPassingTests: 2,
       numPendingTests: 0,
@@ -51,7 +51,7 @@ const createMockResults = (overrides = {}) => ({
       ],
     },
     {
-      testFilePath: '/mock/project/__tests__/failing.test.js',
+      testFilePath: '/mock/project/tests/unit/failing.test.js',
       numFailingTests: 1,
       numPassingTests: 1,
       numPendingTests: 1,
@@ -109,8 +109,8 @@ const createMockReportData = () => ({
   },
   testSuites: [
     {
-      name: '__tests__/example.test.js',
-      path: '/mock/project/__tests__/example.test.js',
+      name: 'tests/unit/example.test.js',
+      path: '/mock/project/tests/unit/example.test.js',
       status: 'passed',
       duration: 300,
       tests: [
@@ -368,7 +368,7 @@ describe('generateHtmlReport', () => {
         showProgressBar: true,
       });
 
-      expect(html).toContain('<div class="progress-bar-container">');
+      expect(html).toContain('class="progress-bar-container"');
       expect(html).toContain('progress-bar-stats');
     });
 

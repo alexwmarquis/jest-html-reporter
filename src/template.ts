@@ -92,22 +92,22 @@ ${customCss ? `\n${customCss}` : ''}
     <div class="header">
       <div class="search-box">
         <i class="bi bi-search"></i>
-        <input type="text" id="search-input" placeholder="Filter tests">
+        <input type="text" id="search-input" data-testid="search-input" placeholder="Filter tests">
       </div>
       <div class="filter-chips">
-        <button class="filter-chip all active" data-filter="all">
+        <button class="filter-chip all active" data-filter="all" data-testid="filter-chip-all">
           <span class="label">All</span>
           <span class="count">${summary.totalTests}</span>
         </button>
-        <button class="filter-chip passed" data-filter="passed">
+        <button class="filter-chip passed" data-filter="passed" data-testid="filter-chip-passed">
           <span class="label">Passed</span>
           <span class="count">${summary.passedTests}</span>
         </button>
-        <button class="filter-chip failed" data-filter="failed">
+        <button class="filter-chip failed" data-filter="failed" data-testid="filter-chip-failed">
           <span class="label">Failed</span>
           <span class="count">${summary.failedTests}</span>
         </button>
-        <button class="filter-chip skipped" data-filter="pending">
+        <button class="filter-chip skipped" data-filter="pending" data-testid="filter-chip-skipped">
           <span class="label">Skipped</span>
           <span class="count">${skippedTests}</span>
         </button>
@@ -162,7 +162,7 @@ function generateReportHeader(
         ${logo ? `<img src="${escapeHtml(logo)}" alt="Logo" class="header-logo" style="height: ${logoHeight}px">` : ''}
         <h1 class="report-title">${escapeHtml(title)}</h1>
       </div>
-      ${subtitle ? `<p class="report-subtitle">${escapeHtml(subtitle)}</p>` : ''}
+      ${subtitle ? `<p class="report-subtitle" data-testid="report-subtitle">${escapeHtml(subtitle)}</p>` : ''}
     </div>
   `;
 }
@@ -180,7 +180,7 @@ function generateProgressBar(summary: {
   const skippedPct = ((summary.pendingTests + summary.todoTests) / total) * 100;
 
   return `
-    <div class="progress-bar-container">
+    <div class="progress-bar-container" data-testid="progress-bar">
       <div class="progress-bar-header">
         <div class="progress-bar-stats">
           <span class="stat"><span class="dot passed"></span> ${summary.passedTests} passed</span>
@@ -229,14 +229,14 @@ function generateThemeToggle(currentTheme: ThemePreset): string {
   const themes: ThemePreset[] = ['dark', 'light', 'github', 'monokai', 'dracula', 'nord'];
 
   return `
-    <button class="theme-toggle" id="theme-toggle" title="Change theme">
+    <button class="theme-toggle" id="theme-toggle" data-testid="theme-toggle" title="Change theme">
       <i class="bi bi-palette"></i>
     </button>
-    <div class="theme-menu" id="theme-menu">
+    <div class="theme-menu" id="theme-menu" data-testid="theme-menu">
       ${themes
         .map(
           t => `
-        <div class="theme-option${t === currentTheme ? ' active' : ''}" data-theme="${t}">
+        <div class="theme-option${t === currentTheme ? ' active' : ''}" data-theme="${t}" data-testid="theme-option-${t}">
           <span class="color-preview" style="background: ${THEME_PREVIEWS[t]}"></span>
           ${t.charAt(0).toUpperCase() + t.slice(1)}
         </div>
@@ -249,12 +249,12 @@ function generateThemeToggle(currentTheme: ThemePreset): string {
 
 function generateEnvironmentHtml(env: EnvironmentInfo): string {
   return `
-    <div class="environment-info" id="env-info">
-      <div class="env-header" onclick="this.parentElement.classList.toggle('collapsed')">
+    <div class="environment-info" id="env-info" data-testid="environment-info">
+      <div class="env-header" data-testid="environment-header" onclick="this.parentElement.classList.toggle('collapsed')">
         <i class="bi bi-chevron-down"></i>
         <span>Environment</span>
       </div>
-      <div class="env-grid">
+      <div class="env-grid" data-testid="environment-grid">
         <div class="env-item">
           <span class="env-label">Node.js</span>
           <span class="env-value">${escapeHtml(env.nodeVersion)}</span>
@@ -306,7 +306,7 @@ function generateSuiteHtml(
     shouldCollapse = true;
   }
 
-  if (hasFailed) {
+  if (hasFailed && !options.collapseAll) {
     shouldCollapse = false;
   }
 
@@ -324,13 +324,13 @@ function generateSuiteHtml(
   };
 
   return `
-    <div class="suite${shouldCollapse ? ' collapsed' : ''}" data-status="${suite.status}" data-has-failed="${hasFailed}" data-name="${escapeHtml(suite.name)}">
-      <div class="suite-header">
+    <div class="suite${shouldCollapse ? ' collapsed' : ''}" data-status="${suite.status}" data-has-failed="${hasFailed}" data-name="${escapeHtml(suite.name)}" data-testid="test-suite">
+      <div class="suite-header" data-testid="suite-header">
         <i class="bi bi-chevron-down suite-chevron"></i>
-        <span class="suite-name">${escapeHtml(displayName)}</span>
-        ${options.showDuration ? `<span class="test-duration" style="margin-left: auto">${formatDuration(suite.duration)}</span>` : ''}
+        <span class="suite-name" data-testid="suite-name">${escapeHtml(displayName)}</span>
+        ${options.showDuration ? `<span class="test-duration" data-testid="suite-duration" style="margin-left: auto">${formatDuration(suite.duration)}</span>` : ''}
       </div>
-      <div class="suite-body">
+      <div class="suite-body" data-testid="suite-body">
         ${
           suite.failureMessage
             ? `
@@ -461,18 +461,19 @@ function generateDescribeGroupHtml(
   if (options.collapsePassed && node.status === 'passed') {
     shouldCollapse = true;
   }
-  if (hasFailed) {
+
+  if (hasFailed && !options.collapseAll) {
     shouldCollapse = false;
   }
 
   return `
-    <div class="describe-group${shouldCollapse ? ' collapsed' : ''}" data-status="${node.status || 'passed'}" data-depth="${depth}">
-      <div class="describe-header">
+    <div class="describe-group${shouldCollapse ? ' collapsed' : ''}" data-status="${node.status || 'passed'}" data-depth="${depth}" data-testid="describe-group">
+      <div class="describe-header" data-testid="describe-header">
         <i class="bi bi-chevron-down describe-chevron"></i>
-        <span class="describe-name">${escapeHtml(node.name)}</span>
-        <span class="describe-count">${countTestsInTree(node)} tests</span>
+        <span class="describe-name" data-testid="describe-name">${escapeHtml(node.name)}</span>
+        <span class="describe-count" data-testid="describe-count">${countTestsInTree(node)} tests</span>
       </div>
-      <div class="describe-body">
+      <div class="describe-body" data-testid="describe-body">
         ${generateTreeHtml(node.children, options, depth + 1)}
       </div>
     </div>
@@ -532,19 +533,19 @@ function generateTestItemHtml(
   };
 
   return `
-    <div class="test-item" data-status="${test.status}">
+    <div class="test-item" data-status="${test.status}" data-testid="test-item">
       <i class="bi ${statusIcon[test.status] || 'bi-circle'} test-status-icon ${test.status}"></i>
       <div class="test-content">
-        <span class="test-title">${escapeHtml(test.title)}</span>
+        <span class="test-title" data-testid="test-title">${escapeHtml(test.title)}</span>
         ${
           test.failureMessages.length > 0
             ? `
-          <div class="error-block">${test.failureMessages.map(msg => escapeHtml(msg)).join('\n\n')}</div>
+          <div class="error-block" data-testid="test-error-block">${test.failureMessages.map(msg => escapeHtml(msg)).join('\n\n')}</div>
         `
             : ''
         }
       </div>
-      ${options.showDuration ? `<span class="test-duration">${formatDuration(test.duration)}</span>` : ''}
+      ${options.showDuration ? `<span class="test-duration" data-testid="test-duration">${formatDuration(test.duration)}</span>` : ''}
     </div>
   `;
 }
