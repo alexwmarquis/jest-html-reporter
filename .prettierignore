@@ -1,2 +1,4 @@
 node_modules
 *.html
+playwright-report
+test-results
