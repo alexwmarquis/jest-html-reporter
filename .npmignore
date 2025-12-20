@@ -1,9 +1,8 @@
 src/
 scripts/
 tsconfig.json
-__tests__/
+tests/
 jest.config.js
-jest.config.unit.js
 jest-report.html
 jest-report.json
 *.test.js
@@ -16,3 +15,5 @@ jest-report.json
 coverage/
 .DS_Store
 Thumbs.db
+playwright-report/
+test-results/

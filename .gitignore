@@ -15,3 +15,5 @@ yarn-error.log*
 coverage/
 *.tgz
 src/template.built.ts
+playwright-report/
+test-results/
