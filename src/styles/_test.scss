@@ -43,6 +43,28 @@
   &.todo {
     color: var(--color-skipped);
   }
+
+  &.flaky {
+    color: var(--color-flaky);
+  }
+}
+
+.flaky-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--color-flaky-bg);
+  color: var(--color-flaky);
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-left: 8px;
+  flex-shrink: 0;
+
+  i {
+    font-size: 10px;
+  }
 }
 
 .test-content {

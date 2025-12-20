@@ -113,6 +113,11 @@
       background: var(--color-skipped-bg);
       color: var(--color-skipped);
     }
+
+    &.flaky {
+      background: var(--color-flaky-bg);
+      color: var(--color-flaky);
+    }
   }
 
   .label {

@@ -111,6 +111,10 @@ ${customCss ? `\n${customCss}` : ''}
           <span class="label">Skipped</span>
           <span class="count">${skippedTests}</span>
         </button>
+        <button class="filter-chip flaky" data-filter="flaky" data-testid="filter-chip-flaky">
+          <span class="label">Flaky</span>
+          <span class="count">${summary.flakyTests}</span>
+        </button>
       </div>
       <div class="meta-info">
         ${formatDate(summary.endTime, dateFormat)}&nbsp;&nbsp;&nbsp;Total time: ${formatDuration(summary.duration)}
@@ -187,7 +191,7 @@ function generateProgressBar(summary: {
           <span class="stat"><span class="dot failed"></span> ${summary.failedTests} failed</span>
           <span class="stat"><span class="dot skipped"></span> ${summary.pendingTests + summary.todoTests} skipped</span>
         </div>
-        <span>${Math.round((summary.passedTests / total) * 100)}% passing</span>
+        <span>${Math.round((summary.passedTests / total) * 100)}% passed</span>
       </div>
       <div class="progress-bar">
         <div class="segment passed" style="width: ${passedPct}%"></div>
@@ -323,6 +327,11 @@ function generateSuiteHtml(
     collapseAll: options.collapseAll,
   };
 
+  const testsHaveFailureMessages = suite.tests.some(
+    t => t.failureMessages && t.failureMessages.length > 0,
+  );
+  const showSuiteFailureMessage = suite.failureMessage && !testsHaveFailureMessages;
+
   return `
     <div class="suite${shouldCollapse ? ' collapsed' : ''}" data-status="${suite.status}" data-has-failed="${hasFailed}" data-name="${escapeHtml(suite.name)}" data-testid="test-suite">
       <div class="suite-header" data-testid="suite-header">
@@ -332,11 +341,11 @@ function generateSuiteHtml(
       </div>
       <div class="suite-body" data-testid="suite-body">
         ${
-          suite.failureMessage
+          showSuiteFailureMessage
             ? `
           <div class="test-item">
             <div class="test-content">
-              <div class="error-block">${escapeHtml(suite.failureMessage)}</div>
+              <div class="error-block">${escapeHtml(stripAnsi(suite.failureMessage || ''))}</div>
             </div>
           </div>
         `
@@ -532,15 +541,22 @@ function generateTestItemHtml(
     todo: 'bi-skip-forward-fill',
   };
 
+  const icon = test.isFlaky ? 'bi-arrow-repeat' : statusIcon[test.status] || 'bi-circle';
+  const iconClass = test.isFlaky ? 'flaky' : test.status;
+
+  const flakyBadge = test.isFlaky
+    ? `<span class="flaky-badge" data-testid="flaky-badge"><i class="bi bi-arrow-repeat"></i>${test.invocations} attempts</span>`
+    : '';
+
   return `
-    <div class="test-item" data-status="${test.status}" data-testid="test-item">
-      <i class="bi ${statusIcon[test.status] || 'bi-circle'} test-status-icon ${test.status}"></i>
+    <div class="test-item" data-status="${test.status}" data-flaky="${test.isFlaky}" data-testid="test-item">
+      <i class="bi ${icon} test-status-icon ${iconClass}"></i>
       <div class="test-content">
-        <span class="test-title" data-testid="test-title">${escapeHtml(test.title)}</span>
+        <span class="test-title" data-testid="test-title">${escapeHtml(test.title)}</span>${flakyBadge}
         ${
           test.failureMessages.length > 0
             ? `
-          <div class="error-block" data-testid="test-error-block">${test.failureMessages.map(msg => escapeHtml(msg)).join('\n\n')}</div>
+          <div class="error-block" data-testid="test-error-block">${test.failureMessages.map(msg => escapeHtml(stripAnsi(msg))).join('\n\n')}</div>
         `
             : ''
         }
@@ -583,6 +599,9 @@ function generateScript(options: {
         document.querySelectorAll('.test-item').forEach(item => {
           if (filter === 'all') {
             item.style.display = 'flex';
+          } else if (filter === 'flaky') {
+            const isFlaky = item.dataset.flaky === 'true';
+            item.style.display = isFlaky ? 'flex' : 'none';
           } else {
             const status = item.dataset.status;
             const match = filter === 'pending' 
@@ -685,6 +704,10 @@ function hashString(str: string): number {
     hash &= hash;
   }
   return Math.abs(hash);
+}
+
+function stripAnsi(text: string): string {
+  return text.replace(/\u001b\[[0-9;]*[a-zA-Z]/g, '');
 }
 
 function escapeHtml(text: string | null | undefined): string {
