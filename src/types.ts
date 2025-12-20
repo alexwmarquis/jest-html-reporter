@@ -52,6 +52,7 @@ export interface TestSummary {
   failedTests: number;
   pendingTests: number;
   todoTests: number;
+  flakyTests: number;
   duration: number;
   success: boolean;
   startTime: string;
@@ -75,6 +76,8 @@ export interface ProcessedTest {
   duration: number;
   failureMessages: string[];
   failureDetails: unknown[];
+  invocations: number;
+  isFlaky: boolean;
 }
 
 export interface ReportData {

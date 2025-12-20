@@ -186,8 +186,16 @@ class JestHtmlReporter {
   }
 
   private processResults(results: AggregatedResult): ReportData {
-    const startTime = results.startTime;
+    const { startTime } = results;
     const endTime = Date.now();
+
+    const testSuites = results.testResults.map((suite: TestResult) => this.processSuite(suite));
+
+    const flakyTests = testSuites.reduce(
+      (count: number, suite: ProcessedTestSuite): number =>
+        count + suite.tests.filter((t: ProcessedTest): boolean => t.isFlaky).length,
+      0,
+    );
 
     const summary: TestSummary = {
       totalSuites: results.numTotalTestSuites,
@@ -199,13 +207,12 @@ class JestHtmlReporter {
       failedTests: results.numFailedTests,
       pendingTests: results.numPendingTests,
       todoTests: results.numTodoTests,
+      flakyTests,
       duration: endTime - startTime,
       success: results.success,
       startTime: new Date(startTime).toISOString(),
       endTime: new Date(endTime).toISOString(),
     };
-
-    const testSuites = results.testResults.map(suite => this.processSuite(suite));
 
     return { summary, testSuites };
   }
@@ -214,14 +221,40 @@ class JestHtmlReporter {
     const suitePath = suite.testFilePath;
     const relativePath = path.relative(process.cwd(), suitePath);
 
+    const errorSections = this.parseFailureMessageByTest(suite.failureMessage, suite.testResults);
+
     return {
       name: relativePath,
       path: suitePath,
       status: this.getSuiteStatus(suite),
       duration: suite.perfStats ? suite.perfStats.end - suite.perfStats.start : 0,
-      tests: suite.testResults.map(test => this.processTest(test)),
+      tests: suite.testResults.map(test => this.processTest(test, errorSections)),
       failureMessage: suite.failureMessage || null,
     };
+  }
+
+  private parseFailureMessageByTest(
+    failureMessage: string | null | undefined,
+    testResults: AssertionResult[],
+  ): Map<string, string> {
+    const errorMap = new Map<string, string>();
+    if (!failureMessage) return errorMap;
+
+    const failedTests = testResults.filter(t => t.status === 'failed');
+
+    for (const test of failedTests) {
+      const testPattern = new RegExp(`●[^●]*${this.escapeRegex(test.title)}[\\s\\S]*?(?=●|$)`, 'g');
+      const match = failureMessage.match(testPattern);
+      if (match && match[0]) {
+        errorMap.set(test.fullName, match[0].trim());
+      }
+    }
+
+    return errorMap;
+  }
+
+  private escapeRegex(str: string): string {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   private getSuiteStatus(suite: TestResult): 'passed' | 'failed' | 'pending' {
@@ -230,15 +263,23 @@ class JestHtmlReporter {
     return 'passed';
   }
 
-  private processTest(test: AssertionResult): ProcessedTest {
+  private processTest(test: AssertionResult, errorSections: Map<string, string>): ProcessedTest {
+    const invocations = ((test as unknown as { invocations?: number })?.invocations ?? 1) as number;
+    const isFlaky = test.status === 'passed' && ((invocations > 1) as boolean);
+
+    const detailedError = errorSections.get(test.fullName);
+    const failureMessages = detailedError ? [detailedError] : test.failureMessages || [];
+
     return {
       title: test.title,
       fullName: test.fullName,
       ancestorTitles: test.ancestorTitles,
       status: test.status as ProcessedTest['status'],
       duration: test.duration || 0,
-      failureMessages: test.failureMessages || [],
+      failureMessages,
       failureDetails: test.failureDetails || [],
+      invocations,
+      isFlaky,
     };
   }
 }
