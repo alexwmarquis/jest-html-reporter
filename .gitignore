@@ -17,3 +17,6 @@ coverage/
 src/template.built.ts
 playwright-report/
 test-results/
+tests/integration/generated-reports/
+tests/integration/test-report.html
+tests/integration/test-report.json

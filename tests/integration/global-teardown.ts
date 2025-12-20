@@ -1,20 +1,29 @@
+/**
+ * Global teardown for Playwright E2E tests.
+ * Cleans up generated reports after all tests complete.
+ */
+
 import { test as teardown } from '@playwright/test';
-import * as path from 'path';
 import * as fs from 'fs';
+import * as path from 'path';
+import { cleanupGeneratedReports } from './fixtures';
 
-teardown('delete sample report', async () => {
-  const outputPath = path.resolve(__dirname, 'test-report.html');
-  const jsonPath = path.resolve(__dirname, 'test-report.json');
+teardown('cleanup generated reports', async () => {
+  console.log('Cleaning up generated reports...');
 
-  console.log('Cleaning up sample report files...');
+  // Clean up dynamically generated reports
+  cleanupGeneratedReports();
 
-  if (fs.existsSync(outputPath)) {
-    fs.unlinkSync(outputPath);
-    console.log('Deleted:', outputPath);
+  // Clean up legacy report location
+  const legacyPath = path.resolve(__dirname, 'test-report.html');
+  const legacyJsonPath = path.resolve(__dirname, 'test-report.json');
+
+  if (fs.existsSync(legacyPath)) {
+    fs.unlinkSync(legacyPath);
+  }
+  if (fs.existsSync(legacyJsonPath)) {
+    fs.unlinkSync(legacyJsonPath);
   }
 
-  if (fs.existsSync(jsonPath)) {
-    fs.unlinkSync(jsonPath);
-    console.log('Deleted:', jsonPath);
-  }
+  console.log('Cleanup complete');
 });

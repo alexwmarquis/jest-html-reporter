@@ -306,7 +306,7 @@ function generateSuiteHtml(
     shouldCollapse = true;
   }
 
-  if (hasFailed) {
+  if (hasFailed && !options.collapseAll) {
     shouldCollapse = false;
   }
 
@@ -461,7 +461,8 @@ function generateDescribeGroupHtml(
   if (options.collapsePassed && node.status === 'passed') {
     shouldCollapse = true;
   }
-  if (hasFailed) {
+
+  if (hasFailed && !options.collapseAll) {
     shouldCollapse = false;
   }
 
