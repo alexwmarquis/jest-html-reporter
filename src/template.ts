@@ -94,27 +94,41 @@ ${customCss ? `\n${customCss}` : ''}
         <i class="bi bi-search"></i>
         <input type="text" id="search-input" data-testid="search-input" placeholder="Filter tests">
       </div>
-      <div class="filter-chips">
-        <button class="filter-chip all active" data-filter="all" data-testid="filter-chip-all">
-          <span class="label">All</span>
-          <span class="count">${summary.totalTests}</span>
-        </button>
-        <button class="filter-chip passed" data-filter="passed" data-testid="filter-chip-passed">
-          <span class="label">Passed</span>
-          <span class="count">${summary.passedTests}</span>
-        </button>
-        <button class="filter-chip failed" data-filter="failed" data-testid="filter-chip-failed">
-          <span class="label">Failed</span>
-          <span class="count">${summary.failedTests}</span>
-        </button>
-        <button class="filter-chip skipped" data-filter="pending" data-testid="filter-chip-skipped">
-          <span class="label">Skipped</span>
-          <span class="count">${skippedTests}</span>
-        </button>
-        <button class="filter-chip flaky" data-filter="flaky" data-testid="filter-chip-flaky">
-          <span class="label">Flaky</span>
-          <span class="count">${summary.flakyTests}</span>
-        </button>
+      <div class="subnav-container">
+        <nav class="subnav">
+          <a class="subnav-item active" data-filter="all" data-testid="filter-chip-all" href="#" role="button">
+            <span class="subnav-item-label">All</span>
+            <span class="counter">${summary.totalTests}</span>
+          </a>
+          <a class="subnav-item" data-filter="passed" data-testid="filter-chip-passed" href="#" role="button">
+            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" class="subnav-icon passed">
+              <path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path>
+            </svg>
+            <span class="subnav-item-label">Passed</span>
+            <span class="counter">${summary.passedTests}</span>
+          </a>
+          <a class="subnav-item" data-filter="failed" data-testid="filter-chip-failed" href="#" role="button">
+            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" class="subnav-icon failed">
+              <path fill-rule="evenodd" d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"></path>
+            </svg>
+            <span class="subnav-item-label">Failed</span>
+            <span class="counter">${summary.failedTests}</span>
+          </a>
+          <a class="subnav-item" data-filter="flaky" data-testid="filter-chip-flaky" href="#" role="button">
+            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" class="subnav-icon flaky">
+              <path fill-rule="evenodd" d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM8 0a8 8 0 100 16A8 8 0 008 0zm.75 4a.75.75 0 00-1.5 0v3.5a.75.75 0 00.22.53l2.25 2.25a.75.75 0 001.06-1.06L8.75 7.19V4z"></path>
+            </svg>
+            <span class="subnav-item-label">Flaky</span>
+            <span class="counter">${summary.flakyTests}</span>
+          </a>
+          <a class="subnav-item" data-filter="pending" data-testid="filter-chip-skipped" href="#" role="button">
+            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" class="subnav-icon skipped">
+              <path d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM8 0a8 8 0 100 16A8 8 0 008 0zm3.28 5.78a.75.75 0 00-1.06-1.06l-5.5 5.5a.75.75 0 101.06 1.06l5.5-5.5z"></path>
+            </svg>
+            <span class="subnav-item-label">Skipped</span>
+            <span class="counter">${skippedTests}</span>
+          </a>
+        </nav>
       </div>
       <div class="meta-info">
         ${formatDate(summary.endTime, dateFormat)}&nbsp;&nbsp;&nbsp;Total time: ${formatDuration(summary.duration)}
@@ -589,12 +603,13 @@ function generateScript(options: {
       });
     });
 
-    document.querySelectorAll('.filter-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        const filter = chip.dataset.filter;
+    document.querySelectorAll('.subnav-item').forEach(navItem => {
+      navItem.addEventListener('click', (e) => {
+        e.preventDefault();
+        const filter = navItem.dataset.filter;
         
-        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
+        document.querySelectorAll('.subnav-item').forEach(c => c.classList.remove('active'));
+        navItem.classList.add('active');
 
         document.querySelectorAll('.test-item').forEach(item => {
           if (filter === 'all') {

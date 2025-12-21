@@ -22,8 +22,8 @@
 
 .search-box {
   position: relative;
-  width: 320px;
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 200px;
 
   @include mobile {
     width: 100%;
@@ -35,10 +35,10 @@
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: $border-radius;
-    padding: 6px $spacing-md 6px 32px;
+    padding: 8px $spacing-md 8px 32px;
     color: var(--text-primary);
     font-size: $font-size-sm;
-    height: 32px;
+    height: 36px;
     box-sizing: border-box;
 
     &::placeholder {
@@ -59,31 +59,44 @@
   }
 }
 
-.filter-chips {
+.subnav-container {
   display: flex;
-  gap: $spacing-sm;
-  flex-wrap: wrap;
+  align-items: center;
   flex-shrink: 0;
-  margin-left: $spacing-lg;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: $border-radius;
+  padding: $spacing-xs;
 
   @include mobile {
-    justify-content: flex-start;
-    margin-left: 0;
+    overflow-x: auto;
+    width: 100%;
+    order: 1;
   }
 }
 
-.filter-chip {
-  @include flex-center;
+.subnav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  @include mobile {
+    gap: 0;
+  }
+}
+
+.subnav-item {
+  display: flex;
+  align-items: center;
   gap: 6px;
   padding: $spacing-xs $spacing-md;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: $border-radius-lg;
   color: var(--text-secondary);
+  text-decoration: none;
   font-size: $font-size-sm;
   cursor: pointer;
-  height: 28px;
+  border-radius: $border-radius;
   @include transition;
+  white-space: nowrap;
 
   &:hover {
     background: var(--bg-hover);
@@ -91,54 +104,66 @@
   }
 
   &.active {
-    border-color: transparent;
+    color: var(--text-primary);
+    background: var(--bg-hover);
+    font-weight: 500;
 
-    &.all {
-      background: var(--bg-hover);
-      border-color: var(--border-color);
-      color: var(--text-primary);
-    }
-
-    &.passed {
-      background: var(--color-passed-bg);
-      color: var(--color-passed);
-    }
-
-    &.failed {
-      background: var(--color-failed-bg);
-      color: var(--color-failed);
-    }
-
-    &.skipped {
-      background: var(--color-skipped-bg);
-      color: var(--color-skipped);
-    }
-
-    &.flaky {
-      background: var(--color-flaky-bg);
-      color: var(--color-flaky);
+    .counter {
+      background: var(--color-accent);
+      color: #fff;
     }
   }
 
-  .label {
-    font-weight: 400;
+  .subnav-item-label {
+    font-weight: inherit;
   }
 
-  .count {
+  .counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    font-size: $font-size-xs;
     font-weight: 600;
+    background: var(--bg-hover);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    @include transition;
+  }
+}
+
+.subnav-icon {
+  flex-shrink: 0;
+  fill: currentColor;
+
+  &.passed {
+    color: var(--color-passed);
+  }
+
+  &.failed {
+    color: var(--color-failed);
+  }
+
+  &.skipped {
+    color: var(--color-skipped);
+  }
+
+  &.flaky {
+    color: var(--color-flaky);
   }
 }
 
 .meta-info {
+  width: 100%;
   text-align: right;
   font-size: $font-size-sm;
   color: var(--text-secondary);
-  margin-bottom: $spacing-xl;
-  margin-left: auto;
+  margin-top: $spacing-xs;
 
   @include mobile {
     text-align: left;
-    margin-left: 0;
   }
 }
 
