@@ -43,6 +43,7 @@ export function generateHtmlReport(data: ReportData, options: TemplateOptions): 
     expandLevel,
     includeEnvironment,
     dateFormat,
+    fonts,
   } = options;
 
   const { summary, testSuites } = data;
@@ -72,15 +73,27 @@ export function generateHtmlReport(data: ReportData, options: TemplateOptions): 
 
   const customColorsCss = customColors ? generateCustomColorsCss(customColors) : '';
 
+  const fontLinks = fonts
+    ? `
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="${escapeHtml(fonts.url)}" rel="stylesheet">`
+    : '';
+
+  const fontOverrideCss = fonts
+    ? `:root { --font-sans: '${fonts.sans}'; --font-mono: '${fonts.mono}'; }`
+    : '';
+
   return `<!DOCTYPE html>
 <html lang="en" class="${themeClass}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(pageTitle)}</title>
+  <title>${escapeHtml(pageTitle)}</title>${fontLinks}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <style>
 ${COMPILED_CSS}
+${fontOverrideCss ? `\n${fontOverrideCss}` : ''}
 ${customColorsCss ? `\n${customColorsCss}` : ''}
 ${customCss ? `\n${customCss}` : ''}
   </style>

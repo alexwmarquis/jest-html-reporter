@@ -89,13 +89,14 @@ module.exports = {
 
 ### Theming Options
 
-| Option              | Type           | Default  | Description                    |
-| ------------------- | -------------- | -------- | ------------------------------ |
-| `theme`             | `ThemePreset`  | `'dark'` | Built-in theme preset          |
-| `customColors`      | `CustomColors` | -        | Custom color overrides         |
-| `enableThemeToggle` | `boolean`      | `false`  | Show theme toggle button       |
-| `customCssPath`     | `string`       | -        | Path to custom CSS file        |
-| `customJsPath`      | `string`       | -        | Path to custom JavaScript file |
+| Option              | Type              | Default                                             | Description                    |
+| ------------------- | ----------------- | --------------------------------------------------- | ------------------------------ |
+| `theme`             | `ThemePreset`     | `'dark'`                                            | Built-in theme preset          |
+| `customColors`      | `CustomColors`    | -                                                   | Custom color overrides         |
+| `enableThemeToggle` | `boolean`         | `false`                                             | Show theme toggle button       |
+| `customCssPath`     | `string`          | -                                                   | Path to custom CSS file        |
+| `customJsPath`      | `string`          | -                                                   | Path to custom JavaScript file |
+| `fonts`             | `object \| false` | `{ sans: 'Google Sans', mono: 'Google Sans Code' }` | Font configuration (see below) |
 
 #### Available Themes
 
@@ -129,6 +130,36 @@ Available color keys:
 - `borderColor`
 - `colorPassed`, `colorFailed`, `colorSkipped`
 - `colorAccent`
+
+#### Custom Fonts
+
+Load custom fonts from Google Fonts by specifying font names:
+
+```javascript
+{
+  fonts: {
+    sans: 'Inter',
+    mono: 'Fira Code',
+  }
+}
+```
+
+For air-gapped environments (no external network), disable font loading entirely:
+
+```javascript
+{
+  fonts: false;
+}
+```
+
+Popular font combinations:
+
+| Sans Font     | Mono Font        | Style                   |
+| ------------- | ---------------- | ----------------------- |
+| Google Sans   | Google Sans Code | Clean, modern           |
+| Inter         | JetBrains Mono   | Developer favorite      |
+| Roboto        | Fira Code        | Material-inspired       |
+| IBM Plex Sans | IBM Plex Mono    | Technical, professional |
 
 ## Full Example
 

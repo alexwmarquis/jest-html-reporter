@@ -20,6 +20,10 @@ module.exports = {
         collapsePassed: true,
         theme: 'dark',
         enableThemeToggle: true,
+        fonts: {
+          sans: 'Google Sans',
+          mono: 'Google Sans Code',
+        },
       },
     ],
   ],

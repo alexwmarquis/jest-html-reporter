@@ -7,6 +7,11 @@
 @use 'test';
 @use 'empty';
 
+:root {
+  --font-sans: 'Google Sans';
+  --font-mono: 'Google Sans Code';
+}
+
 :root,
 .theme-dark {
   @include themes.apply-theme(themes.$theme-dark);

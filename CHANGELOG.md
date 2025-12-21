@@ -5,6 +5,10 @@ This project adheres to semantic versioning.
 
 ## Unreleased
 
+### Added
+
+- Added configurable `fonts` option for custom Google Fonts. Specify `{ sans, mono }` font names or set to `false` for air-gapped environments.
+
 ## v1.0.4
 
 ### Fixed
