@@ -5,9 +5,15 @@ This project adheres to semantic versioning.
 
 ## Unreleased
 
+## v1.0.5
+
 ### Added
 
 - Added configurable `fonts` option for custom Google Fonts. Specify `{ sans, mono }` font names or set to `false` for air-gapped environments.
+
+### Changed
+
+- Improved styling of test status filter menu.
 
 ## v1.0.4
 
