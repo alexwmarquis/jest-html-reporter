@@ -17,7 +17,6 @@
 .header-logo {
   height: 32px;
   width: auto;
-  margin-right: $spacing-sm;
 }
 
 .search-box {
@@ -155,15 +154,16 @@
   }
 }
 
-.meta-info {
-  width: 100%;
-  text-align: right;
+.header .meta-info {
+  flex-shrink: 0;
   font-size: $font-size-sm;
   color: var(--text-secondary);
-  margin-top: $spacing-xs;
+  white-space: nowrap;
 
   @include mobile {
+    width: 100%;
     text-align: left;
+    order: -1;
   }
 }
 

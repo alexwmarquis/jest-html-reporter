@@ -194,7 +194,15 @@
 }
 
 .report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: vars.$spacing-lg;
+  gap: vars.$spacing-lg;
+
+  .report-branding {
+    flex: 1;
+  }
 
   .report-title-row {
     display: flex;
@@ -220,6 +228,24 @@
     font-size: vars.$font-size-sm;
     color: var(--text-secondary);
     margin: 0;
+  }
+
+  .meta-info {
+    flex-shrink: 0;
+    text-align: right;
+    font-size: vars.$font-size-sm;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  @include mix.mobile {
+    flex-direction: column;
+    gap: vars.$spacing-sm;
+
+    .meta-info {
+      text-align: left;
+      order: -1;
+    }
   }
 }
 

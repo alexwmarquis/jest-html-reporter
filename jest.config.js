@@ -17,9 +17,11 @@ module.exports = {
         showProgressBar: true,
         includeEnvironment: true,
         sort: 'default',
-        collapsePassed: true,
+        collapsePassed: false,
         theme: 'dark',
         enableThemeToggle: true,
+        logo: '/example.png',
+        logoHeight: 32,
         fonts: {
           sans: 'Google Sans',
           mono: 'Google Sans Code',
