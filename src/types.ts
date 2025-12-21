@@ -40,6 +40,12 @@ export interface ReporterOptions {
   customCssPath?: string;
   customJsPath?: string;
   embedAssets?: boolean;
+  fonts?:
+    | {
+        sans?: string;
+        mono?: string;
+      }
+    | false;
 }
 
 export interface TestSummary {
@@ -108,6 +114,13 @@ export interface TemplateOptions {
   includeEnvironment: boolean;
   dateFormat: 'locale' | 'iso' | 'relative';
   embedAssets: boolean;
+  fonts:
+    | {
+        sans: string;
+        mono: string;
+        url: string;
+      }
+    | false;
 }
 
 export interface EnvironmentInfo {

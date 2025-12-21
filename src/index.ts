@@ -48,6 +48,7 @@ class JestHtmlReporter {
       customCssPath,
       customJsPath,
       embedAssets = true,
+      fonts = { sans: 'Google Sans', mono: 'Google Sans Code' },
     } = this.options;
 
     let customCss: string | undefined;
@@ -80,6 +81,18 @@ class JestHtmlReporter {
       this.sortResults(reportData, sort);
     }
 
+    const DEFAULT_SANS = 'Google Sans';
+    const DEFAULT_MONO = 'Google Sans Code';
+
+    const resolvedFonts =
+      fonts === false
+        ? false
+        : {
+            sans: fonts.sans || DEFAULT_SANS,
+            mono: fonts.mono || DEFAULT_MONO,
+            url: this.buildGoogleFontsUrl(fonts.sans || DEFAULT_SANS, fonts.mono || DEFAULT_MONO),
+          };
+
     const templateOptions: TemplateOptions = {
       pageTitle,
       subtitle,
@@ -103,6 +116,7 @@ class JestHtmlReporter {
       includeEnvironment,
       dateFormat,
       embedAssets,
+      fonts: resolvedFonts,
     };
 
     const html = generateHtmlReport(reportData, templateOptions);
@@ -255,6 +269,12 @@ class JestHtmlReporter {
 
   private escapeRegex(str: string): string {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  private buildGoogleFontsUrl(sans: string, mono: string): string {
+    const encodeSans = sans.replace(/ /g, '+');
+    const encodeMono = mono.replace(/ /g, '+');
+    return `https://fonts.googleapis.com/css2?family=${encodeMono}:wght@400;500&family=${encodeSans}:wght@400;500;600&display=swap`;
   }
 
   private getSuiteStatus(suite: TestResult): 'passed' | 'failed' | 'pending' {
