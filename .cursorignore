@@ -4,6 +4,9 @@ coverage/
 playwright-report/
 test-results/
 tests/.test-output/
-package-lock.json
-src/template.built.ts
-*.tgz
+*.html
+jest-report.json
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

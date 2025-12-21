@@ -46,6 +46,7 @@
     "jest": "^29.7.0",
     "prettier": "^3.7.4",
     "sass": "^1.69.5",
+    "ts-jest": "^29.4.6",
     "typescript": "^5.3.2"
   },
   "scripts": {
@@ -56,6 +57,7 @@
     "format": "npx prettier --check .",
     "format:fix": "npx prettier --write .",
     "test:unit": "npm run build && npx jest --config jest.config.js",
+    "test:coverage": "npm run build && npx jest --config jest.config.js --coverage",
     "test:integration": "npm run build && npx playwright test",
     "test": "npm run test:unit && npm run test:integration",
     "clean": "rm -rf dist",
