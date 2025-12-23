@@ -104,13 +104,13 @@ ${customCss ? `\n${customCss}` : ''}
   <div class="container">
     ${generateReportHeader(pageTitle, `${formatDate(summary.endTime, dateFormat)}&nbsp;&nbsp;&nbsp;Total time: ${formatDuration(summary.duration)}`, subtitle, logo, logoHeight)}
     
-    <div class="header">
-      <div class="search-box">
+    <div class="header" data-testid="header">
+      <div class="search-box" data-testid="search-box">
         <i class="bi bi-search"></i>
         <input type="text" id="search-input" data-testid="search-input" placeholder="Filter tests">
       </div>
-      <div class="subnav-container">
-        <nav class="subnav">
+      <div class="subnav-container" data-testid="subnav-container">
+        <nav class="subnav" data-testid="subnav">
           <a class="subnav-item active" data-filter="all" data-testid="filter-chip-all" href="#" role="button">
             <span class="subnav-item-label">All</span>
             <span class="counter">${summary.totalTests}</span>
@@ -145,7 +145,9 @@ ${customCss ? `\n${customCss}` : ''}
           </a>
         </nav>
       </div>
-      ${!subtitle && !logo ? `<div class="meta-info">${formatDate(summary.endTime, dateFormat)}&nbsp;&nbsp;&nbsp;Total time: ${formatDuration(summary.duration)}</div>` : ''}
+      <div class="meta-info" data-testid="meta-info">
+        ${formatDate(summary.endTime, dateFormat)}&nbsp;&nbsp;&nbsp;Total time: ${formatDuration(summary.duration)}
+      </div>
     </div>
 
     ${showProgressBar ? generateProgressBar(summary) : ''}
@@ -158,7 +160,7 @@ ${customCss ? `\n${customCss}` : ''}
     ${
       testSuites.length === 0
         ? `
-      <div class="empty-state">
+      <div class="empty-state" data-testid="empty-state">
         <i class="bi bi-inbox"></i>
         <p>No test results found</p>
       </div>
@@ -191,11 +193,11 @@ function generateReportHeader(
   }
 
   return `
-    <div class="report-header">
+    <div class="report-header" data-testid="report-header">
       <div class="report-branding">
-        <div class="report-title-row">
-          ${logo ? `<img src="${escapeHtml(logo)}" alt="Logo" class="header-logo" style="height: ${logoHeight}px">` : ''}
-          <h1 class="report-title">${escapeHtml(title)}</h1>
+        <div class="report-title-row" data-testid="report-title-row">
+          ${logo ? `<img src="${escapeHtml(logo)}" alt="Logo" class="header-logo" data-testid="header-logo" style="height: ${logoHeight}px">` : ''}
+          <h1 class="report-title" data-testid="report-title">${escapeHtml(title)}</h1>
         </div>
         ${subtitle ? `<p class="report-subtitle" data-testid="report-subtitle">${escapeHtml(subtitle)}</p>` : ''}
       </div>
@@ -218,15 +220,15 @@ function generateProgressBar(summary: {
 
   return `
     <div class="progress-bar-container" data-testid="progress-bar">
-      <div class="progress-bar-header">
-        <div class="progress-bar-stats">
+      <div class="progress-bar-header" data-testid="progress-bar-header">
+        <div class="progress-bar-stats" data-testid="progress-bar-stats">
           <span class="stat"><span class="dot passed"></span> ${summary.passedTests} passed</span>
           <span class="stat"><span class="dot failed"></span> ${summary.failedTests} failed</span>
           <span class="stat"><span class="dot skipped"></span> ${summary.pendingTests + summary.todoTests} skipped</span>
         </div>
         <span>${Math.round((summary.passedTests / total) * 100)}% passed</span>
       </div>
-      <div class="progress-bar">
+      <div class="progress-bar" data-testid="progress-bar-track">
         <div class="segment passed" style="width: ${passedPct}%"></div>
         <div class="segment failed" style="width: ${failedPct}%"></div>
         <div class="segment skipped" style="width: ${skippedPct}%"></div>
