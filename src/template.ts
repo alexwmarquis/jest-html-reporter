@@ -145,9 +145,6 @@ ${customCss ? `\n${customCss}` : ''}
           </a>
         </nav>
       </div>
-      <div class="meta-info" data-testid="meta-info">
-        ${formatDate(summary.endTime, dateFormat)}&nbsp;&nbsp;&nbsp;Total time: ${formatDuration(summary.duration)}
-      </div>
     </div>
 
     ${showProgressBar ? generateProgressBar(summary) : ''}
@@ -188,12 +185,11 @@ function generateReportHeader(
 ): string {
   const hasBranding = subtitle || logo;
 
-  if (!hasBranding) {
-    return '';
-  }
-
   return `
     <div class="report-header" data-testid="report-header">
+      ${
+        hasBranding
+          ? `
       <div class="report-branding">
         <div class="report-title-row" data-testid="report-title-row">
           ${logo ? `<img src="${escapeHtml(logo)}" alt="Logo" class="header-logo" data-testid="header-logo" style="height: ${logoHeight}px">` : ''}
@@ -201,7 +197,10 @@ function generateReportHeader(
         </div>
         ${subtitle ? `<p class="report-subtitle" data-testid="report-subtitle">${escapeHtml(subtitle)}</p>` : ''}
       </div>
-      <div class="meta-info">${metaInfo}</div>
+      `
+          : `<h1 class="report-title" data-testid="report-title">${escapeHtml(title)}</h1>`
+      }
+      <div class="meta-info" data-testid="meta-info">${metaInfo}</div>
     </div>
   `;
 }

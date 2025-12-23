@@ -92,13 +92,15 @@ test('includes logo when provided', () => {
   expect(html).toContain('data-testid="header-logo"');
 });
 
-test('does not render report header when logo and subtitle are not provided', () => {
+test('renders report header with title and timestamp when logo and subtitle are not provided', () => {
   const html = renderReport(undefined, {
     logo: undefined,
     subtitle: undefined,
   });
 
-  expect(html).not.toContain('data-testid="report-header"');
+  expect(html).toContain('data-testid="report-header"');
+  expect(html).toContain('data-testid="report-title"');
+  expect(html).toContain('data-testid="meta-info"');
   expect(html).not.toContain('data-testid="report-title-row"');
 });
 
