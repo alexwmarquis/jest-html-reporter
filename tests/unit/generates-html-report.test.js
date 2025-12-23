@@ -76,9 +76,9 @@ test('can be parsed as valid html', () => {
   });
 
   expect(html).toContain('<!DOCTYPE html>');
-  expect(html).toContain('theme-github');
-  expect(html).toContain('progress-bar');
-  expect(html).toContain('environment-info');
-  expect(html).toContain('theme-toggle');
+  expect(html).toContain('class="theme-github"');
+  expect(html).toContain('data-testid="progress-bar"');
+  expect(html).toContain('data-testid="environment-info"');
+  expect(html).toContain('data-testid="theme-toggle"');
   expect(html).toContain('--color-accent: #ff0000');
 });

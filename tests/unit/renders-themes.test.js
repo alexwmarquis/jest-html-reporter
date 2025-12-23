@@ -39,15 +39,14 @@ test('applies nord theme class when selected', () => {
 test('includes theme toggle when enabled', () => {
   const html = renderReport(undefined, { enableThemeToggle: true });
 
-  expect(html).toContain('theme-toggle');
-  expect(html).toContain('theme-menu');
-  expect(html).toContain('bi-palette');
+  expect(html).toContain('data-testid="theme-toggle"');
+  expect(html).toContain('data-testid="theme-menu"');
 });
 
 test('does not include theme toggle when disabled', () => {
   const html = renderReport(undefined, { enableThemeToggle: false });
 
-  expect(html).not.toContain('id="theme-toggle"');
+  expect(html).not.toContain('data-testid="theme-toggle"');
 });
 
 test('includes custom color overrides in css', () => {

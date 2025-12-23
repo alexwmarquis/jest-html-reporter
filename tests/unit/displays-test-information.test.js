@@ -3,22 +3,22 @@ const { createMockReportData, renderReport } = require('./test-utils');
 test('includes test suites in generated report', () => {
   const html = renderReport();
 
-  expect(html).toContain('suite');
-  expect(html).toContain('suite-header');
-  expect(html).toContain('suite-body');
+  expect(html).toContain('data-testid="test-suite"');
+  expect(html).toContain('data-testid="suite-header"');
+  expect(html).toContain('data-testid="suite-body"');
 });
 
 test('includes test items within suites', () => {
   const html = renderReport();
 
-  expect(html).toContain('test-item');
-  expect(html).toContain('test-title');
+  expect(html).toContain('data-testid="test-item"');
+  expect(html).toContain('data-testid="test-title"');
 });
 
 test('shows test duration when enabled', () => {
   const html = renderReport(undefined, { showDuration: true });
 
-  expect(html).toContain('test-duration');
+  expect(html).toContain('data-testid="test-duration"');
 });
 
 test('hides test duration when disabled', () => {
@@ -47,20 +47,20 @@ test('shows filename only when show file path is set to filename', () => {
 test('includes progress bar when enabled', () => {
   const html = renderReport(undefined, { showProgressBar: true });
 
-  expect(html).toContain('class="progress-bar-container"');
-  expect(html).toContain('progress-bar-stats');
+  expect(html).toContain('data-testid="progress-bar"');
+  expect(html).toContain('data-testid="progress-bar-stats"');
 });
 
 test('excludes progress bar when disabled', () => {
   const html = renderReport(undefined, { showProgressBar: false });
 
-  expect(html).not.toContain('<div class="progress-bar-container">');
+  expect(html).not.toContain('data-testid="progress-bar"');
 });
 
 test('includes environment information when enabled', () => {
   const html = renderReport(undefined, { includeEnvironment: true });
 
-  expect(html).toContain('<div class="environment-info"');
+  expect(html).toContain('data-testid="environment-info"');
   expect(html).toContain('Node.js');
   expect(html).toContain('Platform');
   expect(html).toContain('CPU Cores');
@@ -70,14 +70,14 @@ test('includes environment information when enabled', () => {
 test('excludes environment information when disabled', () => {
   const html = renderReport(undefined, { includeEnvironment: false });
 
-  expect(html).not.toContain('<div class="environment-info"');
+  expect(html).not.toContain('data-testid="environment-info"');
 });
 
 test('includes subtitle when provided', () => {
   const html = renderReport(undefined, { subtitle: 'My Subtitle' });
 
   expect(html).toContain('My Subtitle');
-  expect(html).toContain('report-subtitle');
+  expect(html).toContain('data-testid="report-subtitle"');
 });
 
 test('includes logo when provided', () => {
@@ -89,6 +89,7 @@ test('includes logo when provided', () => {
 
   expect(html).toContain('https://example.com/logo.png');
   expect(html).toContain('height: 48px');
+  expect(html).toContain('data-testid="header-logo"');
 });
 
 test('does not render report header when logo and subtitle are not provided', () => {
@@ -97,11 +98,8 @@ test('does not render report header when logo and subtitle are not provided', ()
     subtitle: undefined,
   });
 
-  const bodyStart = html.indexOf('<body>');
-  const bodyEnd = html.indexOf('</body>');
-  const bodyContent = html.substring(bodyStart, bodyEnd);
-  expect(bodyContent).not.toContain('report-header');
-  expect(bodyContent).not.toContain('report-title-row');
+  expect(html).not.toContain('data-testid="report-header"');
+  expect(html).not.toContain('data-testid="report-title-row"');
 });
 
 test('renders header with title but no subtitle element when subtitle not provided', () => {
@@ -110,8 +108,8 @@ test('renders header with title but no subtitle element when subtitle not provid
     logo: 'https://example.com/logo.png',
   });
 
-  expect(html).toContain('report-header');
-  expect(html).toContain('report-title');
+  expect(html).toContain('data-testid="report-header"');
+  expect(html).toContain('data-testid="report-title"');
   expect(html).not.toContain('data-testid="report-subtitle"');
 });
 
@@ -133,7 +131,7 @@ test('does not collapse suites by default', () => {
     collapsePassed: false,
   });
 
-  expect(html).toContain('<div class="suite"');
+  expect(html).toContain('data-testid="test-suite"');
   expect(html).not.toContain('class="suite collapsed"');
 });
 
@@ -194,6 +192,7 @@ test('handles test with failure details', () => {
 
   expect(html).toContain('test with details');
   expect(html).toContain('Expected true to be false');
+  expect(html).toContain('data-testid="test-error-block"');
 });
 
 test('handles suite with failure message', () => {
@@ -268,6 +267,6 @@ test('displays empty state message when no tests exist', () => {
 
   const html = renderReport(data);
 
-  expect(html).toContain('empty-state');
+  expect(html).toContain('data-testid="empty-state"');
   expect(html).toContain('No test results found');
 });

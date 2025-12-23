@@ -78,16 +78,15 @@ test('hides pending tests when show pending is set to false', () => {
 test('includes filter chips for all test statuses', () => {
   const html = renderReport(createMixedStatusData());
 
-  expect(html).toContain('filter-chip');
-  expect(html).toContain('data-filter="all"');
-  expect(html).toContain('data-filter="passed"');
-  expect(html).toContain('data-filter="failed"');
-  expect(html).toContain('data-filter="pending"');
+  expect(html).toContain('data-testid="filter-chip-all"');
+  expect(html).toContain('data-testid="filter-chip-passed"');
+  expect(html).toContain('data-testid="filter-chip-failed"');
+  expect(html).toContain('data-testid="filter-chip-skipped"');
 });
 
 test('includes search box for filtering tests', () => {
   const html = renderReport();
 
-  expect(html).toContain('search-input');
+  expect(html).toContain('data-testid="search-input"');
   expect(html).toContain('Filter tests');
 });
