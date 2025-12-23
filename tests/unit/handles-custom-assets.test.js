@@ -1,91 +1,13 @@
 const path = require('path');
 const fs = require('fs');
 const JestHtmlReporter = require('../../dist/index');
-const { generateHtmlReport } = require('../../dist/template');
-
-const createMockGlobalConfig = () => ({
-  rootDir: '/mock/project',
-  testPathPattern: '',
-});
-
-const createMockResults = () => ({
-  numTotalTestSuites: 1,
-  numPassedTestSuites: 1,
-  numFailedTestSuites: 0,
-  numPendingTestSuites: 0,
-  numTotalTests: 1,
-  numPassedTests: 1,
-  numFailedTests: 0,
-  numPendingTests: 0,
-  numTodoTests: 0,
-  success: true,
-  startTime: Date.now() - 1000,
-  testResults: [
-    {
-      testFilePath: '/project/test.js',
-      numFailingTests: 0,
-      numPassingTests: 1,
-      numPendingTests: 0,
-      perfStats: { start: 0, end: 100 },
-      failureMessage: null,
-      testResults: [
-        {
-          title: 'test',
-          fullName: 'test',
-          ancestorTitles: [],
-          status: 'passed',
-          duration: 10,
-          failureMessages: [],
-          failureDetails: [],
-        },
-      ],
-    },
-  ],
-});
-
-const createMockReportData = () => ({
-  summary: {
-    totalSuites: 1,
-    passedSuites: 1,
-    failedSuites: 0,
-    pendingSuites: 0,
-    totalTests: 1,
-    passedTests: 1,
-    failedTests: 0,
-    pendingTests: 0,
-    todoTests: 0,
-    duration: 100,
-    success: true,
-    startTime: '2024-01-01T12:00:00.000Z',
-    endTime: '2024-01-01T12:00:00.100Z',
-  },
-  testSuites: [
-    {
-      name: 'test.js',
-      path: '/project/test.js',
-      status: 'passed',
-      duration: 100,
-      tests: [
-        {
-          title: 'test',
-          fullName: 'test',
-          ancestorTitles: [],
-          status: 'passed',
-          duration: 10,
-          failureMessages: [],
-          failureDetails: [],
-        },
-      ],
-      failureMessage: null,
-    },
-  ],
-});
+const { createMockGlobalConfig, createMockResults, renderReport } = require('./test-utils');
 
 let tempDir;
 let consoleWarnSpy;
 
 beforeAll(() => {
-  tempDir = path.join(__dirname, '../.test-output');
+  tempDir = path.join(__dirname, '/output');
   if (!fs.existsSync(tempDir)) {
     fs.mkdirSync(tempDir, { recursive: true });
   }
@@ -180,24 +102,7 @@ test('handles relative paths for custom css files', () => {
 });
 
 test('includes custom css in generated html', () => {
-  const html = generateHtmlReport(createMockReportData(), {
-    pageTitle: 'Test',
-    showPassed: true,
-    showFailed: true,
-    showPending: true,
-    showDuration: true,
-    showFilePath: 'filename',
-    showProgressBar: false,
-    theme: 'dark',
-    enableThemeToggle: false,
-    sort: 'default',
-    collapsePassed: false,
-    collapseAll: false,
-    expandLevel: -1,
-    includeEnvironment: false,
-    dateFormat: 'locale',
-    embedAssets: true,
-    logoHeight: 32,
+  const html = renderReport(undefined, {
     customCss: '.custom-class { color: red; }',
   });
 
@@ -205,24 +110,7 @@ test('includes custom css in generated html', () => {
 });
 
 test('includes custom javascript in generated html', () => {
-  const html = generateHtmlReport(createMockReportData(), {
-    pageTitle: 'Test',
-    showPassed: true,
-    showFailed: true,
-    showPending: true,
-    showDuration: true,
-    showFilePath: 'filename',
-    showProgressBar: false,
-    theme: 'dark',
-    enableThemeToggle: false,
-    sort: 'default',
-    collapsePassed: false,
-    collapseAll: false,
-    expandLevel: -1,
-    includeEnvironment: false,
-    dateFormat: 'locale',
-    embedAssets: true,
-    logoHeight: 32,
+  const html = renderReport(undefined, {
     customJs: 'console.log("Hello");',
   });
 

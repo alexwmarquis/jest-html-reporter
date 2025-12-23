@@ -17,4 +17,4 @@ coverage/
 src/template.built.ts
 playwright-report/
 test-results/
-tests/.test-output/
+tests/unit/output/

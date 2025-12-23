@@ -1,53 +1,13 @@
 const path = require('path');
 const fs = require('fs');
 const JestHtmlReporter = require('../../dist/index');
-
-const createMockGlobalConfig = () => ({
-  rootDir: '/mock/project',
-  testPathPattern: '',
-});
-
-const createMockResults = (overrides = {}) => ({
-  numTotalTestSuites: 1,
-  numPassedTestSuites: 1,
-  numFailedTestSuites: 0,
-  numPendingTestSuites: 0,
-  numTotalTests: 1,
-  numPassedTests: 1,
-  numFailedTests: 0,
-  numPendingTests: 0,
-  numTodoTests: 0,
-  success: true,
-  startTime: Date.now() - 1000,
-  testResults: [
-    {
-      testFilePath: '/project/test.js',
-      numFailingTests: 0,
-      numPassingTests: 1,
-      numPendingTests: 0,
-      perfStats: { start: 0, end: 100 },
-      failureMessage: null,
-      testResults: [
-        {
-          title: 'passing test',
-          fullName: 'passing test',
-          ancestorTitles: [],
-          status: 'passed',
-          duration: 10,
-          failureMessages: [],
-          failureDetails: [],
-        },
-      ],
-    },
-  ],
-  ...overrides,
-});
+const { createMockGlobalConfig, createMockResults } = require('./test-utils');
 
 let tempDir;
 let execSpy;
 
 beforeAll(() => {
-  tempDir = path.join(__dirname, '../.test-output');
+  tempDir = path.join(__dirname, '/output');
   if (!fs.existsSync(tempDir)) {
     fs.mkdirSync(tempDir, { recursive: true });
   }

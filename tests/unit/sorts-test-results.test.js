@@ -1,71 +1,12 @@
 const path = require('path');
 const fs = require('fs');
 const JestHtmlReporter = require('../../dist/index');
-
-const createMockGlobalConfig = () => ({
-  rootDir: '/mock/project',
-  testPathPattern: '',
-});
-
-const createMockResults = (overrides = {}) => ({
-  numTotalTestSuites: 2,
-  numPassedTestSuites: 2,
-  numFailedTestSuites: 0,
-  numPendingTestSuites: 0,
-  numTotalTests: 2,
-  numPassedTests: 2,
-  numFailedTests: 0,
-  numPendingTests: 0,
-  numTodoTests: 0,
-  success: true,
-  startTime: Date.now() - 1000,
-  testResults: [
-    {
-      testFilePath: '/project/fast.test.js',
-      numFailingTests: 0,
-      numPassingTests: 1,
-      numPendingTests: 0,
-      perfStats: { start: 0, end: 100 },
-      failureMessage: null,
-      testResults: [
-        {
-          title: 'fast test',
-          fullName: 'fast test',
-          ancestorTitles: [],
-          status: 'passed',
-          duration: 5,
-          failureMessages: [],
-          failureDetails: [],
-        },
-      ],
-    },
-    {
-      testFilePath: '/project/slow.test.js',
-      numFailingTests: 0,
-      numPassingTests: 1,
-      numPendingTests: 0,
-      perfStats: { start: 0, end: 500 },
-      failureMessage: null,
-      testResults: [
-        {
-          title: 'slow test',
-          fullName: 'slow test',
-          ancestorTitles: [],
-          status: 'passed',
-          duration: 450,
-          failureMessages: [],
-          failureDetails: [],
-        },
-      ],
-    },
-  ],
-  ...overrides,
-});
+const { createMockGlobalConfig, createMockResults } = require('./test-utils');
 
 let tempDir;
 
 beforeAll(() => {
-  tempDir = path.join(__dirname, '../.test-output');
+  tempDir = path.join(__dirname, '/output');
   if (!fs.existsSync(tempDir)) {
     fs.mkdirSync(tempDir, { recursive: true });
   }
@@ -73,7 +14,50 @@ beforeAll(() => {
 
 test('sorts test suites by duration when sort is set to duration', () => {
   const outputPath = path.join(tempDir, 'sorted-duration.html');
-  const mockResults = createMockResults();
+  const mockResults = createMockResults({
+    numTotalTestSuites: 2,
+    numPassedTestSuites: 2,
+    testResults: [
+      {
+        testFilePath: '/project/fast.test.js',
+        numFailingTests: 0,
+        numPassingTests: 1,
+        numPendingTests: 0,
+        perfStats: { start: 0, end: 100 },
+        failureMessage: null,
+        testResults: [
+          {
+            title: 'fast test',
+            fullName: 'fast test',
+            ancestorTitles: [],
+            status: 'passed',
+            duration: 5,
+            failureMessages: [],
+            failureDetails: [],
+          },
+        ],
+      },
+      {
+        testFilePath: '/project/slow.test.js',
+        numFailingTests: 0,
+        numPassingTests: 1,
+        numPendingTests: 0,
+        perfStats: { start: 0, end: 500 },
+        failureMessage: null,
+        testResults: [
+          {
+            title: 'slow test',
+            fullName: 'slow test',
+            ancestorTitles: [],
+            status: 'passed',
+            duration: 450,
+            failureMessages: [],
+            failureDetails: [],
+          },
+        ],
+      },
+    ],
+  });
 
   const reporter = new JestHtmlReporter(createMockGlobalConfig(), {
     outputPath,
@@ -87,6 +71,8 @@ test('sorts test suites by duration when sort is set to duration', () => {
 test('sorts test suites by name when sort is set to name', () => {
   const outputPath = path.join(tempDir, 'sorted-name.html');
   const mockResults = createMockResults({
+    numTotalTestSuites: 2,
+    numPassedTestSuites: 2,
     testResults: [
       {
         testFilePath: '/project/zebra.test.js',
@@ -140,7 +126,10 @@ test('sorts test suites by name when sort is set to name', () => {
 
 test('sorts test suites by status when sort is set to status', () => {
   const outputPath = path.join(tempDir, 'sorted-status.html');
-  const mockResults = createMockResults();
+  const mockResults = createMockResults({
+    numTotalTestSuites: 2,
+    numPassedTestSuites: 2,
+  });
 
   const reporter = new JestHtmlReporter(createMockGlobalConfig(), {
     outputPath,

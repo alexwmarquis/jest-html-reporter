@@ -1,124 +1,82 @@
-const { generateHtmlReport } = require('../../dist/template');
+const { createMockReportData, renderReport } = require('./test-utils');
 
-const createMockReportData = () => ({
-  summary: {
-    totalSuites: 1,
-    passedSuites: 0,
-    failedSuites: 1,
-    pendingSuites: 0,
-    totalTests: 3,
-    passedTests: 1,
-    failedTests: 1,
-    pendingTests: 1,
-    todoTests: 0,
-    duration: 100,
-    success: false,
-    startTime: '2024-01-01T12:00:00.000Z',
-    endTime: '2024-01-01T12:00:00.100Z',
-  },
-  testSuites: [
-    {
-      name: 'test.js',
-      path: '/project/test.js',
-      status: 'failed',
-      duration: 100,
-      tests: [
-        {
-          title: 'passing test',
-          fullName: 'passing test',
-          ancestorTitles: [],
-          status: 'passed',
-          duration: 10,
-          failureMessages: [],
-          failureDetails: [],
-          invocations: 1,
-          isFlaky: false,
-        },
-        {
-          title: 'failing test',
-          fullName: 'failing test',
-          ancestorTitles: [],
-          status: 'failed',
-          duration: 20,
-          failureMessages: ['Error'],
-          failureDetails: [],
-          invocations: 1,
-          isFlaky: false,
-        },
-        {
-          title: 'pending test',
-          fullName: 'pending test',
-          ancestorTitles: [],
-          status: 'pending',
-          duration: 0,
-          failureMessages: [],
-          failureDetails: [],
-          invocations: 1,
-          isFlaky: false,
-        },
-      ],
-      failureMessage: null,
+const createMixedStatusData = () =>
+  createMockReportData({
+    summary: {
+      totalTests: 3,
+      passedTests: 1,
+      failedTests: 1,
+      pendingTests: 1,
+      failedSuites: 1,
+      passedSuites: 0,
+      success: false,
     },
-  ],
-});
-
-const defaultOptions = {
-  pageTitle: 'Test',
-  showPassed: true,
-  showFailed: true,
-  showPending: true,
-  showDuration: true,
-  showFilePath: 'filename',
-  showProgressBar: false,
-  theme: 'dark',
-  enableThemeToggle: false,
-  sort: 'default',
-  collapsePassed: false,
-  collapseAll: false,
-  expandLevel: -1,
-  includeEnvironment: false,
-  dateFormat: 'locale',
-  embedAssets: true,
-  logoHeight: 32,
-};
+    testSuites: [
+      {
+        name: 'test.js',
+        path: '/project/test.js',
+        status: 'failed',
+        duration: 100,
+        tests: [
+          {
+            title: 'passing test',
+            fullName: 'passing test',
+            ancestorTitles: [],
+            status: 'passed',
+            duration: 10,
+            failureMessages: [],
+            failureDetails: [],
+            invocations: 1,
+            isFlaky: false,
+          },
+          {
+            title: 'failing test',
+            fullName: 'failing test',
+            ancestorTitles: [],
+            status: 'failed',
+            duration: 20,
+            failureMessages: ['Error'],
+            failureDetails: [],
+            invocations: 1,
+            isFlaky: false,
+          },
+          {
+            title: 'pending test',
+            fullName: 'pending test',
+            ancestorTitles: [],
+            status: 'pending',
+            duration: 0,
+            failureMessages: [],
+            failureDetails: [],
+            invocations: 1,
+            isFlaky: false,
+          },
+        ],
+        failureMessage: null,
+      },
+    ],
+  });
 
 test('hides passed tests when show passed is set to false', () => {
-  const data = createMockReportData();
-
-  const html = generateHtmlReport(data, {
-    ...defaultOptions,
-    showPassed: false,
-    showFailed: true,
-  });
+  const html = renderReport(createMixedStatusData(), { showPassed: false });
 
   expect(html).not.toContain('passing test');
 });
 
 test('hides failed tests when show failed is set to false', () => {
-  const data = createMockReportData();
-
-  const html = generateHtmlReport(data, {
-    ...defaultOptions,
-    showPassed: true,
-    showFailed: false,
-  });
+  const html = renderReport(createMixedStatusData(), { showFailed: false });
 
   expect(html).not.toContain('failing test');
 });
 
 test('hides pending tests when show pending is set to false', () => {
-  const data = createMockReportData();
-
-  const html = generateHtmlReport(data, {
-    ...defaultOptions,
-    showPending: false,
-  });
+  const html = renderReport(createMixedStatusData(), { showPending: false });
 
   expect(html).not.toContain('pending test');
 });
 
 test('includes filter chips for all test statuses', () => {
-  const html = generateHtmlReport(createMockReportData(), defaultOptions);
+  const html = renderReport(createMixedStatusData());
 
   expect(html).toContain('filter-chip');
   expect(html).toContain('data-filter="all"');
@@ -128,7 +86,7 @@ test('includes filter chips for all test statuses', () => {
 });
 
 test('includes search box for filtering tests', () => {
-  const html = generateHtmlReport(createMockReportData(), defaultOptions);
+  const html = renderReport();
 
   expect(html).toContain('search-input');
   expect(html).toContain('Filter tests');

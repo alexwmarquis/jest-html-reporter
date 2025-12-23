@@ -3,7 +3,7 @@ dist/
 coverage/
 playwright-report/
 test-results/
-tests/.test-output/
+tests/unit/output/
 package-lock.json
 src/template.built.ts
 *.tgz
