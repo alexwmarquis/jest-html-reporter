@@ -5,6 +5,16 @@ This project adheres to semantic versioning.
 
 ## Unreleased
 
+## v1.0.6
+
+### Added
+
+- Improved unit test coverage and added code coverage reporting.
+
+### Changed
+
+- Made spacing more consistent throughout the reporter.
+
 ## v1.0.5
 
 ### Added
