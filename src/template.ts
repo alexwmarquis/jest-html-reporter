@@ -80,6 +80,8 @@ export function generateHtmlReport(data: ReportData, options: TemplateOptions): 
   <link href="${escapeHtml(fonts.url)}" rel="stylesheet">`
     : '';
 
+  const faviconLink = logo ? `\n  <link rel="icon" href="${escapeHtml(logo)}">` : '';
+
   const fontOverrideCss = fonts
     ? `:root { --font-sans: '${fonts.sans}'; --font-mono: '${fonts.mono}'; }`
     : '';
@@ -89,7 +91,7 @@ export function generateHtmlReport(data: ReportData, options: TemplateOptions): 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(pageTitle)}</title>${fontLinks}
+  <title>${escapeHtml(pageTitle)}</title>${faviconLink}${fontLinks}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <style>
 ${COMPILED_CSS}
@@ -100,7 +102,7 @@ ${customCss ? `\n${customCss}` : ''}
 </head>
 <body>
   <div class="container">
-    ${generateReportHeader(pageTitle, subtitle, logo, logoHeight)}
+    ${generateReportHeader(pageTitle, `${formatDate(summary.endTime, dateFormat)}&nbsp;&nbsp;&nbsp;Total time: ${formatDuration(summary.duration)}`, subtitle, logo, logoHeight)}
     
     <div class="header" data-testid="header">
       <div class="search-box" data-testid="search-box">
@@ -143,9 +145,6 @@ ${customCss ? `\n${customCss}` : ''}
           </a>
         </nav>
       </div>
-      <div class="meta-info" data-testid="meta-info">
-        ${formatDate(summary.endTime, dateFormat)}&nbsp;&nbsp;&nbsp;Total time: ${formatDuration(summary.duration)}
-      </div>
     </div>
 
     ${showProgressBar ? generateProgressBar(summary) : ''}
@@ -179,21 +178,29 @@ ${customJs ? `\n${customJs}` : ''}
 
 function generateReportHeader(
   title: string,
+  metaInfo: string,
   subtitle?: string,
   logo?: string,
   logoHeight = 32,
 ): string {
-  if (!subtitle && !logo) {
-    return '';
-  }
+  const hasBranding = subtitle || logo;
 
   return `
     <div class="report-header" data-testid="report-header">
-      <div class="report-title-row" data-testid="report-title-row">
-        ${logo ? `<img src="${escapeHtml(logo)}" alt="Logo" class="header-logo" data-testid="header-logo" style="height: ${logoHeight}px">` : ''}
-        <h1 class="report-title" data-testid="report-title">${escapeHtml(title)}</h1>
+      ${
+        hasBranding
+          ? `
+      <div class="report-branding">
+        <div class="report-title-row" data-testid="report-title-row">
+          ${logo ? `<img src="${escapeHtml(logo)}" alt="Logo" class="header-logo" data-testid="header-logo" style="height: ${logoHeight}px">` : ''}
+          <h1 class="report-title" data-testid="report-title">${escapeHtml(title)}</h1>
+        </div>
+        ${subtitle ? `<p class="report-subtitle" data-testid="report-subtitle">${escapeHtml(subtitle)}</p>` : ''}
       </div>
-      ${subtitle ? `<p class="report-subtitle" data-testid="report-subtitle">${escapeHtml(subtitle)}</p>` : ''}
+      `
+          : `<h1 class="report-title" data-testid="report-title">${escapeHtml(title)}</h1>`
+      }
+      <div class="meta-info" data-testid="meta-info">${metaInfo}</div>
     </div>
   `;
 }
