@@ -367,7 +367,7 @@ function generateSuiteHtml(
   const showSuiteFailureMessage = suite.failureMessage && !testsHaveFailureMessages;
 
   return `
-    <div class="suite${shouldCollapse ? ' collapsed' : ''}" data-status="${suite.status}" data-has-failed="${hasFailed}" data-name="${escapeHtml(suite.name)}" data-testid="test-suite">
+    <div class="suite${shouldCollapse ? ' collapsed' : ''}" data-status="${suite.status}" data-has-failed="${hasFailed}" data-name="${escapeHtml(suite.name)}" data-testid="test-suite" data-collapsed="${shouldCollapse}">
       <div class="suite-header" data-testid="suite-header">
         <i class="bi bi-chevron-down suite-chevron"></i>
         <span class="suite-name" data-testid="suite-name">${escapeHtml(displayName)}</span>
@@ -510,7 +510,7 @@ function generateDescribeGroupHtml(
   }
 
   return `
-    <div class="describe-group${shouldCollapse ? ' collapsed' : ''}" data-status="${node.status || 'passed'}" data-depth="${depth}" data-testid="describe-group">
+    <div class="describe-group${shouldCollapse ? ' collapsed' : ''}" data-status="${node.status || 'passed'}" data-depth="${depth}" data-testid="describe-group" data-collapsed="${shouldCollapse}">
       <div class="describe-header" data-testid="describe-header">
         <i class="bi bi-chevron-down describe-chevron"></i>
         <span class="describe-name" data-testid="describe-name">${escapeHtml(node.name)}</span>
@@ -587,17 +587,267 @@ function generateTestItemHtml(
       <i class="bi ${icon} test-status-icon ${iconClass}"></i>
       <div class="test-content">
         <span class="test-title" data-testid="test-title">${escapeHtml(test.title)}</span>${flakyBadge}
-        ${
-          test.failureMessages.length > 0
-            ? `
-          <div class="error-block" data-testid="test-error-block">${test.failureMessages.map(msg => escapeHtml(stripAnsi(msg))).join('\n\n')}</div>
-        `
-            : ''
-        }
+        ${test.failureMessages.length > 0 ? generateEnhancedErrorHtml(test.failureMessages) : ''}
       </div>
       ${options.showDuration ? `<span class="test-duration" data-testid="test-duration">${formatDuration(test.duration)}</span>` : ''}
     </div>
   `;
+}
+
+interface ParsedError {
+  mainMessage: string;
+  expected?: string;
+  received?: string;
+  diff?: string;
+  stackFrames: StackFrame[];
+}
+
+interface StackFrame {
+  raw: string;
+  filePath?: string;
+  lineNumber?: number;
+  columnNumber?: number;
+  functionName?: string;
+  isNodeModule: boolean;
+}
+
+function parseErrorMessage(rawMessage: string): ParsedError {
+  const message = stripAnsi(rawMessage);
+  const lines = message.split('\n');
+
+  let mainMessage = '';
+  let expected: string | undefined;
+  let received: string | undefined;
+  let diff: string | undefined;
+  const stackFrames: StackFrame[] = [];
+
+  let inDiff = false;
+  let diffLines: string[] = [];
+  let mainMessageLines: string[] = [];
+  let foundStackTrace = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    if (trimmed.startsWith('Expected:')) {
+      expected = trimmed.replace('Expected:', '').trim();
+      continue;
+    }
+    if (trimmed.startsWith('Received:')) {
+      received = trimmed.replace('Received:', '').trim();
+      continue;
+    }
+
+    if (
+      trimmed.startsWith('- Expected') ||
+      trimmed.startsWith('+ Received') ||
+      trimmed === 'Difference:' ||
+      trimmed.startsWith('- ') ||
+      trimmed.startsWith('+ ')
+    ) {
+      if (!inDiff && (trimmed.startsWith('- Expected') || trimmed === 'Difference:')) {
+        inDiff = true;
+      }
+      if (inDiff) {
+        diffLines.push(line);
+        continue;
+      }
+    }
+
+    const stackMatch =
+      line.match(/^\s*at\s+(.+?)\s+\((.+?):(\d+):(\d+)\)/) ||
+      line.match(/^\s*at\s+(.+?):(\d+):(\d+)/) ||
+      line.match(/^\s*at\s+(.+)/);
+
+    if (stackMatch) {
+      foundStackTrace = true;
+      const frame = parseStackFrame(line);
+      stackFrames.push(frame);
+      continue;
+    }
+
+    if (!foundStackTrace && !inDiff && trimmed && !trimmed.startsWith('●')) {
+      mainMessageLines.push(line);
+    }
+  }
+
+  mainMessage = mainMessageLines.join('\n').trim();
+  diff = diffLines.length > 0 ? diffLines.join('\n') : undefined;
+
+  return { mainMessage, expected, received, diff, stackFrames };
+}
+
+function parseStackFrame(line: string): StackFrame {
+  const trimmed = line.trim();
+
+  let match = trimmed.match(/^at\s+(.+?)\s+\((.+?):(\d+):(\d+)\)$/);
+  if (match) {
+    return {
+      raw: trimmed,
+      functionName: match[1],
+      filePath: match[2],
+      lineNumber: parseInt(match[3], 10),
+      columnNumber: parseInt(match[4], 10),
+      isNodeModule: match[2].includes('node_modules'),
+    };
+  }
+
+  match = trimmed.match(/^at\s+(.+?):(\d+):(\d+)$/);
+  if (match) {
+    return {
+      raw: trimmed,
+      filePath: match[1],
+      lineNumber: parseInt(match[2], 10),
+      columnNumber: parseInt(match[3], 10),
+      isNodeModule: match[1].includes('node_modules'),
+    };
+  }
+
+  match = trimmed.match(/^at\s+(.+)$/);
+  if (match) {
+    return {
+      raw: trimmed,
+      functionName: match[1],
+      isNodeModule: false,
+    };
+  }
+
+  return { raw: trimmed, isNodeModule: false };
+}
+
+function generateEnhancedErrorHtml(failureMessages: string[]): string {
+  const errorId = `error-${Math.random().toString(36).substr(2, 9)}`;
+  const allMessages = failureMessages.map(msg => stripAnsi(msg)).join('\n\n');
+
+  const blocks = failureMessages
+    .map((msg, idx) => {
+      const parsed = parseErrorMessage(msg);
+      return generateSingleErrorBlock(parsed, `${errorId}-${idx}`);
+    })
+    .join('');
+
+  return `
+    <div class="error-container" data-testid="error-container">
+      <div class="error-actions" data-testid="error-actions">
+        <button class="copy-error-btn" data-testid="copy-error-btn" data-error="${escapeHtml(allMessages.replace(/"/g, '&quot;'))}" title="Copy error to clipboard">
+          <i class="bi bi-clipboard"></i>
+          <span>Copy</span>
+        </button>
+      </div>
+      ${blocks}
+    </div>
+  `;
+}
+
+function generateSingleErrorBlock(parsed: ParsedError, errorId: string): string {
+  let html = '<div class="error-block-enhanced" data-testid="error-block-enhanced">';
+
+  if (parsed.mainMessage) {
+    html += `<div class="error-message" data-testid="error-message">${escapeHtml(parsed.mainMessage)}</div>`;
+  }
+
+  if (parsed.expected !== undefined || parsed.received !== undefined) {
+    html += '<div class="error-diff-container" data-testid="error-diff-container">';
+    if (parsed.expected !== undefined) {
+      html += `
+        <div class="error-diff-row expected" data-testid="error-diff-row-expected">
+          <span class="error-diff-label" data-testid="error-diff-label-expected">Expected</span>
+          <code class="error-diff-value" data-testid="error-diff-value-expected">${escapeHtml(parsed.expected)}</code>
+        </div>
+      `;
+    }
+    if (parsed.received !== undefined) {
+      html += `
+        <div class="error-diff-row received" data-testid="error-diff-row-received">
+          <span class="error-diff-label" data-testid="error-diff-label-received">Received</span>
+          <code class="error-diff-value" data-testid="error-diff-value-received">${escapeHtml(parsed.received)}</code>
+        </div>
+      `;
+    }
+    html += '</div>';
+  }
+
+  if (parsed.diff) {
+    html += `
+      <div class="error-diff-full" data-testid="error-diff-full">
+        <div class="error-diff-title" data-testid="error-diff-title">Difference</div>
+        <pre class="error-diff-content" data-testid="error-diff-content">${formatDiffHtml(parsed.diff)}</pre>
+      </div>
+    `;
+  }
+
+  if (parsed.stackFrames.length > 0) {
+    const visibleFrames = parsed.stackFrames.slice(0, 3);
+    const hiddenFrames = parsed.stackFrames.slice(3);
+
+    html += '<div class="error-stack" data-testid="error-stack">';
+    html += '<div class="error-stack-title" data-testid="error-stack-title">Stack Trace</div>';
+    html += '<div class="error-stack-frames" data-testid="error-stack-frames">';
+
+    visibleFrames.forEach(frame => {
+      html += generateStackFrameHtml(frame);
+    });
+
+    if (hiddenFrames.length > 0) {
+      html += `
+        <div class="error-stack-hidden" data-testid="error-stack-hidden" id="${errorId}-hidden" style="display: none;">
+          ${hiddenFrames.map(frame => generateStackFrameHtml(frame)).join('')}
+        </div>
+        <button class="error-stack-toggle" data-testid="error-stack-toggle" data-target="${errorId}-hidden">
+          <i class="bi bi-chevron-down"></i>
+          <span>Show ${hiddenFrames.length} more frame${hiddenFrames.length > 1 ? 's' : ''}</span>
+        </button>
+      `;
+    }
+
+    html += '</div></div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function generateStackFrameHtml(frame: StackFrame): string {
+  const classes = `error-stack-frame${frame.isNodeModule ? ' is-node-module' : ''}`;
+
+  if (frame.filePath && frame.lineNumber) {
+    const displayPath = frame.filePath.replace(/^.*[/\\]/, '');
+    const vsCodeLink = `vscode://file/${frame.filePath}:${frame.lineNumber}${frame.columnNumber ? ':' + frame.columnNumber : ''}`;
+
+    return `
+      <div class="${classes}" data-testid="error-stack-frame" data-is-node-module="${frame.isNodeModule}">
+        <span class="stack-at" data-testid="stack-at">at</span>
+        ${frame.functionName ? `<span class="stack-function" data-testid="stack-function">${escapeHtml(frame.functionName)}</span>` : ''}
+        <a href="${vsCodeLink}" class="stack-location" data-testid="stack-location" title="Open in VS Code: ${escapeHtml(frame.filePath)}">
+          <span class="stack-file" data-testid="stack-file">${escapeHtml(displayPath)}</span>
+          <span class="stack-line" data-testid="stack-line">:${frame.lineNumber}${frame.columnNumber ? ':' + frame.columnNumber : ''}</span>
+        </a>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="${classes}" data-testid="error-stack-frame" data-is-node-module="${frame.isNodeModule}">
+      <span class="stack-raw" data-testid="stack-raw">${escapeHtml(frame.raw)}</span>
+    </div>
+  `;
+}
+
+function formatDiffHtml(diff: string): string {
+  return diff
+    .split('\n')
+    .map(line => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('-') && !trimmed.startsWith('---')) {
+        return `<span class="diff-removed" data-testid="diff-removed">${escapeHtml(line)}</span>`;
+      }
+      if (trimmed.startsWith('+') && !trimmed.startsWith('+++')) {
+        return `<span class="diff-added" data-testid="diff-added">${escapeHtml(line)}</span>`;
+      }
+      return escapeHtml(line);
+    })
+    .join('\n');
 }
 
 function generateScript(options: {
@@ -620,6 +870,49 @@ function generateScript(options: {
         e.stopPropagation();
         const group = header.closest('.describe-group');
         group.classList.toggle('collapsed');
+      });
+    });
+
+    document.querySelectorAll('.copy-error-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const errorText = btn.dataset.error;
+        try {
+          await navigator.clipboard.writeText(errorText);
+          const icon = btn.querySelector('i');
+          const text = btn.querySelector('span');
+          icon.className = 'bi bi-check';
+          text.textContent = 'Copied!';
+          setTimeout(() => {
+            icon.className = 'bi bi-clipboard';
+            text.textContent = 'Copy';
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy:', err);
+        }
+      });
+    });
+
+    document.querySelectorAll('.error-stack-toggle').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const targetId = btn.dataset.target;
+        const hiddenSection = document.getElementById(targetId);
+        const icon = btn.querySelector('i');
+        const text = btn.querySelector('span');
+        
+        if (hiddenSection.style.display === 'none') {
+          hiddenSection.style.display = 'block';
+          icon.className = 'bi bi-chevron-up';
+          text.textContent = 'Show less';
+          btn.classList.add('expanded');
+        } else {
+          hiddenSection.style.display = 'none';
+          icon.className = 'bi bi-chevron-down';
+          const frameCount = hiddenSection.querySelectorAll('.error-stack-frame').length;
+          text.textContent = 'Show ' + frameCount + ' more frame' + (frameCount > 1 ? 's' : '');
+          btn.classList.remove('expanded');
+        }
       });
     });
 

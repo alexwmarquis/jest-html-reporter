@@ -5,6 +5,16 @@ This project adheres to semantic versioning.
 
 ## Unreleased
 
+### Added
+
+- **Enhanced Error Display**: Completely redesigned failure message presentation
+  - Beautiful Expected vs. Received diff view with color-coded labels
+  - Syntax-highlighted code snippets showing the failing line in context
+  - Full diff section with red/green highlighting for removed/added lines
+  - Collapsible stack traces with "Show more frames" for long traces
+  - Clickable file paths that open directly in VS Code (`vscode://file/` links)
+  - "Copy error" button for easy clipboard copying of failure messages
+
 ## v1.0.6
 
 ### Added

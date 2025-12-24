@@ -118,13 +118,13 @@ test('renders header with title but no subtitle element when subtitle not provid
 test('collapses all test suites when collapse all is set to true', () => {
   const html = renderReport(undefined, { collapseAll: true });
 
-  expect(html).toContain('class="suite collapsed"');
+  expect(html).toContain('data-collapsed="true"');
 });
 
 test('collapses only passed test suites when collapse passed is set to true', () => {
   const html = renderReport(undefined, { collapsePassed: true });
 
-  expect(html).toContain('collapsed');
+  expect(html).toContain('data-collapsed="true"');
 });
 
 test('does not collapse suites by default', () => {
@@ -134,7 +134,7 @@ test('does not collapse suites by default', () => {
   });
 
   expect(html).toContain('data-testid="test-suite"');
-  expect(html).not.toContain('class="suite collapsed"');
+  expect(html).toContain('data-collapsed="false"');
 });
 
 test('renders todo test count in summary', () => {
@@ -194,7 +194,7 @@ test('handles test with failure details', () => {
 
   expect(html).toContain('test with details');
   expect(html).toContain('Expected true to be false');
-  expect(html).toContain('data-testid="test-error-block"');
+  expect(html).toContain('data-testid="error-container"');
 });
 
 test('handles suite with failure message', () => {
