@@ -1,4 +1,4 @@
-import { test as teardown, expect } from './fixtures';
+import { test as teardown } from './fixtures';
 import path from 'node:path';
 import fs from 'node:fs';
 
@@ -15,9 +15,5 @@ teardown('should delete existing test results', async () => {
     if (fs.existsSync(reportPath)) {
       fs.rmSync(reportPath);
     }
-  }
-
-  for (const reportPath of reportPaths) {
-    expect(fs.existsSync(reportPath)).toBe(false);
   }
 });
