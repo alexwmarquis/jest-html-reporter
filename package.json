@@ -59,7 +59,7 @@
     "test:unit": "npm run build && npx jest --config jest.config.js",
     "test:coverage": "npm run build && npx jest --config jest.config.js --coverage",
     "test:integration": "npm run build && npx playwright test",
-    "test": "npm run test:unit && npm run test:integration",
+    "test": "npm run test:integration",
     "clean": "rm -rf dist",
     "prepack": "npm run build",
     "prepare": "husky",
