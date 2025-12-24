@@ -21,6 +21,10 @@ $theme-dark: (
   'error-bg': rgba(229, 83, 75, 0.1),
   'error-border': rgba(229, 83, 75, 0.25),
   'error-text': #f48771,
+  'error-section-bg': rgba(0, 0, 0, 0.15),
+  'error-header-bg': rgba(0, 0, 0, 0.1),
+  'diff-removed-bg': rgba(229, 83, 75, 0.12),
+  'diff-added-bg': rgba(78, 201, 80, 0.12),
 );
 
 $theme-light: (
@@ -41,9 +45,13 @@ $theme-light: (
   'color-flaky': #bc4c00,
   'color-flaky-bg': rgba(188, 76, 0, 0.12),
   'color-accent': #0969da,
-  'error-bg': rgba(207, 34, 46, 0.08),
-  'error-border': rgba(207, 34, 46, 0.2),
+  'error-bg': rgba(207, 34, 46, 0.06),
+  'error-border': rgba(207, 34, 46, 0.25),
   'error-text': #a40e26,
+  'error-section-bg': rgba(207, 34, 46, 0.04),
+  'error-header-bg': rgba(207, 34, 46, 0.06),
+  'diff-removed-bg': rgba(207, 34, 46, 0.12),
+  'diff-added-bg': rgba(26, 127, 55, 0.12),
 );
 
 $theme-github: (
@@ -67,6 +75,10 @@ $theme-github: (
   'error-bg': rgba(248, 81, 73, 0.1),
   'error-border': rgba(248, 81, 73, 0.4),
   'error-text': #f85149,
+  'error-section-bg': rgba(0, 0, 0, 0.15),
+  'error-header-bg': rgba(0, 0, 0, 0.1),
+  'diff-removed-bg': rgba(248, 81, 73, 0.15),
+  'diff-added-bg': rgba(63, 185, 80, 0.15),
 );
 
 $theme-monokai: (
@@ -90,6 +102,10 @@ $theme-monokai: (
   'error-bg': rgba(249, 38, 114, 0.1),
   'error-border': rgba(249, 38, 114, 0.4),
   'error-text': #f92672,
+  'error-section-bg': rgba(0, 0, 0, 0.15),
+  'error-header-bg': rgba(0, 0, 0, 0.1),
+  'diff-removed-bg': rgba(249, 38, 114, 0.15),
+  'diff-added-bg': rgba(166, 226, 46, 0.15),
 );
 
 $theme-dracula: (
@@ -113,6 +129,10 @@ $theme-dracula: (
   'error-bg': rgba(255, 85, 85, 0.1),
   'error-border': rgba(255, 85, 85, 0.4),
   'error-text': #ff5555,
+  'error-section-bg': rgba(0, 0, 0, 0.15),
+  'error-header-bg': rgba(0, 0, 0, 0.1),
+  'diff-removed-bg': rgba(255, 85, 85, 0.15),
+  'diff-added-bg': rgba(80, 250, 123, 0.15),
 );
 
 $theme-nord: (
@@ -136,6 +156,10 @@ $theme-nord: (
   'error-bg': rgba(191, 97, 106, 0.1),
   'error-border': rgba(191, 97, 106, 0.4),
   'error-text': #bf616a,
+  'error-section-bg': rgba(0, 0, 0, 0.15),
+  'error-header-bg': rgba(0, 0, 0, 0.1),
+  'diff-removed-bg': rgba(191, 97, 106, 0.15),
+  'diff-added-bg': rgba(163, 190, 140, 0.15),
 );
 
 @mixin apply-theme($theme) {
