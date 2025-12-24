@@ -26,6 +26,7 @@ export class ReportPage {
   readonly progressBarHeader: Locator;
   readonly progressBarStats: Locator;
   readonly progressBarTrack: Locator;
+  readonly progressBarPassedPercentage: Locator;
 
   // Theme
   readonly themeToggle: Locator;
@@ -117,6 +118,7 @@ export class ReportPage {
     this.progressBarHeader = this.page.getByTestId('progress-bar-header');
     this.progressBarStats = this.page.getByTestId('progress-bar-stats');
     this.progressBarTrack = this.page.getByTestId('progress-bar-track');
+    this.progressBarPassedPercentage = this.page.getByTestId('progress-bar-passed-percentage');
 
     // Theme
     this.themeToggle = this.page.getByTestId('theme-toggle');

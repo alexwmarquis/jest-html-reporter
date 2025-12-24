@@ -81,6 +81,37 @@ class JestHtmlReporter {
       this.sortResults(reportData, sort);
     }
 
+    let resolvedLogo = logo;
+    if (logo && embedAssets && !logo.startsWith('http') && !logo.startsWith('data:')) {
+      let logoPath = path.isAbsolute(logo) ? logo : path.resolve(process.cwd(), logo);
+
+      if (!fs.existsSync(logoPath) && path.isAbsolute(logo)) {
+        const relativeLogoPath = path.resolve(
+          process.cwd(),
+          logo.startsWith('/') ? logo.slice(1) : logo,
+        );
+        if (fs.existsSync(relativeLogoPath)) {
+          logoPath = relativeLogoPath;
+        }
+      }
+
+      if (fs.existsSync(logoPath)) {
+        const buffer = fs.readFileSync(logoPath);
+        const ext = path.extname(logoPath).slice(1).toLowerCase();
+        let mimeType = `image/${ext}`;
+        if (ext === 'svg') mimeType = 'image/svg+xml';
+        else if (ext === 'png') mimeType = 'image/png';
+        else if (ext === 'jpg' || ext === 'jpeg') mimeType = 'image/jpeg';
+        else if (ext === 'gif') mimeType = 'image/gif';
+        else if (ext === 'webp') mimeType = 'image/webp';
+        else if (ext === 'ico') mimeType = 'image/x-icon';
+
+        resolvedLogo = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      } else {
+        console.warn(`⚠️ Logo file not found: ${logoPath}`);
+      }
+    }
+
     const DEFAULT_SANS = 'Google Sans';
     const DEFAULT_MONO = 'Google Sans Code';
 
@@ -96,7 +127,7 @@ class JestHtmlReporter {
     const templateOptions: TemplateOptions = {
       pageTitle,
       subtitle,
-      logo,
+      logo: resolvedLogo,
       logoHeight,
       showPassed,
       showFailed,
@@ -146,7 +177,7 @@ class JestHtmlReporter {
 
   private openInBrowser(filePath: string): void {
     const { exec } = require('child_process');
-    const platform = process.platform;
+    const { platform } = process;
 
     let command: string;
     if (platform === 'darwin') {

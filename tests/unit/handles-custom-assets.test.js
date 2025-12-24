@@ -116,3 +116,44 @@ test('includes custom javascript in generated html', () => {
 
   expect(html).toContain('console.log("Hello");');
 });
+
+test('embeds logo as base 64 when file exists and embed assets option is true', () => {
+  const logoPath = path.join(tempDir, 'test-logo.png');
+  fs.writeFileSync(logoPath, 'fake-image-content');
+
+  const outputPath = path.join(tempDir, 'with-embedded-logo.html');
+  const reporter = new JestHtmlReporter(createMockGlobalConfig(), {
+    outputPath,
+    logo: logoPath,
+    embedAssets: true,
+  });
+
+  reporter.onRunComplete(new Set(), createMockResults());
+
+  const content = fs.readFileSync(outputPath, 'utf8');
+  expect(content).toContain('data:image/png;base64,');
+  expect(content).toContain(Buffer.from('fake-image-content').toString('base64'));
+});
+
+test('handles logo as absolute path even if it does not exist at that exact path but exists relative to cwd', () => {
+  const logoPath = 'test-logo-relative.png';
+  const absoluteButWrongPath = '/test-logo-relative.png';
+  const fullLogoPath = path.join(process.cwd(), logoPath);
+  fs.writeFileSync(fullLogoPath, 'fake-image-content');
+
+  const outputPath = path.join(tempDir, 'with-absolute-logo.html');
+  const reporter = new JestHtmlReporter(createMockGlobalConfig(), {
+    outputPath,
+    logo: absoluteButWrongPath,
+    embedAssets: true,
+  });
+
+  reporter.onRunComplete(new Set(), createMockResults());
+
+  const content = fs.readFileSync(outputPath, 'utf8');
+  expect(content).toContain('data:image/png;base64,');
+
+  if (fs.existsSync(fullLogoPath)) {
+    fs.unlinkSync(fullLogoPath);
+  }
+});
