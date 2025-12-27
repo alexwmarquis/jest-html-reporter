@@ -4,15 +4,15 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
-  collectCoverageFrom: ['dist/**/*.js', '!dist/**/*.d.ts', '!dist/**/*.map'],
+  collectCoverageFrom: ['dist/**/*.js', '!dist/**/*.d.ts', '!dist/**/*.map', '!dist/types.js'],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
   coverageThreshold: {
     global: {
-      branches: 50,
-      functions: 50,
-      lines: 50,
-      statements: 50,
+      statements: 85,
+      branches: 75,
+      functions: 90,
+      lines: 85,
     },
   },
   reporters: [
