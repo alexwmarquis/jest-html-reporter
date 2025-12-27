@@ -1,5 +1,14 @@
 import { Page, Locator } from '@playwright/test';
 
+export enum Theme {
+  DARK = 'dark',
+  LIGHT = 'light',
+  NORD = 'nord',
+  GITHUB = 'github',
+  MONOKAI = 'monokai',
+  DRACULA = 'dracula',
+}
+
 export class ReportPage {
   // Header & Navigation
   readonly header: Locator;
@@ -187,5 +196,15 @@ export class ReportPage {
 
   async open() {
     await this.page.goto('');
+  }
+
+  async selectTheme(theme: Theme) {
+    await this.themeToggle.click();
+    await this.themeOption(theme).click();
+  }
+
+  async getActiveTheme(): Promise<string> {
+    const htmlClass = await this.page.locator('html').getAttribute('class');
+    return htmlClass?.replace('theme-', '') ?? 'unknown';
   }
 }
