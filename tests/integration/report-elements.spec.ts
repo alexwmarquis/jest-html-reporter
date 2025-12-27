@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
   await reportPage.open();
 });
 
-test('should display the report page', async () => {
+test('should display critical report elements', async () => {
   await expect(reportPage.header).toBeVisible();
   await expect(reportPage.headerLogo).toBeVisible();
   await expect(reportPage.reportHeader).toBeVisible();
