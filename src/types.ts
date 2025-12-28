@@ -29,6 +29,7 @@ export interface ReporterOptions {
   hideEmptySuites?: boolean;
   includeEnvironment?: boolean;
   additionalInfo?: AdditionalInfo;
+  minify?: boolean;
   showProgressBar?: boolean;
   sort?: 'default' | 'status' | 'duration' | 'name';
   collapsePassed?: boolean;
@@ -114,6 +115,7 @@ export interface TemplateOptions {
   expandLevel: number;
   includeEnvironment: boolean;
   additionalInfo?: AdditionalInfo;
+  minify?: boolean;
   dateFormat: 'locale' | 'iso' | 'relative';
   embedAssets: boolean;
   fonts:

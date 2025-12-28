@@ -55,6 +55,7 @@ module.exports = {
 | --------------- | --------- | -------------------- | ---------------------------------------- |
 | `outputPath`    | `string`  | `'jest-report.html'` | Path where the HTML report will be saved |
 | `outputJson`    | `boolean` | `false`              | Also output a JSON file with test data   |
+| `minify`        | `boolean` | `true`               | Minify the generated HTML report         |
 | `openOnFailure` | `boolean` | `false`              | Open report in browser when tests fail   |
 
 ### Branding & Display

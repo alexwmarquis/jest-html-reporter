@@ -44,6 +44,7 @@ export function generateHtmlReport(data: ReportData, options: TemplateOptions): 
     expandLevel,
     includeEnvironment,
     additionalInfo,
+    minify,
     dateFormat,
     fonts,
   } = options;
@@ -88,7 +89,7 @@ export function generateHtmlReport(data: ReportData, options: TemplateOptions): 
     ? `:root { --font-sans: '${fonts.sans}'; --font-mono: '${fonts.mono}'; }`
     : '';
 
-  return `<!DOCTYPE html>
+  const reportHtml = `<!DOCTYPE html>
 <html lang="en" class="${themeClass}">
 <head>
   <meta charset="UTF-8">
@@ -177,6 +178,8 @@ ${customJs ? `\n${customJs}` : ''}
   </script>
 </body>
 </html>`;
+
+  return minify ? minifyHtml(reportHtml) : reportHtml;
 }
 
 function generateReportHeader(
@@ -1139,4 +1142,26 @@ function getRelativeTime(date: Date): string {
   if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
 
   return date.toLocaleDateString('en-US');
+}
+
+function minifyHtml(html: string): string {
+  const placeholders: string[] = [];
+  const preTagPattern = /<pre[\s\S]*?<\/pre>/gi;
+
+  let minified = html.replace(preTagPattern, match => {
+    placeholders.push(match);
+    return `__PRE_PLACEHOLDER_${placeholders.length - 1}__`;
+  });
+
+  minified = minified
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/>\s+</g, '><')
+    .trim();
+
+  placeholders.forEach((content, i) => {
+    minified = minified.replace(`__PRE_PLACEHOLDER_${i}__`, content);
+  });
+
+  return minified;
 }

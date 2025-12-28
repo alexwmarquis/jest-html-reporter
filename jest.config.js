@@ -24,6 +24,7 @@ module.exports = {
         outputJson: true,
         pageTitle: 'Jest HTML Reporter',
         subtitle: 'Unit tests for Jest HTML Reporter',
+        minify: true,
         showPassed: true,
         showFailed: true,
         showPending: true,

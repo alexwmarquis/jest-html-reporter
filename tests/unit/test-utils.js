@@ -100,6 +100,7 @@ const defaultOptions = {
   collapseAll: false,
   expandLevel: -1,
   includeEnvironment: false,
+  minify: true,
   dateFormat: 'locale',
   embedAssets: true,
   logoHeight: 32,
