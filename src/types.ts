@@ -28,6 +28,7 @@ export interface ReporterOptions {
   showFilePath?: 'full' | 'filename';
   hideEmptySuites?: boolean;
   includeEnvironment?: boolean;
+  minify?: boolean;
   showProgressBar?: boolean;
   sort?: 'default' | 'status' | 'duration' | 'name';
   collapsePassed?: boolean;
@@ -112,6 +113,7 @@ export interface TemplateOptions {
   collapseAll: boolean;
   expandLevel: number;
   includeEnvironment: boolean;
+  minify?: boolean;
   dateFormat: 'locale' | 'iso' | 'relative';
   embedAssets: boolean;
   fonts:

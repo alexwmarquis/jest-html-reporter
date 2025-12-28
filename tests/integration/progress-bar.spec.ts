@@ -8,6 +8,6 @@ test.beforeEach(async ({ page }) => {
   await reportPage.open();
 });
 
-test('should displayed a passed percentage', async () => {
+test('should display a passed percentage', async () => {
   await expect(reportPage.progressBarPassedPercentage).toHaveText('100% passed');
 });
