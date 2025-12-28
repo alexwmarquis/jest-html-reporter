@@ -35,7 +35,7 @@ module.exports = {
         collapsePassed: false,
         theme: 'dark',
         enableThemeToggle: true,
-        logo: '/example.png',
+        logo: '/logo.png',
         logoHeight: 32,
         fonts: {
           sans: 'Google Sans',
