@@ -5,6 +5,7 @@ import type {
   ProcessedTestSuite,
   ProcessedTest,
   EnvironmentInfo,
+  AdditionalInfo,
   CustomColors,
   ThemePreset,
   TestTreeNode,
@@ -42,6 +43,7 @@ export function generateHtmlReport(data: ReportData, options: TemplateOptions): 
     collapseAll,
     expandLevel,
     includeEnvironment,
+    additionalInfo,
     minify,
     dateFormat,
     fonts,
@@ -150,6 +152,7 @@ ${customCss ? `\n${customCss}` : ''}
 
     ${showProgressBar ? generateProgressBar(summary) : ''}
     ${envInfo ? generateEnvironmentHtml(envInfo) : ''}
+    ${additionalInfo ? generateAdditionalInfoHtml(additionalInfo) : ''}
 
     <div id="test-suites">
       ${testSuites.map((suite, idx) => generateSuiteHtml(suite, idx, renderOptions)).join('')}
@@ -312,6 +315,49 @@ function generateEnvironmentHtml(env: EnvironmentInfo): string {
           <span class="env-label">Memory</span>
           <span class="env-value">${escapeHtml(env.totalMemory)}</span>
         </div>
+      </div>
+    </div>
+  `;
+}
+
+function generateAdditionalInfoHtml(info: AdditionalInfo): string {
+  const title = info.title || 'Additional Information';
+  const entries = Object.entries(info)
+    .filter(
+      ([key, value]) => key !== 'title' && value !== undefined && value !== null && value !== '',
+    )
+    .map(([key, value]) => ({ label: key, value: String(value) }));
+
+  if (entries.length === 0) {
+    return '';
+  }
+
+  const URL_PATTERN = /^https?:\/\/\S+$/i;
+
+  const renderValue = (value: string): string => {
+    if (URL_PATTERN.test(value)) {
+      return `<a href="${escapeHtml(value)}" target="_blank" rel="noopener noreferrer">${escapeHtml(value)}</a>`;
+    }
+    return escapeHtml(value);
+  };
+
+  return `
+    <div class="environment-info" id="additional-info" data-testid="additional-info">
+      <div class="env-header" data-testid="additional-info-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <i class="bi bi-chevron-down"></i>
+        <span>${escapeHtml(title)}</span>
+      </div>
+      <div class="env-grid" data-testid="additional-info-grid">
+        ${entries
+          .map(
+            ({ label, value }) => `
+        <div class="env-item">
+          <span class="env-label">${escapeHtml(label)}</span>
+          <span class="env-value">${renderValue(value)}</span>
+        </div>
+          `,
+          )
+          .join('')}
       </div>
     </div>
   `;

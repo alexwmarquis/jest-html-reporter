@@ -17,6 +17,7 @@ A beautiful, modern Jest HTML reporter with Bootstrap styling and customizable t
 - 🖼️ **Custom Branding** - Add your logo and customize colors
 - 📄 **JSON Export** - Export test data as JSON alongside HTML
 - 🌍 **Environment Info** - Display Node.js, platform, and system info
+- 📋 **Additional Info** - Add custom build/CI metadata to reports
 - ⚙️ **Highly Configurable** - 25+ configuration options
 - 📦 **TypeScript Support** - Full type definitions included
 
@@ -77,6 +78,64 @@ module.exports = {
 | `showFilePath`       | `'full' \| 'filename'` | `'filename'` | Display full path or just filename |
 | `showProgressBar`    | `boolean`              | `true`       | Show the progress bar section      |
 | `includeEnvironment` | `boolean`              | `false`      | Show environment info section      |
+| `additionalInfo`     | `AdditionalInfo`       | -            | Custom key-value info section      |
+
+### Additional Information
+
+Display custom metadata in a collapsible section (useful for CI/CD context):
+
+```javascript
+{
+  additionalInfo: {
+    title: 'Build Context',  // optional, defaults to 'Additional Information'
+    'Build': process.env.CI_BUILD_ID,
+    'Branch': process.env.GIT_BRANCH,
+    'Commit': process.env.GIT_COMMIT?.slice(0, 7),
+    'Pipeline': 'https://github.com/org/repo/actions/runs/12345',
+  }
+}
+```
+
+Features:
+
+- **Auto-link detection**: URLs are automatically converted to clickable links
+- **Null filtering**: `undefined`, `null`, and empty string values are automatically hidden
+- **Configurable title**: Set `title` to customize the section header
+- **HTML escaping**: All values are safely escaped
+
+Example with dynamic git info:
+
+```javascript
+const { execSync } = require('child_process');
+
+const getGitInfo = () => {
+  try {
+    return {
+      branch: execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
+      commit: execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim(),
+    };
+  } catch {
+    return { branch: undefined, commit: undefined };
+  }
+};
+
+const git = getGitInfo();
+
+module.exports = {
+  reporters: [
+    [
+      '@awmarquis/jest-html-reporter',
+      {
+        additionalInfo: {
+          title: 'Build Information',
+          Branch: git.branch,
+          Commit: git.commit,
+        },
+      },
+    ],
+  ],
+};
+```
 
 ### Behavior Options
 
@@ -188,6 +247,11 @@ module.exports = {
         showProgressBar: true,
         includeEnvironment: true,
         showFilePath: 'filename',
+        additionalInfo: {
+          title: 'Build Context',
+          Branch: process.env.GIT_BRANCH,
+          Commit: process.env.GIT_COMMIT,
+        },
 
         sort: 'status',
         collapsePassed: true,
@@ -209,7 +273,12 @@ module.exports = {
 Full TypeScript definitions are included:
 
 ```typescript
-import type { ReporterOptions, ThemePreset, CustomColors } from '@awmarquis/jest-html-reporter';
+import type {
+  ReporterOptions,
+  ThemePreset,
+  CustomColors,
+  AdditionalInfo,
+} from '@awmarquis/jest-html-reporter';
 
 const options: ReporterOptions = {
   theme: 'dracula',
@@ -256,6 +325,15 @@ When `includeEnvironment: true`, displays:
 - Platform/OS
 - CPU cores
 - Available memory
+
+### Additional Information
+
+When `additionalInfo` is configured, displays a collapsible section with custom key-value pairs. Perfect for:
+
+- Build IDs and CI pipeline links
+- Git branch and commit info
+- Environment names (dev/staging/prod)
+- Any custom metadata relevant to your test run
 
 ## Development
 
