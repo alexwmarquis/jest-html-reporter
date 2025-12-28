@@ -91,7 +91,7 @@ Display custom metadata in a collapsible section (useful for CI/CD context):
 ```javascript
 {
   additionalInfo: {
-    title: 'Build Context',  // optional, defaults to 'Additional Information'
+    title: 'Build Context',
     'Build': process.env.CI_BUILD_ID,
     'Branch': process.env.GIT_BRANCH,
     'Commit': process.env.GIT_COMMIT?.slice(0, 7),

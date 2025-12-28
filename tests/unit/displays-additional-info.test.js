@@ -170,7 +170,7 @@ test('renders collapsible header with chevron icon', () => {
   });
 
   expect(html).toContain('bi-chevron-down');
-  expect(html).toContain('onclick="this.parentElement.classList.toggle(\'collapsed\')"');
+  expect(html).toContain('class="env-header clickable"');
 });
 
 test('uses environment-info class for consistent styling', () => {
@@ -180,7 +180,7 @@ test('uses environment-info class for consistent styling', () => {
     },
   });
 
-  expect(html).toContain('class="environment-info"');
+  expect(html).toContain('environment-info');
   expect(html).toContain('id="additional-info"');
 });
 

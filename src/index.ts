@@ -88,12 +88,9 @@ class JestHtmlReporter {
       let logoPath = path.isAbsolute(logo) ? logo : path.resolve(process.cwd(), logo);
 
       if (!fs.existsSync(logoPath) && path.isAbsolute(logo)) {
-        const relativeLogoPath = path.resolve(
-          process.cwd(),
-          logo.startsWith('/') ? logo.slice(1) : logo,
-        );
-        if (fs.existsSync(relativeLogoPath)) {
-          logoPath = relativeLogoPath;
+        const relativeFallback = path.resolve(process.cwd(), logo.replace(/^[/\\]+/, ''));
+        if (fs.existsSync(relativeFallback)) {
+          logoPath = relativeFallback;
         }
       }
 
@@ -290,7 +287,10 @@ class JestHtmlReporter {
     const failedTests = testResults.filter(t => t.status === 'failed');
 
     for (const test of failedTests) {
-      const testPattern = new RegExp(`●[^●]*${this.escapeRegex(test.title)}[\\s\\S]*?(?=●|$)`, 'g');
+      const testPattern = new RegExp(
+        `●[^●]*?${this.escapeRegex(test.fullName)}[\\s\\S]*?(?=●|$)`,
+        'g',
+      );
       const match = failureMessage.match(testPattern);
       if (match && match[0]) {
         errorMap.set(test.fullName, match[0].trim());

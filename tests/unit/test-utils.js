@@ -1,4 +1,4 @@
-const { generateHtmlReport } = require('../../dist/template');
+const { generateHtmlReport } = require('../../src/template');
 
 const createMockReportData = (overrides = {}) => {
   return {
