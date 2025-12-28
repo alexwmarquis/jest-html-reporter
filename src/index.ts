@@ -98,14 +98,12 @@ class JestHtmlReporter {
       if (fs.existsSync(logoPath)) {
         const buffer = fs.readFileSync(logoPath);
         const ext = path.extname(logoPath).slice(1).toLowerCase();
-        let mimeType = `image/${ext}`;
-        if (ext === 'svg') mimeType = 'image/svg+xml';
-        else if (ext === 'png') mimeType = 'image/png';
-        else if (ext === 'jpg' || ext === 'jpeg') mimeType = 'image/jpeg';
-        else if (ext === 'gif') mimeType = 'image/gif';
-        else if (ext === 'webp') mimeType = 'image/webp';
-        else if (ext === 'ico') mimeType = 'image/x-icon';
-
+        const MIME_OVERRIDES: Record<string, string> = {
+          svg: 'image/svg+xml',
+          jpg: 'image/jpeg',
+          ico: 'image/x-icon',
+        };
+        const mimeType = MIME_OVERRIDES[ext] ?? `image/${ext}`;
         resolvedLogo = `data:${mimeType};base64,${buffer.toString('base64')}`;
       } else {
         console.warn(`⚠️ Logo file not found: ${logoPath}`);
