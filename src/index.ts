@@ -81,6 +81,35 @@ class JestHtmlReporter {
       this.sortResults(reportData, sort);
     }
 
+    let resolvedLogo = logo;
+    if (logo && embedAssets && !logo.startsWith('http') && !logo.startsWith('data:')) {
+      let logoPath = path.isAbsolute(logo) ? logo : path.resolve(process.cwd(), logo);
+
+      if (!fs.existsSync(logoPath) && path.isAbsolute(logo)) {
+        const relativeLogoPath = path.resolve(
+          process.cwd(),
+          logo.startsWith('/') ? logo.slice(1) : logo,
+        );
+        if (fs.existsSync(relativeLogoPath)) {
+          logoPath = relativeLogoPath;
+        }
+      }
+
+      if (fs.existsSync(logoPath)) {
+        const buffer = fs.readFileSync(logoPath);
+        const ext = path.extname(logoPath).slice(1).toLowerCase();
+        const MIME_OVERRIDES: Record<string, string> = {
+          svg: 'image/svg+xml',
+          jpg: 'image/jpeg',
+          ico: 'image/x-icon',
+        };
+        const mimeType = MIME_OVERRIDES[ext] ?? `image/${ext}`;
+        resolvedLogo = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      } else {
+        console.warn(`⚠️ Logo file not found: ${logoPath}`);
+      }
+    }
+
     const DEFAULT_SANS = 'Google Sans';
     const DEFAULT_MONO = 'Google Sans Code';
 
@@ -96,7 +125,7 @@ class JestHtmlReporter {
     const templateOptions: TemplateOptions = {
       pageTitle,
       subtitle,
-      logo,
+      logo: resolvedLogo,
       logoHeight,
       showPassed,
       showFailed,
@@ -146,7 +175,7 @@ class JestHtmlReporter {
 
   private openInBrowser(filePath: string): void {
     const { exec } = require('child_process');
-    const platform = process.platform;
+    const { platform } = process;
 
     let command: string;
     if (platform === 'darwin') {

@@ -225,7 +225,7 @@ function generateProgressBar(summary: {
           <span class="stat"><span class="dot failed"></span> ${summary.failedTests} failed</span>
           <span class="stat"><span class="dot skipped"></span> ${summary.pendingTests + summary.todoTests} skipped</span>
         </div>
-        <span>${Math.round((summary.passedTests / total) * 100)}% passed</span>
+        <span data-testid="progress-bar-passed-percentage">${Math.round((summary.passedTests / total) * 100)}% passed</span>
       </div>
       <div class="progress-bar" data-testid="progress-bar-track">
         <div class="segment passed" style="width: ${passedPct}%"></div>

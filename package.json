@@ -38,6 +38,7 @@
     "jest": ">=26.0.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.1.0",
     "@jest/reporters": "^29.7.0",
     "@jest/test-result": "^30.2.0",
     "@playwright/test": "^1.57.0",
@@ -58,8 +59,8 @@
     "format:fix": "npx prettier --write .",
     "test:unit": "npm run build && npx jest --config jest.config.js",
     "test:coverage": "npm run build && npx jest --config jest.config.js --coverage",
-    "test:integration": "npm run build && npx playwright test",
-    "test": "npm run test:unit && npm run test:integration",
+    "test:integration": "npm run test:unit && npx playwright test",
+    "test": "npm run test:integration",
     "clean": "rm -rf dist",
     "prepack": "npm run build",
     "prepare": "husky",
