@@ -28,6 +28,7 @@ export interface ReporterOptions {
   showFilePath?: 'full' | 'filename';
   hideEmptySuites?: boolean;
   includeEnvironment?: boolean;
+  additionalInfo?: AdditionalInfo;
   showProgressBar?: boolean;
   sort?: 'default' | 'status' | 'duration' | 'name';
   collapsePassed?: boolean;
@@ -112,6 +113,7 @@ export interface TemplateOptions {
   collapseAll: boolean;
   expandLevel: number;
   includeEnvironment: boolean;
+  additionalInfo?: AdditionalInfo;
   dateFormat: 'locale' | 'iso' | 'relative';
   embedAssets: boolean;
   fonts:
@@ -130,6 +132,11 @@ export interface EnvironmentInfo {
   cwd: string;
   cpuCores: number;
   totalMemory: string;
+}
+
+export interface AdditionalInfo {
+  title?: string;
+  [key: string]: string | undefined;
 }
 
 export interface TestTreeNode {
