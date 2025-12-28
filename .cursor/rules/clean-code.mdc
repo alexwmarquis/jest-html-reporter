@@ -14,20 +14,10 @@ alwaysApply: true
 - Names should explain why something exists and how it's used
 - Avoid abbreviations unless they're universally understood
 
-## Smart Comments
-- Don't comment on what the code does - make the code self-documenting
-- Use comments to explain why something is done a certain way
-- Document APIs, complex algorithms, and non-obvious side effects
-
 ## Single Responsibility
 - Each function should do exactly one thing
 - Functions should be small and focused
 - If a function needs a comment to explain what it does, it should be split
-
-## DRY (Don't Repeat Yourself)
-- Extract repeated code into reusable functions
-- Share common logic through proper abstraction
-- Maintain single sources of truth
 
 ## Clean Structure
 - Keep related code together
