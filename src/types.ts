@@ -80,7 +80,7 @@ export interface ProcessedTest {
   title: string;
   fullName: string;
   ancestorTitles: string[];
-  status: 'passed' | 'failed' | 'pending' | 'skipped' | 'todo';
+  status: 'passed' | 'failed' | 'pending' | 'skipped' | 'todo' | 'disabled';
   duration: number;
   failureMessages: string[];
   failureDetails: unknown[];

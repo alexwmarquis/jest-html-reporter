@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const JestHtmlReporter = require('../../dist/index');
+const JestHtmlReporter = require('../../src/index');
 const { createMockGlobalConfig, createMockResults, renderReport } = require('./test-utils');
 
 let tempDir;

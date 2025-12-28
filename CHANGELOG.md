@@ -14,6 +14,20 @@ This project adheres to semantic versioning.
   - Collapsible stack traces with "Show more frames" for long traces
   - Clickable file paths that open directly in VS Code (`vscode://file/` links)
   - "Copy error" button for easy clipboard copying of failure messages
+- Added support for the **`disabled`** test status.
+
+### Fixed
+
+- **Synchronized Filters**: Fixed issue where search queries and status filters (Passed/Failed/etc.) operated independently; they are now correctly synchronized.
+- **Theme Flash (FOUC)**: Prevented the "flash of unstyled content" by moving theme initialization to a blocking script in the document `<head>`.
+- **Failure Message Mapping**: Fixed incorrect failure message association for tests sharing the same title in different suites by switching to full test names.
+- **Logo Resolution**: Improved the reliability of logo path resolution for both absolute and relative file paths.
+
+### Changed
+
+- **Build Integrity**: Refactored the build process to inject compiled CSS into distribution files instead of modifying source code in-place.
+- **Source-Level Testing**: Updated unit tests and coverage reporting to run directly against TypeScript source files for better accuracy and performance.
+- **Code Quality**: Removed inline event handlers in favor of modern event listeners and replaced deprecated `substr()` calls with `slice()`.
 
 ## v1.0.6
 

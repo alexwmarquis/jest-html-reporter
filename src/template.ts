@@ -90,10 +90,19 @@ export function generateHtmlReport(data: ReportData, options: TemplateOptions): 
     : '';
 
   const reportHtml = `<!DOCTYPE html>
-<html lang="en" class="${themeClass}">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        const savedTheme = localStorage.getItem('jest-reporter-theme');
+        const theme = savedTheme || '${theme}';
+        document.documentElement.className = 'theme-' + theme;
+      } catch (e) {}
+    })();
+  </script>
   <title>${escapeHtml(pageTitle)}</title>${faviconLink}${fontLinks}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <style>
@@ -293,8 +302,8 @@ function generateThemeToggle(currentTheme: ThemePreset): string {
 
 function generateEnvironmentHtml(env: EnvironmentInfo): string {
   return `
-    <div class="environment-info" id="env-info" data-testid="environment-info">
-      <div class="env-header" data-testid="environment-header" onclick="this.parentElement.classList.toggle('collapsed')">
+    <div class="environment-info collapsed" id="env-info" data-testid="environment-info">
+      <div class="env-header clickable" data-testid="environment-header">
         <i class="bi bi-chevron-down"></i>
         <span>Environment</span>
       </div>
@@ -342,8 +351,8 @@ function generateAdditionalInfoHtml(info: AdditionalInfo): string {
   };
 
   return `
-    <div class="environment-info" id="additional-info" data-testid="additional-info">
-      <div class="env-header" data-testid="additional-info-header" onclick="this.parentElement.classList.toggle('collapsed')">
+    <div class="environment-info collapsed" id="additional-info" data-testid="additional-info">
+      <div class="env-header clickable" data-testid="additional-info-header">
         <i class="bi bi-chevron-down"></i>
         <span>${escapeHtml(title)}</span>
       </div>
@@ -766,7 +775,7 @@ function parseStackFrame(line: string): StackFrame {
 }
 
 function generateEnhancedErrorHtml(failureMessages: string[]): string {
-  const errorId = `error-${Math.random().toString(36).substr(2, 9)}`;
+  const errorId = `error-${Math.random().toString(36).slice(2, 11)}`;
   const allMessages = failureMessages.map(msg => stripAnsi(msg)).join('\n\n');
 
   const blocks = failureMessages
@@ -907,165 +916,173 @@ function generateScript(options: {
   currentTheme: ThemePreset;
 }): string {
   return `
-    document.querySelectorAll('.suite-header').forEach(header => {
-      header.addEventListener('click', () => {
-        const suite = header.closest('.suite');
-        suite.classList.toggle('collapsed');
-      });
-    });
+    (function() {
+      let currentFilter = 'all';
+      let currentSearch = '';
 
-    document.querySelectorAll('.describe-header').forEach(header => {
-      header.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const group = header.closest('.describe-group');
-        group.classList.toggle('collapsed');
-      });
-    });
-
-    document.querySelectorAll('.copy-error-btn').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        const errorText = btn.dataset.error;
-        try {
-          await navigator.clipboard.writeText(errorText);
-          const icon = btn.querySelector('i');
-          const text = btn.querySelector('span');
-          icon.className = 'bi bi-check';
-          text.textContent = 'Copied!';
-          setTimeout(() => {
-            icon.className = 'bi bi-clipboard';
-            text.textContent = 'Copy';
-          }, 2000);
-        } catch (err) {
-          console.error('Failed to copy:', err);
-        }
-      });
-    });
-
-    document.querySelectorAll('.error-stack-toggle').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const targetId = btn.dataset.target;
-        const hiddenSection = document.getElementById(targetId);
-        const icon = btn.querySelector('i');
-        const text = btn.querySelector('span');
+      function updateVisibility() {
+        const testItems = document.querySelectorAll('.test-item');
         
-        if (hiddenSection.style.display === 'none') {
-          hiddenSection.style.display = 'block';
-          icon.className = 'bi bi-chevron-up';
-          text.textContent = 'Show less';
-          btn.classList.add('expanded');
-        } else {
-          hiddenSection.style.display = 'none';
-          icon.className = 'bi bi-chevron-down';
-          const frameCount = hiddenSection.querySelectorAll('.error-stack-frame').length;
-          text.textContent = 'Show ' + frameCount + ' more frame' + (frameCount > 1 ? 's' : '');
-          btn.classList.remove('expanded');
-        }
-      });
-    });
-
-    document.querySelectorAll('.subnav-item').forEach(navItem => {
-      navItem.addEventListener('click', (e) => {
-        e.preventDefault();
-        const filter = navItem.dataset.filter;
-        
-        document.querySelectorAll('.subnav-item').forEach(c => c.classList.remove('active'));
-        navItem.classList.add('active');
-
-        document.querySelectorAll('.test-item').forEach(item => {
-          if (filter === 'all') {
-            item.style.display = 'flex';
-          } else if (filter === 'flaky') {
-            const isFlaky = item.dataset.flaky === 'true';
-            item.style.display = isFlaky ? 'flex' : 'none';
+        testItems.forEach(item => {
+          const status = item.dataset.status;
+          const isFlaky = item.dataset.flaky === 'true';
+          const text = item.textContent.toLowerCase();
+          
+          let matchesFilter = false;
+          if (currentFilter === 'all') {
+            matchesFilter = true;
+          } else if (currentFilter === 'flaky') {
+            matchesFilter = isFlaky;
           } else {
-            const status = item.dataset.status;
-            const match = filter === 'pending' 
-              ? ['pending', 'skipped', 'todo'].includes(status)
-              : status === filter;
-            item.style.display = match ? 'flex' : 'none';
+            matchesFilter = currentFilter === 'pending' 
+              ? ['pending', 'skipped', 'todo', 'disabled'].includes(status)
+              : status === currentFilter;
           }
+
+          const matchesSearch = !currentSearch || text.includes(currentSearch);
+          
+          item.style.display = (matchesFilter && matchesSearch) ? 'flex' : 'none';
         });
 
         Array.from(document.querySelectorAll('.describe-group')).reverse().forEach(group => {
           const hasVisible = Array.from(group.querySelectorAll(':scope > .describe-body > .test-item')).some(t => t.style.display !== 'none');
           const hasVisibleNested = Array.from(group.querySelectorAll(':scope > .describe-body > .describe-group')).some(g => g.style.display !== 'none');
-          group.style.display = (hasVisible || hasVisibleNested) ? 'block' : 'none';
+          const isVisible = hasVisible || hasVisibleNested;
+          group.style.display = isVisible ? 'block' : 'none';
+          if (isVisible && currentSearch) {
+            group.classList.remove('collapsed');
+          }
         });
 
         document.querySelectorAll('.suite').forEach(suite => {
           const hasVisible = Array.from(suite.querySelectorAll('.test-item')).some(t => t.style.display !== 'none');
           suite.style.display = hasVisible ? 'block' : 'none';
+          if (hasVisible && currentSearch) {
+            suite.classList.remove('collapsed');
+          }
+        });
+      }
+
+      document.querySelectorAll('.suite-header').forEach(header => {
+        header.addEventListener('click', () => {
+          header.closest('.suite').classList.toggle('collapsed');
         });
       });
-    });
 
-    document.getElementById('search-input').addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
+      document.querySelectorAll('.describe-header').forEach(header => {
+        header.addEventListener('click', (e) => {
+          e.stopPropagation();
+          header.closest('.describe-group').classList.toggle('collapsed');
+        });
+      });
+
+      document.querySelectorAll('.env-header.clickable').forEach(header => {
+        header.addEventListener('click', () => {
+          header.parentElement.classList.toggle('collapsed');
+        });
+      });
+
+      document.querySelectorAll('.subnav-item').forEach(navItem => {
+        navItem.addEventListener('click', (e) => {
+          e.preventDefault();
+          currentFilter = navItem.dataset.filter;
+          document.querySelectorAll('.subnav-item').forEach(c => c.classList.remove('active'));
+          navItem.classList.add('active');
+          updateVisibility();
+        });
+      });
+
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          currentSearch = e.target.value.toLowerCase();
+          updateVisibility();
+        });
+      }
+
+      document.querySelectorAll('.copy-error-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const errorText = btn.dataset.error;
+          try {
+            await navigator.clipboard.writeText(errorText);
+            const icon = btn.querySelector('i');
+            const text = btn.querySelector('span');
+            const originalIcon = icon.className;
+            const originalText = text.textContent;
+            icon.className = 'bi bi-check';
+            text.textContent = 'Copied!';
+            setTimeout(() => {
+              icon.className = originalIcon;
+              text.textContent = originalText;
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        });
+      });
+
+      document.querySelectorAll('.error-stack-toggle').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const targetId = btn.dataset.target;
+          const hiddenSection = document.getElementById(targetId);
+          const icon = btn.querySelector('i');
+          const text = btn.querySelector('span');
+          
+          if (hiddenSection.style.display === 'none') {
+            hiddenSection.style.display = 'block';
+            icon.className = 'bi bi-chevron-up';
+            text.textContent = 'Show less';
+            btn.classList.add('expanded');
+          } else {
+            hiddenSection.style.display = 'none';
+            icon.className = 'bi bi-chevron-down';
+            const frameCount = hiddenSection.querySelectorAll('.error-stack-frame').length;
+            text.textContent = 'Show ' + frameCount + ' more frame' + (frameCount > 1 ? 's' : '');
+            btn.classList.remove('expanded');
+          }
+        });
+      });
+
+      ${
+        options.enableThemeToggle
+          ? `
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeMenu = document.getElementById('theme-menu');
       
-      document.querySelectorAll('.test-item').forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(query) || !query ? 'flex' : 'none';
-      });
-
-      Array.from(document.querySelectorAll('.describe-group')).reverse().forEach(group => {
-        const hasVisible = Array.from(group.querySelectorAll('.test-item')).some(t => t.style.display !== 'none');
-        group.style.display = hasVisible ? 'block' : 'none';
-        if (hasVisible && query) group.classList.remove('collapsed');
-      });
-
-      document.querySelectorAll('.suite').forEach(suite => {
-        const hasVisible = Array.from(suite.querySelectorAll('.test-item')).some(t => t.style.display !== 'none');
-        suite.style.display = hasVisible ? 'block' : 'none';
-        if (hasVisible && query) suite.classList.remove('collapsed');
-      });
-    });
-
-    ${
-      options.enableThemeToggle
-        ? `
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeMenu = document.getElementById('theme-menu');
-    let currentTheme = '${options.currentTheme}';
-    
-    themeToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      themeMenu.classList.toggle('visible');
-    });
-    
-    document.querySelectorAll('.theme-option').forEach(option => {
-      option.addEventListener('click', () => {
-        const newTheme = option.dataset.theme;
-        document.documentElement.className = 'theme-' + newTheme;
+      if (themeToggle && themeMenu) {
+        themeToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          themeMenu.classList.toggle('visible');
+        });
         
-        document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
-        option.classList.add('active');
+        document.querySelectorAll('.theme-option').forEach(option => {
+          option.addEventListener('click', () => {
+            const newTheme = option.dataset.theme;
+            document.documentElement.className = 'theme-' + newTheme;
+            document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
+            option.classList.add('active');
+            try {
+              localStorage.setItem('jest-reporter-theme', newTheme);
+            } catch (e) {}
+            themeMenu.classList.remove('visible');
+          });
+        });
         
-        try {
-          localStorage.setItem('jest-reporter-theme', newTheme);
-        } catch (e) {}
-        
-        themeMenu.classList.remove('visible');
-      });
-    });
-    
-    document.addEventListener('click', () => {
-      themeMenu.classList.remove('visible');
-    });
-    
-    try {
-      const savedTheme = localStorage.getItem('jest-reporter-theme');
-      if (savedTheme) {
-        document.documentElement.className = 'theme-' + savedTheme;
+        document.addEventListener('click', () => {
+          themeMenu.classList.remove('visible');
+        });
+
+        const savedTheme = localStorage.getItem('jest-reporter-theme') || '${options.currentTheme}';
         document.querySelectorAll('.theme-option').forEach(o => {
           o.classList.toggle('active', o.dataset.theme === savedTheme);
         });
       }
-    } catch (e) {}
-    `
-        : ''
-    }
+      `
+          : ''
+      }
+    })();
   `;
 }
 
@@ -1146,9 +1163,9 @@ function getRelativeTime(date: Date): string {
 
 function minifyHtml(html: string): string {
   const placeholders: string[] = [];
-  const preTagPattern = /<pre[\s\S]*?<\/pre>/gi;
+  const prePattern = /<pre[\s\S]*?<\/pre>/gi;
 
-  let minified = html.replace(preTagPattern, match => {
+  let minified = html.replace(prePattern, match => {
     placeholders.push(match);
     return `__PRE_PLACEHOLDER_${placeholders.length - 1}__`;
   });

@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const JestHtmlReporter = require('../../dist/index');
+const JestHtmlReporter = require('../../src/index');
 const { createMockGlobalConfig, createMockResults, renderReport } = require('./test-utils');
 
 let tempDir;
@@ -76,7 +76,7 @@ test('can be parsed as valid html', () => {
   });
 
   expect(html).toContain('<!DOCTYPE html>');
-  expect(html).toContain('class="theme-github"');
+  expect(html).toContain("const theme = savedTheme || 'github'");
   expect(html).toContain('data-testid="progress-bar"');
   expect(html).toContain('data-testid="environment-info"');
   expect(html).toContain('data-testid="theme-toggle"');

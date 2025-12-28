@@ -1,39 +1,39 @@
 const { renderReport } = require('./test-utils');
 
-test('applies dark theme class by default', () => {
+test('applies dark theme by default', () => {
   const html = renderReport(undefined, { theme: 'dark' });
 
-  expect(html).toContain('class="theme-dark"');
+  expect(html).toContain("const theme = savedTheme || 'dark'");
 });
 
-test('applies light theme class when selected', () => {
+test('applies light theme when selected', () => {
   const html = renderReport(undefined, { theme: 'light' });
 
-  expect(html).toContain('class="theme-light"');
+  expect(html).toContain("const theme = savedTheme || 'light'");
 });
 
-test('applies github theme class when selected', () => {
+test('applies github theme when selected', () => {
   const html = renderReport(undefined, { theme: 'github' });
 
-  expect(html).toContain('class="theme-github"');
+  expect(html).toContain("const theme = savedTheme || 'github'");
 });
 
-test('applies monokai theme class when selected', () => {
+test('applies monokai theme when selected', () => {
   const html = renderReport(undefined, { theme: 'monokai' });
 
-  expect(html).toContain('class="theme-monokai"');
+  expect(html).toContain("const theme = savedTheme || 'monokai'");
 });
 
-test('applies dracula theme class when selected', () => {
+test('applies dracula theme when selected', () => {
   const html = renderReport(undefined, { theme: 'dracula' });
 
-  expect(html).toContain('class="theme-dracula"');
+  expect(html).toContain("const theme = savedTheme || 'dracula'");
 });
 
-test('applies nord theme class when selected', () => {
+test('applies nord theme when selected', () => {
   const html = renderReport(undefined, { theme: 'nord' });
 
-  expect(html).toContain('class="theme-nord"');
+  expect(html).toContain("const theme = savedTheme || 'nord'");
 });
 
 test('includes theme toggle when enabled', () => {
