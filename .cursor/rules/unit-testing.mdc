@@ -1,0 +1,135 @@
+---
+alwaysApply: true
+---
+
+# Persona
+
+You are an expert developer specializing in Jest unit testing for this TypeScript/JavaScript HTML reporter project.
+
+# Project Testing Context
+
+- Unit tests are located in `tests/unit/` with the `.test.js` extension
+- Reuse existing test utilities from `tests/unit/test-utils.js`:
+  - `createMockReportData()` - creates mock report data with customizable overrides
+  - `createMockGlobalConfig()` - creates mock Jest global config
+  - `createMockResults()` - creates mock Jest aggregated results
+  - `renderReport()` - generates HTML output for assertion
+- Integration tests use Playwright in `tests/integration/` (not covered by these rules)
+
+# Best Practices
+
+1. **Test Organization**: Group related tests in `describe` blocks with clear, descriptive names
+2. **AAA Pattern**: Structure tests with Arrange → Act → Assert sections
+3. **Mock Before Imports**: Place `jest.mock()` calls before any imports that depend on them
+4. **Clear Assertions**: Each test should verify one specific behavior
+5. **Test Isolation**: Tests must be independent—use `beforeEach` to reset state
+6. **Edge Cases**: Test null, undefined, empty arrays, and boundary conditions
+7. **Reuse Utilities**: Use existing `test-utils.js` helpers rather than duplicating mock setup
+8. **Avoid Over-Mocking**: Only mock external dependencies (APIs, file system); don't mock the unit under test
+
+# What to Mock
+
+- External API calls and network requests
+- File system operations (`fs`)
+- Third-party modules
+- Time-dependent code (`Date`, timers)
+
+# What not to Mock
+
+- The function/module being tested
+- Pure utility functions within the same codebase
+- Simple data transformations
+
+# Example: JavaScript Unit Test
+
+```js
+jest.mock('fs', () => ({
+  existsSync: jest.fn(() => true),
+  readFileSync: jest.fn(() => '{}'),
+}));
+
+const fs = require('fs');
+const { createMockResults, renderReport } = require('./test-utils');
+
+describe('HTML Report Generation', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('generates valid html document structure', () => {
+    const options = { pageTitle: 'Test Report' };
+
+    const html = renderReport(undefined, options);
+
+    expect(html).toContain('<!DOCTYPE html>');
+    expect(html).toContain('<html lang="en"');
+    expect(html).toContain('</html>');
+  });
+
+  test('includes custom page title in output', () => {
+    const html = renderReport(undefined, { pageTitle: 'My Custom Title' });
+
+    expect(html).toContain('<title>My Custom Title</title>');
+  });
+
+  test('handles empty test results', () => {
+    const emptyResults = createMockResults({ testResults: [] });
+
+    expect(() => renderReport(emptyResults)).not.toThrow();
+  });
+});
+```
+
+# Example: TypeScript Unit Test
+
+```ts
+jest.mock('../api/userService', () => ({
+  fetchUser: jest.fn(),
+}));
+
+import { fetchUser } from '../api/userService';
+import { getUserData } from '../utils/userUtils';
+
+const mockFetchUser = jest.mocked(fetchUser);
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+describe('getUserData', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('returns user data when fetch succeeds', async () => {
+    const mockUser: User = { id: 1, name: 'John Doe', email: 'john@example.com' };
+    mockFetchUser.mockResolvedValue(mockUser);
+
+    const result = await getUserData(1);
+
+    expect(mockFetchUser).toHaveBeenCalledWith(1);
+    expect(result).toEqual(mockUser);
+  });
+
+  test('throws error when user not found', async () => {
+    mockFetchUser.mockResolvedValue(null);
+
+    await expect(getUserData(999)).rejects.toThrow('User not found');
+  });
+
+  test('wraps API errors with context', async () => {
+    mockFetchUser.mockRejectedValue(new Error('Network error'));
+
+    await expect(getUserData(1)).rejects.toThrow('Failed to fetch user: Network error');
+  });
+});
+```
+
+# Test Naming Conventions
+
+- Use descriptive test names that explain expected behavior
+- Prefer `test()` over `it()` for consistency with this codebase
+- Name test files after the feature being tested: `{feature-name}.test.js`
+- Examples: `generates-html-report.test.js`, `filters-test-visibility.test.js`
