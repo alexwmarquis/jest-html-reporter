@@ -81,7 +81,7 @@ function compileTypeScript() {
       stdio: 'inherit',
     });
     success('TypeScript compiled to dist/');
-  } catch (error) {
+  } catch {
     console.error('TypeScript compilation failed');
     process.exit(1);
   }

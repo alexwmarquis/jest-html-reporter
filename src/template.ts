@@ -11,6 +11,7 @@ import type {
   TestTreeNode,
 } from './types';
 
+/* eslint-disable-next-line @stylistic/quotes */
 const COMPILED_CSS = `/* __INJECT_CSS__ */`;
 
 const THEME_PREVIEWS: Record<ThemePreset, string> = {
@@ -51,7 +52,6 @@ export function generateHtmlReport(data: ReportData, options: TemplateOptions): 
 
   const { summary, testSuites } = data;
   const skippedTests = (summary.pendingTests || 0) + (summary.todoTests || 0);
-  const themeClass = `theme-${theme}`;
 
   const envInfo: EnvironmentInfo | null = includeEnvironment
     ? {
@@ -690,8 +690,8 @@ function parseErrorMessage(rawMessage: string): ParsedError {
   const stackFrames: StackFrame[] = [];
 
   let inDiff = false;
-  let diffLines: string[] = [];
-  let mainMessageLines: string[] = [];
+  const diffLines: string[] = [];
+  const mainMessageLines: string[] = [];
   let foundStackTrace = false;
 
   for (let i = 0; i < lines.length; i++) {
@@ -741,6 +741,7 @@ function parseErrorMessage(rawMessage: string): ParsedError {
   }
 
   mainMessage = mainMessageLines.join('\n').trim();
+  /* eslint-disable-next-line prefer-const */
   diff = diffLines.length > 0 ? diffLines.join('\n') : undefined;
 
   return { mainMessage, expected, received, diff, stackFrames };
@@ -1100,17 +1101,8 @@ function getFileName(filePath: string): string {
   return filePath.split('/').pop() || filePath;
 }
 
-function hashString(str: string): number {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash &= hash;
-  }
-  return Math.abs(hash);
-}
-
 function stripAnsi(text: string): string {
+  // eslint-disable-next-line no-control-regex
   return text.replace(/\u001b\[[0-9;]*[a-zA-Z]/g, '');
 }
 

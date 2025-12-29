@@ -42,13 +42,17 @@
     "@jest/reporters": "^29.7.0",
     "@jest/test-result": "^29.7.0",
     "@playwright/test": "^1.57.0",
+    "@stylistic/eslint-plugin": "^5.6.1",
     "@types/node": "^20.10.0",
+    "eslint": "^9.39.2",
+    "eslint-plugin-playwright": "^2.4.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
     "prettier": "^3.7.4",
     "sass": "^1.69.5",
     "ts-jest": "^29.4.6",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",
+    "typescript-eslint": "^8.50.1"
   },
   "scripts": {
     "build": "node scripts/build.js",
@@ -57,6 +61,8 @@
     "prepublishOnly": "npm run build && npm run test",
     "format": "npx prettier --check .",
     "format:fix": "npx prettier --write .",
+    "lint": "npx eslint .",
+    "lint:fix": "npx eslint --fix .",
     "test:unit": "npx jest --config jest.config.js",
     "test:coverage": "npx jest --config jest.config.js --coverage",
     "test:integration": "npm run test:unit && npx playwright test",
