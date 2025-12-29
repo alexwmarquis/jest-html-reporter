@@ -175,6 +175,7 @@ class JestHtmlReporter {
   }
 
   private openInBrowser(filePath: string): void {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { exec } = require('child_process');
     const { platform } = process;
 
