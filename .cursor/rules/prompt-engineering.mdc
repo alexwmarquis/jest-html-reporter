@@ -1,0 +1,27 @@
+---
+alwaysApply: true
+---
+
+# Token Efficiency & Output Accuracy
+
+## Output Format
+- Specify exact output structure (code only, bullet list, JSON, single paragraph)
+- State length constraints explicitly ("respond in under 50 words", "3 bullet points max")
+- Request structured formats (numbered lists, tables) when comparing or enumerating
+
+## Precision
+- One task per prompt; chain complex tasks sequentially
+- State success criteria upfront ("correct if X, Y, Z are true")
+- Include constraints that eliminate ambiguity ("use ES6 syntax", "no external dependencies")
+- Provide negative constraints ("do not include explanations", "omit imports")
+
+## Context Efficiency
+- Reference existing context by location rather than restating it
+- Omit background the model already has access to
+- Front-load critical information; place constraints before content
+
+## Avoid
+- Temporal references ("latest", "current", "recent")
+- Redundant rephrasing of the same instruction
+- Open-ended questions when specific answers are needed
+- Vague qualifiers ("good", "better", "proper") without criteria
