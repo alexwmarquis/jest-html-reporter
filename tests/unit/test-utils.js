@@ -17,6 +17,7 @@ const createMockReportData = (overrides = {}) => {
       success: true,
       startTime: '2024-01-01T12:00:00.000Z',
       endTime: '2024-01-01T12:00:00.100Z',
+      wasInterrupted: false,
       ...overrides.summary,
     },
     testSuites: overrides.testSuites ?? [
@@ -60,6 +61,7 @@ const createMockResults = (overrides = {}) => ({
   numPendingTests: 0,
   numTodoTests: 0,
   success: true,
+  wasInterrupted: false,
   startTime: Date.now() - 1000,
   testResults: [
     {

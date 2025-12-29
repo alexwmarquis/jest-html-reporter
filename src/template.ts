@@ -159,6 +159,7 @@ ${customCss ? `\n${customCss}` : ''}
       </div>
     </div>
 
+    ${summary.wasInterrupted ? generateInterruptedBanner() : ''}
     ${showProgressBar ? generateProgressBar(summary) : ''}
     ${envInfo ? generateEnvironmentHtml(envInfo) : ''}
     ${additionalInfo ? generateAdditionalInfoHtml(additionalInfo) : ''}
@@ -216,6 +217,15 @@ function generateReportHeader(
           : `<h1 class="report-title" data-testid="report-title">${escapeHtml(title)}</h1>`
       }
       <div class="meta-info" data-testid="meta-info">${metaInfo}</div>
+    </div>
+  `;
+}
+
+function generateInterruptedBanner(): string {
+  return `
+    <div class="interrupted-banner" data-testid="interrupted-banner">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span>Test run stopped early. Not all tests were executed.</span>
     </div>
   `;
 }

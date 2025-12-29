@@ -241,6 +241,10 @@ class JestHtmlReporter {
       0,
     );
 
+    const executedSuites =
+      results.numPassedTestSuites + results.numFailedTestSuites + results.numPendingTestSuites;
+    const stoppedEarly = results.wasInterrupted || executedSuites < results.numTotalTestSuites;
+
     const summary: TestSummary = {
       totalSuites: results.numTotalTestSuites,
       passedSuites: results.numPassedTestSuites,
@@ -256,6 +260,7 @@ class JestHtmlReporter {
       success: results.success,
       startTime: new Date(startTime).toISOString(),
       endTime: new Date(endTime).toISOString(),
+      wasInterrupted: stoppedEarly,
     };
 
     return { summary, testSuites };

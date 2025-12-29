@@ -95,7 +95,6 @@ function build() {
     const css = compileSass();
     compileTypeScript();
     injectCssIntoDist(css);
-    createExports();
 
     log('\n✨ Build complete!\n', colors.green);
   } catch (error) {
