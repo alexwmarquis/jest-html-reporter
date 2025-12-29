@@ -312,7 +312,7 @@ function generateThemeToggle(currentTheme: ThemePreset): string {
 
 function generateEnvironmentHtml(env: EnvironmentInfo): string {
   return `
-    <div class="environment-info collapsed" id="env-info" data-testid="environment-info">
+    <div class="environment-info" id="env-info" data-testid="environment-info">
       <div class="env-header clickable" data-testid="environment-header">
         <i class="bi bi-chevron-down"></i>
         <span>Environment</span>
@@ -361,7 +361,7 @@ function generateAdditionalInfoHtml(info: AdditionalInfo): string {
   };
 
   return `
-    <div class="environment-info collapsed" id="additional-info" data-testid="additional-info">
+    <div class="environment-info" id="additional-info" data-testid="additional-info">
       <div class="env-header clickable" data-testid="additional-info-header">
         <i class="bi bi-chevron-down"></i>
         <span>${escapeHtml(title)}</span>
