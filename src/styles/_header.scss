@@ -185,10 +185,10 @@
     i {
       @include transition(transform);
     }
+  }
 
-    &.collapsed i {
-      transform: rotate(-90deg);
-    }
+  &.collapsed .env-header i {
+    transform: rotate(-90deg);
   }
 
   .env-grid {
