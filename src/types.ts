@@ -65,6 +65,7 @@ export interface TestSummary {
   success: boolean;
   startTime: string;
   endTime: string;
+  wasInterrupted: boolean;
 }
 
 export interface ProcessedTestSuite {

@@ -232,3 +232,21 @@
     display: none;
   }
 }
+
+.interrupted-banner {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  background: var(--color-failed-bg);
+  border: 1px solid var(--color-failed);
+  border-radius: $border-radius;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-lg;
+  font-size: $font-size-sm;
+  color: var(--color-failed);
+
+  i {
+    font-size: $font-size-base;
+    flex-shrink: 0;
+  }
+}
