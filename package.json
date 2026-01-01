@@ -1,6 +1,6 @@
 {
   "name": "@awmarquis/jest-html-reporter",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "A beautiful Jest HTML reporter with Bootstrap styling, 6 built-in themes, and extensive customization options",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
