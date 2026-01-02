@@ -8,7 +8,7 @@ const JestHtmlReporter = require('../../src/index');
 const { createMockGlobalConfig, createMockResults } = require('./test-utils');
 const path = require('path');
 
-test('header coverage: handles logo without subtitle and vice versa', () => {
+test('should render report header correctly with or without logo and subtitle', () => {
   const header1 = generateReportHeader('Title', 'Meta', undefined, 'logo.png');
   expect(header1).toContain('header-logo');
   expect(header1).not.toContain('report-subtitle');
@@ -18,7 +18,7 @@ test('header coverage: handles logo without subtitle and vice versa', () => {
   expect(header2).toContain('report-subtitle');
 });
 
-test('header coverage: handles 0 total tests in progress bar', () => {
+test('should handle zero total tests in the progress bar', () => {
   const summary = {
     passedTests: 0,
     failedTests: 0,
@@ -30,7 +30,7 @@ test('header coverage: handles 0 total tests in progress bar', () => {
   expect(html).toContain('0% passed');
 });
 
-test('build-tree coverage: calculateDescribeStatus sets pending for all-pending tests', () => {
+test('should set group status to pending when all tests are pending or skipped', () => {
   const tests = [
     {
       title: 'pending test',
@@ -58,13 +58,13 @@ test('build-tree coverage: calculateDescribeStatus sets pending for all-pending 
   expect(tree[0].status).toBe('pending');
 });
 
-test('render-tree coverage: handles unknown node type', () => {
+test('should return empty string when rendering an unknown node type in the test tree', () => {
   const unknownNode = { type: 'unknown' };
   const html = generateTreeHtml([unknownNode], {});
   expect(html).toBe('');
 });
 
-test('predicates coverage: hasVisibleTestsInTree handles all pending statuses', () => {
+test('should correctly identify visible tests for all pending statuses', () => {
   const options = { showPassed: false, showFailed: false, showPending: true };
 
   const pendingNode = { type: 'test', test: { status: 'pending' } };
@@ -76,7 +76,7 @@ test('predicates coverage: hasVisibleTestsInTree handles all pending statuses', 
   expect(hasVisibleTestsInTree(todoNode, options)).toBe(true);
 });
 
-test('index coverage: hit default cases and status sorting', () => {
+test('should handle default configuration and status-based sorting correctly', () => {
   const mockResults = createMockResults({
     testResults: [
       {
@@ -145,7 +145,7 @@ test('index coverage: hit default cases and status sorting', () => {
   reporter['sortResults'](data, 'invalid');
 });
 
-test('index coverage: hit remaining branches', () => {
+test('should handle various configuration options like logo embedding and custom fonts', () => {
   const mockConfig = createMockGlobalConfig();
   const mockResults = createMockResults();
 
@@ -173,7 +173,7 @@ test('index coverage: hit remaining branches', () => {
   expect(reporterDefault).toBeDefined();
 });
 
-test('render-tree coverage: hits icon fallback and describe status fallback', () => {
+test('should use fallback icons and statuses when test data is incomplete', () => {
   const options = {
     showPassed: true,
     showFailed: true,
@@ -216,7 +216,7 @@ test('render-tree coverage: hits icon fallback and describe status fallback', ()
   expect(html2).toContain('data-status="passed"');
 });
 
-test('suite coverage: hits failure message fallback', () => {
+test('should display suite-level failure messages when individual test errors are missing', () => {
   const { generateSuiteHtml } = require('../../src/template/suites/suite');
   const suite = {
     name: 'suite.test.js',
@@ -254,12 +254,12 @@ test('suite coverage: hits failure message fallback', () => {
   expect(html).toContain('error-block');
 });
 
-test('parse coverage: hit fallback in parseStackFrame', () => {
+test('should return raw string when a stack frame cannot be parsed', () => {
   const result = parseStackFrame('not a stack frame');
   expect(result.raw).toBe('not a stack frame');
 });
 
-test('render-errors coverage: hit missing column and function name branches', () => {
+test('should render stack frames correctly even when column or function name is missing', () => {
   const frame = {
     filePath: 'test.js',
     lineNumber: 10,

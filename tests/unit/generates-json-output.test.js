@@ -159,7 +159,7 @@ test('parses failure messages into structured format', () => {
   expect(jsonContent.testSuites[0].tests[0].failureMessages.length).toBeGreaterThan(0);
 });
 
-test('extracts test failure messages from suite failure message', () => {
+test('should extract test failure messages from the suite-level failure message', () => {
   const outputPath = path.join(tempDir, 'failure-parsing.html');
   const jsonPath = path.join(tempDir, 'failure-parsing.json');
 

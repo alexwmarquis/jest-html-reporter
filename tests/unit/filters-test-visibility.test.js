@@ -75,7 +75,7 @@ test('hides pending tests when show pending is set to false', () => {
   expect(html).not.toContain('pending test');
 });
 
-test('hides skipped and todo tests when show pending is set to false', () => {
+test('should hide skipped and todo tests when pending tests are hidden', () => {
   const data = createMockReportData({
     testSuites: [
       {
@@ -107,7 +107,7 @@ test('hides skipped and todo tests when show pending is set to false', () => {
   expect(html).not.toContain('todo test');
 });
 
-test('shows skipped and todo tests when show pending is set to true', () => {
+test('should show skipped and todo tests when pending tests are visible', () => {
   const data = createMockReportData({
     testSuites: [
       {
@@ -139,7 +139,7 @@ test('shows skipped and todo tests when show pending is set to true', () => {
   expect(html).toContain('todo test');
 });
 
-test('hides describe groups with no visible tests', () => {
+test('should hide groups that do not contain any visible tests', () => {
   const data = createMockReportData({
     testSuites: [
       {

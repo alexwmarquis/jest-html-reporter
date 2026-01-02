@@ -140,7 +140,7 @@ test('sorts test suites by status when sort is set to status', () => {
   expect(fs.existsSync(outputPath)).toBe(true);
 });
 
-test('sorts individual tests within a suite', () => {
+test('should sort individual tests within a suite based on the selected criteria', () => {
   const outputPath = path.join(tempDir, 'sorted-tests.html');
   const mockResults = createMockResults({
     testResults: [
@@ -208,7 +208,7 @@ test('sorts individual tests within a suite', () => {
   expect(alphaIndex3).toBeLessThan(zebraIndex3);
 });
 
-test('handles invalid sort option gracefully', () => {
+test('should handle invalid sort options gracefully without failing', () => {
   const outputPath = path.join(tempDir, 'invalid-sort.html');
   const mockResults = createMockResults();
 

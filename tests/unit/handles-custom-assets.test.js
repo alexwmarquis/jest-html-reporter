@@ -158,7 +158,7 @@ test('handles logo as absolute path even if it does not exist at that exact path
   }
 });
 
-test('warns when logo file does not exist', () => {
+test('should log a warning when the specified logo file does not exist', () => {
   const outputPath = path.join(tempDir, 'missing-logo.html');
   const reporter = new JestHtmlReporter(createMockGlobalConfig(), {
     outputPath,

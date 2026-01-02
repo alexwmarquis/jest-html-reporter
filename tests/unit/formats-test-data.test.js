@@ -42,7 +42,7 @@ test('formats date in relative format when specified', () => {
   expect(html).toContain('<!DOCTYPE html>');
 });
 
-test('formats minutes correctly in test duration', () => {
+test('should format test duration in minutes correctly', () => {
   const data = createMockReportData();
   data.testSuites[0].tests[0].duration = 65000;
 
@@ -51,7 +51,7 @@ test('formats minutes correctly in test duration', () => {
   expect(html).toContain('1m 5.0s');
 });
 
-test('formats date in relative format as "just now"', () => {
+test('should display relative date as "just now" when appropriate', () => {
   const now = new Date('2024-01-01T12:00:00.000Z');
   const past = new Date('2024-01-01T11:59:50.000Z');
   jest.useFakeTimers().setSystemTime(now);
@@ -66,7 +66,7 @@ test('formats date in relative format as "just now"', () => {
   jest.useRealTimers();
 });
 
-test('formats date in relative format as "minutes ago"', () => {
+test('should display relative date as "minutes ago" when appropriate', () => {
   const now = new Date('2024-01-01T12:00:00.000Z');
   const past1 = new Date('2024-01-01T11:59:00.000Z');
   const past5 = new Date('2024-01-01T11:55:00.000Z');
@@ -91,7 +91,7 @@ test('formats date in relative format as "minutes ago"', () => {
   jest.useRealTimers();
 });
 
-test('formats date in relative format as "hours ago"', () => {
+test('should display relative date as "hours ago" when appropriate', () => {
   const now = new Date('2024-01-01T12:00:00.000Z');
   const past1 = new Date('2024-01-01T11:00:00.000Z');
   const past5 = new Date('2024-01-01T07:00:00.000Z');

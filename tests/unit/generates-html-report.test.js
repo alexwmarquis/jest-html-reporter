@@ -27,7 +27,7 @@ test('creates html report file when tests complete', () => {
   expect(content).toContain('Test Report');
 });
 
-test('renders pending suite status correctly', () => {
+test('should render pending suite status correctly when tests are completed', () => {
   const outputPath = path.join(tempDir, 'pending-suite-on-run-complete.html');
   const mockResults = createMockResults({
     testResults: [

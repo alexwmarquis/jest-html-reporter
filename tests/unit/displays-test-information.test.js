@@ -44,7 +44,7 @@ test('shows filename only when show file path is set to filename', () => {
   expect(html).toContain('example.test.js');
 });
 
-test('shows filename only when path has no slashes', () => {
+test('should show filename only when path has no slashes', () => {
   const data = createMockReportData();
   data.testSuites[0].name = 'test.js';
   data.testSuites[0].path = 'test.js';
@@ -147,7 +147,7 @@ test('does not collapse suites by default', () => {
   expect(html).toContain('data-collapsed="false"');
 });
 
-test('collapses suites when expandLevel is set', () => {
+test('should collapse suites based on the provided expand level', () => {
   const data = createMockReportData({
     testSuites: [
       {

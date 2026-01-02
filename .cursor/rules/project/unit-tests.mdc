@@ -27,9 +27,39 @@ You are an expert developer specializing in Jest unit testing for this TypeScrip
 7. Use existing `test-utils.js` helpers rather than duplicating mock setup
 8. Only mock external dependencies (APIs, file system); don't mock the unit under test
 
-# Test Naming Conventions
 
-- Use descriptive test names that explain expected behavior
-- Prefer `test()` over `it()` for consistency with this codebase
-- Name test files after the feature being tested: `{feature-name}.test.js`
-- Examples: `generates-html-report.test.js`, `filters-test-visibility.test.js`
+### Unit Test Titles
+
+**Rules**
+
+* Unit test titles must describe the observable behavior being tested.
+* Unit test titles must be understandable by a non-technical person.
+* Unit test titles must not include function names, class names, method names, or internal identifiers.
+* Unit test titles must not include capital letters.
+* Unit test titles should describe *what happens*, not *how it is implemented*.
+* Unit test titles should remain valid even if the underlying implementation is renamed or refactored.
+
+**Required format**
+
+* Use plain language.
+* Use sentence-style phrasing.
+* Begin with “should”.
+
+**Examples**
+
+✅ acceptable
+
+```ts
+test('should increase balance when a deposit is made', () => {})
+test('should prevent withdrawal when funds are insufficient', () => {})
+test('should return an error when required information is missing', () => {})
+```
+
+❌ not acceptable
+
+```ts
+test('Deposit increases balance', () => {})              // capital letters
+test('should call deposit()', () => {})                  // references method name
+test('should update AccountService balance', () => {})   // references class name
+test('increments balance', () => {})                     // unclear and non-descriptive
+```

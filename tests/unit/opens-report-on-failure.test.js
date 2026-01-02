@@ -88,7 +88,7 @@ test('handles browser open errors gracefully without crashing', () => {
   consoleWarnSpy.mockRestore();
 });
 
-test('uses correct open command for different platforms', () => {
+test('should use the correct system command to open the report on different platforms', () => {
   const originalPlatform = process.platform;
   const platforms = [
     { name: 'win32', command: 'start ""' },

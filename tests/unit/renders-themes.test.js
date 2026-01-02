@@ -61,7 +61,7 @@ test('includes custom color overrides in css', () => {
   expect(html).toContain('--color-passed: #00ff00');
 });
 
-test('does not include custom color overrides when none are provided', () => {
+test('should not include custom color overrides in the css when none are specified', () => {
   const html = renderReport(undefined, {
     customColors: {},
   });
