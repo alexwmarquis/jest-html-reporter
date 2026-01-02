@@ -1,0 +1,13 @@
+---
+alwaysApply: true
+---
+
+Do not include comments of any kind in suggested code.
+
+This includes:
+- Line comments (//, #)
+- Block comments (/* */)
+- Doc comments (/** */)
+- Inline explanatory comments
+
+Provide only executable code.
