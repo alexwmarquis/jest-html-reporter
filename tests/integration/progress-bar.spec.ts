@@ -1,13 +1,16 @@
 import { test, expect } from './fixtures';
-import { ReportPage } from './pages';
+import { Summary, Report } from './components';
 
-let reportPage: ReportPage;
+let summary: Summary;
+let report: Report;
 
 test.beforeEach(async ({ page }) => {
-  reportPage = new ReportPage(page);
-  await reportPage.open();
+  summary = new Summary(page);
+  report = new Report(page);
+
+  await report.open();
 });
 
 test('should display a passed percentage', async () => {
-  await expect(reportPage.progressBarPassedPercentage).toHaveText('100% passed');
+  await expect(summary.progressBarPassedPercentage).toHaveText('100% passed');
 });
