@@ -14,31 +14,17 @@ You are an expert developer specializing in Jest unit testing for this TypeScrip
   - `createMockGlobalConfig()` - creates mock Jest global config
   - `createMockResults()` - creates mock Jest aggregated results
   - `renderReport()` - generates HTML output for assertion
-- Integration tests use Playwright in `tests/integration/` (not covered by these rules)
 
-# Best Practices
+# Guidelines
 
-1. **Test Organization**: Group related tests in `describe` blocks with clear, descriptive names
-2. **AAA Pattern**: Structure tests with Arrange → Act → Assert sections
-3. **Mock Before Imports**: Place `jest.mock()` calls before any imports that depend on them
-4. **Clear Assertions**: Each test should verify one specific behavior
-5. **Test Isolation**: Tests must be independent—use `beforeEach` to reset state
-6. **Edge Cases**: Test null, undefined, empty arrays, and boundary conditions
-7. **Reuse Utilities**: Use existing `test-utils.js` helpers rather than duplicating mock setup
-8. **Avoid Over-Mocking**: Only mock external dependencies (APIs, file system); don't mock the unit under test
-
-# What to Mock
-
-- External API calls and network requests
-- File system operations (`fs`)
-- Third-party modules
-- Time-dependent code (`Date`, timers)
-
-# What not to Mock
-
-- The function/module being tested
-- Pure utility functions within the same codebase
-- Simple data transformations
+1. Do not use `describe` blocks
+2. Structure tests with Arrange → Act → Assert sections
+3. Place `jest.mock()` calls before any imports that depend on them
+4. Each test should verify one specific behavior
+5. Tests must be independent—use `beforeEach` to reset state
+6. Test null, undefined, empty arrays, and boundary conditions
+7. Use existing `test-utils.js` helpers rather than duplicating mock setup
+8. Only mock external dependencies (APIs, file system); don't mock the unit under test
 
 # Test Naming Conventions
 
