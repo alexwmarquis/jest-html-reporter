@@ -1,17 +1,17 @@
 import { test, expect } from './fixtures';
-import { ReportPage } from './pages';
+import { Report } from './pages';
 
-let reportPage: ReportPage;
+let report: Report;
 
 test.beforeEach(async ({ page }) => {
-  reportPage = new ReportPage(page);
-  await reportPage.open();
+  report = new Report(page);
+  await report.open();
 });
 
 test('should be able to filter tests by status', async () => {
-  await reportPage.filterChipFailed.click();
+  await report.filterChipFailed.click();
 
-  const visibleTests = reportPage.testItem.filter({ visible: true });
+  const visibleTests = report.testItem.filter({ visible: true });
 
   await expect(visibleTests).toHaveCount(0);
 });

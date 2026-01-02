@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import type { Page, Locator } from '@playwright/test';
 
 export enum Theme {
   DARK = 'dark',
@@ -9,7 +9,7 @@ export enum Theme {
   DRACULA = 'dracula',
 }
 
-export class ReportPage {
+export class Report {
   // Header & Navigation
   readonly header: Locator;
   readonly headerLogo: Locator;

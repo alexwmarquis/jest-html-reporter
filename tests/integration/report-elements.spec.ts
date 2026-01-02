@@ -1,21 +1,21 @@
 import { test, expect } from './fixtures';
-import { ReportPage } from './pages';
+import { Report } from './pages';
 
-let reportPage: ReportPage;
+let report: Report;
 
 test.beforeEach(async ({ page }) => {
-  reportPage = new ReportPage(page);
-  await reportPage.open();
+  report = new Report(page);
+  await report.open();
 });
 
 test('should display critical report elements', async () => {
-  await expect(reportPage.header).toBeVisible();
-  await expect(reportPage.headerLogo).toBeVisible();
-  await expect(reportPage.reportHeader).toBeVisible();
-  await expect(reportPage.reportTitle).toBeVisible();
-  await expect(reportPage.reportSubtitle).toBeVisible();
-  await expect(reportPage.reportTitleRow).toBeVisible();
-  await expect(reportPage.subnav).toBeVisible();
-  await expect(reportPage.subnavContainer).toBeVisible();
-  await expect(reportPage.metaInfo).toBeVisible();
+  await expect(report.header).toBeVisible();
+  await expect(report.headerLogo).toBeVisible();
+  await expect(report.reportHeader).toBeVisible();
+  await expect(report.reportTitle).toBeVisible();
+  await expect(report.reportSubtitle).toBeVisible();
+  await expect(report.reportTitleRow).toBeVisible();
+  await expect(report.subnav).toBeVisible();
+  await expect(report.subnavContainer).toBeVisible();
+  await expect(report.metaInfo).toBeVisible();
 });
