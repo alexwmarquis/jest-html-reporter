@@ -104,9 +104,9 @@
   }
 }
 
-.theme-toggle {
+.theme-toggle,
+.jump-to-top {
   position: fixed;
-  bottom: vars.$spacing-xl;
   right: vars.$spacing-xl;
   width: 44px;
   height: 44px;
@@ -135,6 +135,30 @@
 
   i {
     pointer-events: none;
+  }
+}
+
+.theme-toggle {
+  bottom: vars.$spacing-xl;
+}
+
+.jump-to-top {
+  bottom: vars.$spacing-xl;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    all 0.2s ease,
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  z-index: 999;
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &.with-theme-toggle {
+    bottom: calc(#{vars.$spacing-xl} + 44px + #{vars.$spacing-lg});
   }
 }
 
@@ -255,11 +279,23 @@
     gap: vars.$spacing-sm vars.$spacing-md;
   }
 
-  .theme-toggle {
-    bottom: vars.$spacing-md;
+  .theme-toggle,
+  .jump-to-top {
     right: vars.$spacing-md;
     width: 40px;
     height: 40px;
+  }
+
+  .theme-toggle {
+    bottom: vars.$spacing-md;
+  }
+
+  .jump-to-top {
+    bottom: vars.$spacing-md;
+
+    &.with-theme-toggle {
+      bottom: calc(#{vars.$spacing-md} + 40px + #{vars.$spacing-md});
+    }
   }
 
   .theme-menu {

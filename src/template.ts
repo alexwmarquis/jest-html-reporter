@@ -181,6 +181,7 @@ ${customCss ? `\n${customCss}` : ''}
   </div>
 
   ${enableThemeToggle ? generateThemeToggle(theme) : ''}
+  ${generateJumpToTop(enableThemeToggle)}
 
   <script>
 ${generateScript({ collapsePassed, collapseAll, expandLevel, enableThemeToggle, currentTheme: theme })}
@@ -307,6 +308,14 @@ function generateThemeToggle(currentTheme: ThemePreset): string {
         )
         .join('')}
     </div>
+  `;
+}
+
+function generateJumpToTop(hasThemeToggle: boolean): string {
+  return `
+    <button class="jump-to-top${hasThemeToggle ? ' with-theme-toggle' : ''}" id="jump-to-top" data-testid="jump-to-top" title="Jump to top" aria-label="Jump to top">
+      <i class="bi bi-chevron-up"></i>
+    </button>
   `;
 }
 
@@ -1055,6 +1064,36 @@ function generateScript(options: {
           }
         });
       });
+
+      const jumpToTop = document.getElementById('jump-to-top');
+      if (jumpToTop) {
+        jumpToTop.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          jumpToTop.blur();
+        });
+
+        const toggleJumpToTop = () => {
+          if (window.scrollY > 300) {
+            jumpToTop.classList.add('visible');
+          } else {
+            jumpToTop.classList.remove('visible');
+          }
+        };
+
+        let isScrolling;
+        window.addEventListener('scroll', () => {
+          if (!isScrolling) {
+            window.requestAnimationFrame(() => {
+              toggleJumpToTop();
+              isScrolling = false;
+            });
+            isScrolling = true;
+          }
+        });
+        
+        /* Initial check */
+        toggleJumpToTop();
+      }
 
       ${
         options.enableThemeToggle
