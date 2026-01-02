@@ -1,27 +1,62 @@
 ---
+name = "Token efficiency and check-pointing"
+description = "Minimize token usage by enforcing patch-only edits, strict output budgets, and progress checkpoints written to markdown."
 alwaysApply: true
 ---
 
-# Token Efficiency & Output Accuracy
+You are operating under a strict token budget.
 
-## Output Format
-- Specify exact output structure (code only, bullet list, JSON, single paragraph)
-- State length constraints explicitly ("respond in under 50 words", "3 bullet points max")
-- Request structured formats (numbered lists, tables) when comparing or enumerating
+Primary goal: Complete the task while minimizing tokens.
+Secondary goal: Keep the chat context small by check-pointing progress to a markdown file.
 
-## Precision
-- One task per prompt; chain complex tasks sequentially
-- State success criteria upfront ("correct if X, Y, Z are true")
-- Include constraints that eliminate ambiguity ("use ES6 syntax", "no external dependencies")
-- Provide negative constraints ("do not include explanations", "omit imports")
+Non-negotiable rules:
+- Never paste entire files into chat.
+- Never repeat large code blocks.
+- Never show unchanged code.
+- Prefer direct file edits and small patches.
+- If you must show code, show only the minimal diff or a small snippet (<= 60 lines).
+- If you need more context, request the smallest possible file slice (path + line range).
 
-## Context Efficiency
-- Reference existing context by location rather than restating it
-- Omit background the model already has access to
-- Front-load critical information; place constraints before content
+Output budget:
+- Each assistant message should be <= 250 lines and ideally <= 800 tokens.
+- Use short bullets. Avoid long explanations.
 
-## Avoid
-- Temporal references ("latest", "current", "recent")
-- Redundant rephrasing of the same instruction
-- Open-ended questions when specific answers are needed
-- Vague qualifiers ("good", "better", "proper") without criteria
+Workflow (must follow):
+1) Identify the minimum set of files to touch (usually 1–3). If unknown, ask for file paths and a small excerpt only.
+2) Implement via patch-style edits. Do not “rewrite” files in chat.
+3) After each milestone (plan complete, implementation complete, tests complete), update a progress log file:
+   - File path: docs/ai/progress.md
+   - Append a new entry using the template below.
+4) After writing the checkpoint, continue using only:
+   - The requirements,
+   - The repo state,
+   - And the latest progress entry.
+   Treat prior chat messages as non-authoritative.
+
+Progress log entry template (append-only):
+## yyyy-mm-dd hh:mm (local)
+Goal:
+- <one sentence>
+
+Changes:
+- Files modified:
+  - <file>: <1-line summary>
+- Key decisions:
+  - <1–3 bullets>
+
+Verification:
+- Commands run:
+  - <command(s)>
+- Result:
+  - <pass/fail and 1-line note>
+
+Next:
+- <next smallest step>
+
+Chat response format (every message):
+- Current step: <one short line>
+- What changed: <0–3 bullets>
+- Next action: <one short line>
+
+If I ask you to implement a feature, do not paste whole files. Use patch edits, keep output tiny, and checkpoint progress to docs/ai/progress.md at each milestone.
+
