@@ -100,6 +100,7 @@ export class Report {
 
   // Other
   readonly emptyState: Locator;
+  readonly jumpToTop: Locator;
 
   constructor(protected readonly page: Page) {
     // Header & Navigation
@@ -192,6 +193,7 @@ export class Report {
 
     // Other
     this.emptyState = this.page.getByTestId('empty-state');
+    this.jumpToTop = this.page.getByTestId('jump-to-top');
   }
 
   async open() {
