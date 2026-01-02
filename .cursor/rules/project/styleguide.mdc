@@ -1,0 +1,46 @@
+---
+description: TypeScript naming, typing, and formatting rules
+globs:
+  - "**/*.ts"
+  - "**/*.d.ts"
+---
+
+# TypeScript rules
+
+## General application rules
+
+- Apply these rules to all new or modified code.
+- Prefer correctness and clarity over stylistic churn.
+
+## Naming
+
+- Variables and functions: `camelCase`
+- Class names: `PascalCase`
+- Class members and methods: `camelCase`
+- Interfaces: `PascalCase`, no `I` prefix
+- Types: `PascalCase`
+- Namespaces: `PascalCase`
+- Enums: `PascalCase`
+- Enum members: `PascalCase`
+
+## Types vs interfaces
+
+- Use `type` if unions or intersections may be needed.
+- Use `interface` if `extends` or `implements` is required.
+
+## Null and undefined
+
+- Prefer types and optional properties over `null` or `undefined`.
+- Prefer returning `undefined` over `null`.
+- Use `null` only when required by an external API or convention.
+- For object references, use truthy checks for nullish values.
+- For primitives, use `== null` / `!= null` to check for both `null` and `undefined`.
+
+## Equality
+
+- Prefer `===` and `!==`.
+- `== null` is allowed only for nullish checks.
+
+## Arrays
+
+- Use `Foo[]`, not `Array<Foo>`.
