@@ -158,3 +158,44 @@ test('parses failure messages into structured format', () => {
   expect(jsonContent.testSuites[0].tests[0].failureMessages).toBeDefined();
   expect(jsonContent.testSuites[0].tests[0].failureMessages.length).toBeGreaterThan(0);
 });
+
+test('should extract test failure messages from the suite-level failure message', () => {
+  const outputPath = path.join(tempDir, 'failure-parsing.html');
+  const jsonPath = path.join(tempDir, 'failure-parsing.json');
+
+  const mockResults = createMockResults({
+    testResults: [
+      {
+        testFilePath: '/project/failing.test.js',
+        numFailingTests: 1,
+        numPassingTests: 0,
+        numPendingTests: 0,
+        perfStats: { start: 0, end: 100 },
+        failureMessage: ' ● failing test\n\n    Specific error for this test\n',
+        testResults: [
+          {
+            title: 'failing test',
+            fullName: 'failing test',
+            ancestorTitles: [],
+            status: 'failed',
+            duration: 50,
+            failureMessages: [],
+            failureDetails: [],
+          },
+        ],
+      },
+    ],
+  });
+
+  const reporter = new JestHtmlReporter(createMockGlobalConfig(), {
+    outputPath,
+    outputJson: true,
+  });
+
+  reporter.onRunComplete(new Set(), mockResults);
+
+  const jsonContent = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+  expect(jsonContent.testSuites[0].tests[0].failureMessages[0]).toContain(
+    'Specific error for this test',
+  );
+});

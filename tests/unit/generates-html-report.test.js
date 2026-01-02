@@ -27,15 +27,56 @@ test('creates html report file when tests complete', () => {
   expect(content).toContain('Test Report');
 });
 
-test('creates output directory if it does not exist', () => {
-  const nestedPath = path.join(tempDir, 'deep/nested/path/report.html');
+test('should render pending suite status correctly when tests are completed', () => {
+  const outputPath = path.join(tempDir, 'pending-suite-on-run-complete.html');
+  const mockResults = createMockResults({
+    testResults: [
+      {
+        testFilePath: '/project/pending.test.js',
+        numFailingTests: 0,
+        numPassingTests: 0,
+        numPendingTests: 1,
+        perfStats: { start: 0, end: 100 },
+        failureMessage: null,
+        testResults: [
+          {
+            title: 'pending test',
+            fullName: 'pending test',
+            ancestorTitles: [],
+            status: 'pending',
+            duration: 0,
+            failureMessages: [],
+            failureDetails: [],
+          },
+        ],
+      },
+    ],
+  });
+
   const reporter = new JestHtmlReporter(createMockGlobalConfig(), {
-    outputPath: nestedPath,
+    outputPath,
+  });
+
+  reporter.onRunComplete(new Set(), mockResults);
+
+  const content = fs.readFileSync(outputPath, 'utf8');
+  expect(content).toContain('data-status="pending"');
+});
+
+test('creates output directory if it does not exist', () => {
+  const customOutputDir = path.join(tempDir, 'deep/nested/fresh-path');
+  const outputPath = path.join(customOutputDir, 'report.html');
+
+  if (fs.existsSync(customOutputDir)) {
+    fs.rmSync(customOutputDir, { recursive: true, force: true });
+  }
+
+  const reporter = new JestHtmlReporter(createMockGlobalConfig(), {
+    outputPath,
   });
 
   reporter.onRunComplete(new Set(), createMockResults());
-
-  expect(fs.existsSync(nestedPath)).toBe(true);
+  expect(fs.existsSync(outputPath)).toBe(true);
 });
 
 test('generates valid html document structure', () => {

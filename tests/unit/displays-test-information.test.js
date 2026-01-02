@@ -44,6 +44,16 @@ test('shows filename only when show file path is set to filename', () => {
   expect(html).toContain('example.test.js');
 });
 
+test('should show filename only when path has no slashes', () => {
+  const data = createMockReportData();
+  data.testSuites[0].name = 'test.js';
+  data.testSuites[0].path = 'test.js';
+
+  const html = renderReport(data, { showFilePath: 'filename' });
+
+  expect(html).toContain('test.js');
+});
+
 test('includes progress bar when enabled', () => {
   const html = renderReport(undefined, { showProgressBar: true });
 
@@ -135,6 +145,34 @@ test('does not collapse suites by default', () => {
 
   expect(html).toContain('data-testid="test-suite"');
   expect(html).toContain('data-collapsed="false"');
+});
+
+test('should collapse suites based on the provided expand level', () => {
+  const data = createMockReportData({
+    testSuites: [
+      {
+        name: 'suite1.js',
+        path: '/p/1.js',
+        status: 'passed',
+        tests: [],
+        failureMessage: null,
+        duration: 10,
+      },
+      {
+        name: 'suite2.js',
+        path: '/p/2.js',
+        status: 'passed',
+        tests: [],
+        failureMessage: null,
+        duration: 10,
+      },
+    ],
+  });
+
+  const html = renderReport(data, { expandLevel: 1 });
+
+  expect(html).toContain('data-name="suite1.js" data-testid="test-suite" data-collapsed="false"');
+  expect(html).toContain('data-name="suite2.js" data-testid="test-suite" data-collapsed="true"');
 });
 
 test('renders todo test count in summary', () => {

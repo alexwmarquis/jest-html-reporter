@@ -75,6 +75,103 @@ test('hides pending tests when show pending is set to false', () => {
   expect(html).not.toContain('pending test');
 });
 
+test('should hide skipped and todo tests when pending tests are hidden', () => {
+  const data = createMockReportData({
+    testSuites: [
+      {
+        name: 'skipped.js',
+        status: 'pending',
+        tests: [
+          {
+            title: 'skipped test',
+            status: 'skipped',
+            ancestorTitles: [],
+            failureMessages: [],
+            failureDetails: [],
+          },
+          {
+            title: 'todo test',
+            status: 'todo',
+            ancestorTitles: [],
+            failureMessages: [],
+            failureDetails: [],
+          },
+        ],
+      },
+    ],
+  });
+
+  const html = renderReport(data, { showPending: false });
+
+  expect(html).not.toContain('skipped test');
+  expect(html).not.toContain('todo test');
+});
+
+test('should show skipped and todo tests when pending tests are visible', () => {
+  const data = createMockReportData({
+    testSuites: [
+      {
+        name: 'skipped.js',
+        status: 'pending',
+        tests: [
+          {
+            title: 'skipped test',
+            status: 'skipped',
+            ancestorTitles: [],
+            failureMessages: [],
+            failureDetails: [],
+          },
+          {
+            title: 'todo test',
+            status: 'todo',
+            ancestorTitles: [],
+            failureMessages: [],
+            failureDetails: [],
+          },
+        ],
+      },
+    ],
+  });
+
+  const html = renderReport(data, { showPending: true });
+
+  expect(html).toContain('skipped test');
+  expect(html).toContain('todo test');
+});
+
+test('should hide groups that do not contain any visible tests', () => {
+  const data = createMockReportData({
+    testSuites: [
+      {
+        name: 'nested.js',
+        tests: [
+          {
+            title: 'passed test',
+            status: 'passed',
+            ancestorTitles: ['Visible Group'],
+            failureMessages: [],
+            failureDetails: [],
+          },
+          {
+            title: 'hidden test',
+            status: 'passed',
+            ancestorTitles: ['Hidden Group'],
+            failureMessages: [],
+            failureDetails: [],
+          },
+        ],
+      },
+    ],
+  });
+
+  const html = renderReport(data, { showPassed: false });
+
+  expect(html).not.toContain('Visible Group');
+  expect(html).not.toContain('Hidden Group');
+  expect(html).not.toContain('passed test');
+  expect(html).not.toContain('hidden test');
+});
+
 test('includes filter chips for all test statuses', () => {
   const html = renderReport(createMixedStatusData());
 
