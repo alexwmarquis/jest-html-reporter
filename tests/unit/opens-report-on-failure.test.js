@@ -87,3 +87,29 @@ test('handles browser open errors gracefully without crashing', () => {
 
   consoleWarnSpy.mockRestore();
 });
+
+test('uses correct open command for different platforms', () => {
+  const originalPlatform = process.platform;
+  const platforms = [
+    { name: 'win32', command: 'start ""' },
+    { name: 'linux', command: 'xdg-open' },
+  ];
+
+  for (const { name, command } of platforms) {
+    Object.defineProperty(process, 'platform', { value: name, configurable: true });
+    execSpy.mockImplementation((cmd, callback) => callback(null));
+
+    const outputPath = path.join(tempDir, `test-${name}.html`);
+    const reporter = new JestHtmlReporter(createMockGlobalConfig(), {
+      outputPath,
+      openOnFailure: true,
+    });
+
+    reporter.onRunComplete(new Set(), createMockResults({ success: false, numFailedTests: 1 }));
+
+    expect(execSpy).toHaveBeenCalledWith(expect.stringContaining(command), expect.any(Function));
+    execSpy.mockClear();
+  }
+
+  Object.defineProperty(process, 'platform', { value: originalPlatform });
+});

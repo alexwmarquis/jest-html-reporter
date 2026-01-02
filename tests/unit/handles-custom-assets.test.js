@@ -157,3 +157,16 @@ test('handles logo as absolute path even if it does not exist at that exact path
     fs.unlinkSync(fullLogoPath);
   }
 });
+
+test('warns when logo file does not exist', () => {
+  const outputPath = path.join(tempDir, 'missing-logo.html');
+  const reporter = new JestHtmlReporter(createMockGlobalConfig(), {
+    outputPath,
+    logo: '/nonexistent/logo.png',
+    embedAssets: true,
+  });
+
+  reporter.onRunComplete(new Set(), createMockResults());
+
+  expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('Logo file not found:'));
+});

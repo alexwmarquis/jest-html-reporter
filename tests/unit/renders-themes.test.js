@@ -60,3 +60,11 @@ test('includes custom color overrides in css', () => {
   expect(html).toContain('--bg-primary: #123456');
   expect(html).toContain('--color-passed: #00ff00');
 });
+
+test('does not include custom color overrides when none are provided', () => {
+  const html = renderReport(undefined, {
+    customColors: {},
+  });
+
+  expect(html).not.toContain(':root {\n  --bg-primary:');
+});
