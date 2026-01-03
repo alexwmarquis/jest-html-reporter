@@ -1,0 +1,3331 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        try {
+          const savedTheme = localStorage.getItem('jest-reporter-theme');
+          const theme = savedTheme || 'dark';
+          document.documentElement.className = 'theme-' + theme;
+        } catch (e) {}
+      })();
+    </script>
+    <title>Jest HTML Reporter</title>
+    <link
+      rel="icon"
+      href="data:image/png;base64,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"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500&amp;family=Google+Sans:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family:
+          var(--font-sans),
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.5;
+        min-height: 100vh;
+        font-size: 14px;
+      }
+      .container {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 20px 24px;
+      }
+      @media (max-width: 640px) {
+        .container {
+          padding: 16px;
+        }
+      }
+      html::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      html::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0);
+      }
+      html::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+      }
+      html::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      @media (max-width: 640px) {
+        .header {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 12px;
+        }
+      }
+      .header-logo {
+        height: 32px;
+        width: auto;
+      }
+      .search-box {
+        position: relative;
+        flex: 1;
+        min-width: 200px;
+      }
+      @media (max-width: 640px) {
+        .search-box {
+          width: 100%;
+          order: 2;
+        }
+      }
+      .search-box input {
+        width: 100%;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 8px 12px 8px 32px;
+        color: var(--text-primary);
+        font-size: 13px;
+        height: 36px;
+        box-sizing: border-box;
+      }
+      .search-box input::placeholder {
+        color: var(--text-muted);
+      }
+      .search-box input:focus {
+        outline: none;
+        border-color: var(--color-accent);
+      }
+      .search-box i {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 14px;
+        pointer-events: none;
+      }
+      .subnav-container {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 4px;
+      }
+      @media (max-width: 640px) {
+        .subnav-container {
+          overflow-x: auto;
+          width: 100%;
+          order: 1;
+        }
+      }
+      .subnav {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+      @media (max-width: 640px) {
+        .subnav {
+          gap: 0;
+        }
+      }
+      .subnav-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 13px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.15s ease;
+        white-space: nowrap;
+      }
+      .subnav-item:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+      }
+      .subnav-item.active {
+        color: var(--text-primary);
+        background: var(--bg-hover);
+        font-weight: 500;
+      }
+      .subnav-item.active .counter {
+        background: var(--color-accent);
+        color: #fff;
+      }
+      .subnav-item .subnav-item-label {
+        font-weight: inherit;
+      }
+      .subnav-item .counter {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 6px;
+        font-size: 12px;
+        font-weight: 600;
+        background: var(--bg-hover);
+        border-radius: 10px;
+        color: var(--text-secondary);
+        transition: all 0.15s ease;
+      }
+      .subnav-icon {
+        flex-shrink: 0;
+        fill: currentColor;
+      }
+      .subnav-icon.passed {
+        color: var(--color-passed);
+      }
+      .subnav-icon.failed {
+        color: var(--color-failed);
+      }
+      .subnav-icon.skipped {
+        color: var(--color-skipped);
+      }
+      .subnav-icon.flaky {
+        color: var(--color-flaky);
+      }
+      .header .meta-info {
+        flex-shrink: 0;
+        font-size: 13px;
+        color: var(--text-secondary);
+        white-space: nowrap;
+      }
+      @media (max-width: 640px) {
+        .header .meta-info {
+          width: 100%;
+          text-align: left;
+          order: -1;
+        }
+      }
+      .environment-info {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+        font-size: 13px;
+      }
+      .environment-info .env-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        user-select: none;
+      }
+      .environment-info .env-header i {
+        transition: transform 0.15s ease;
+      }
+      .environment-info.collapsed .env-header i {
+        transform: rotate(-90deg);
+      }
+      .environment-info .env-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 8px 16px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border-color);
+      }
+      .environment-info .env-item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .environment-info .env-item .env-label {
+        color: var(--text-muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .environment-info .env-item .env-value {
+        color: var(--text-primary);
+        font-family: var(--font-mono), 'SF Mono', 'Cascadia Code', Consolas, monospace;
+      }
+      .environment-info .env-item .env-value a {
+        color: var(--color-accent);
+        text-decoration: none;
+        word-break: break-all;
+      }
+      .environment-info .env-item .env-value a:hover {
+        text-decoration: underline;
+      }
+      .environment-info.collapsed .env-grid {
+        display: none;
+      }
+      .interrupted-banner {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--color-failed-bg);
+        border: 1px solid var(--color-failed);
+        border-radius: 4px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+        font-size: 13px;
+        color: var(--color-failed);
+      }
+      .interrupted-banner i {
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+      .suite {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        margin-bottom: 8px;
+        overflow: hidden;
+      }
+      .suite.collapsed .suite-body {
+        display: none;
+      }
+      .suite.collapsed .suite-chevron {
+        transform: rotate(-90deg);
+      }
+      .suite-header {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        cursor: pointer;
+        gap: 8px;
+        transition: background 0.15s ease;
+      }
+      .suite-header:hover {
+        background: var(--bg-hover);
+      }
+      .suite-chevron {
+        color: var(--text-muted);
+        font-size: 12px;
+        transition: transform 0.2s ease;
+        width: 16px;
+        flex-shrink: 0;
+      }
+      .suite-name {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+      .suite-body {
+        border-top: 1px solid var(--border-color);
+      }
+      .describe-group {
+        border-left: 2px solid var(--border-color);
+        margin-left: 16px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+      .describe-group:first-child {
+        margin-top: 8px;
+      }
+      .describe-group:last-child {
+        margin-bottom: 8px;
+      }
+      .describe-group.collapsed .describe-body {
+        display: none;
+      }
+      .describe-group.collapsed .describe-chevron {
+        transform: rotate(-90deg);
+      }
+      .describe-group .describe-group {
+        margin-left: 12px;
+      }
+      .describe-header {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        cursor: pointer;
+        gap: 8px;
+        transition: background 0.15s ease;
+        border-radius: 4px;
+        margin: 2px 0;
+      }
+      .describe-header:hover {
+        background: var(--bg-hover);
+      }
+      .describe-chevron {
+        color: var(--text-muted);
+        font-size: 10px;
+        transition: transform 0.2s ease;
+        width: 14px;
+        flex-shrink: 0;
+      }
+      .describe-name {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+      .describe-count {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-left: auto;
+      }
+      .describe-body > .test-item {
+        padding-left: 16px;
+        border-bottom: none;
+        border-top: 1px solid rgba(var(--border-color), 0.5);
+      }
+      .describe-body > .test-item:first-child {
+        border-top: none;
+      }
+      .test-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 12px 16px 12px 40px;
+        gap: 12px;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .test-item:last-child {
+        border-bottom: none;
+      }
+      .test-item:hover {
+        background: hsla(0, 0%, 100%, 0.02);
+      }
+      @media (max-width: 640px) {
+        .test-item {
+          padding-left: 16px;
+        }
+      }
+      .test-status-icon {
+        flex-shrink: 0;
+        font-size: 16px;
+        margin-top: 1px;
+        width: 18px;
+      }
+      .test-status-icon.passed {
+        color: var(--color-passed);
+      }
+      .test-status-icon.failed {
+        color: var(--color-failed);
+      }
+      .test-status-icon.pending,
+      .test-status-icon.skipped,
+      .test-status-icon.todo {
+        color: var(--color-skipped);
+      }
+      .test-status-icon.flaky {
+        color: var(--color-flaky);
+      }
+      .flaky-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        background: var(--color-flaky-bg);
+        color: var(--color-flaky);
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 500;
+        margin-left: 8px;
+        flex-shrink: 0;
+      }
+      .flaky-badge i {
+        font-size: 10px;
+      }
+      .test-content {
+        flex: 1;
+        min-width: 0;
+      }
+      .test-title-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 2px;
+      }
+      .test-title {
+        font-size: 14px;
+        color: var(--text-primary);
+        font-weight: 400;
+      }
+      .test-tag {
+        display: flex;
+        align-items: center;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 500;
+      }
+      .test-tag-0 {
+        background: rgba(78, 201, 80, 0.18);
+        color: #4ec950;
+      }
+      .test-tag-1 {
+        background: rgba(86, 156, 214, 0.18);
+        color: #569cd6;
+      }
+      .test-tag-2 {
+        background: rgba(206, 145, 120, 0.18);
+        color: #ce9178;
+      }
+      .test-tag-3 {
+        background: rgba(220, 220, 170, 0.18);
+        color: #dcdcaa;
+      }
+      .test-tag-4 {
+        background: rgba(181, 206, 168, 0.18);
+        color: #b5cea8;
+      }
+      .test-tag-5 {
+        background: rgba(197, 134, 192, 0.18);
+        color: #c586c0;
+      }
+      .test-tag-6 {
+        background: rgba(78, 201, 176, 0.18);
+        color: #4ec9b0;
+      }
+      .test-tag-7 {
+        background: rgba(156, 220, 254, 0.18);
+        color: #9cdcfe;
+      }
+      .test-location {
+        font-size: 12px;
+        font-family: var(--font-mono), 'SF Mono', 'Cascadia Code', Consolas, monospace;
+        color: var(--text-muted);
+      }
+      .test-duration {
+        flex-shrink: 0;
+        font-size: 13px;
+        color: var(--text-secondary);
+        font-family: var(--font-mono), 'SF Mono', 'Cascadia Code', Consolas, monospace;
+        margin-top: 1px;
+      }
+      .error-block {
+        background: var(--error-bg);
+        border: 1px solid var(--error-border);
+        border-radius: 4px;
+        padding: 12px;
+        margin-top: 8px;
+        font-family: var(--font-mono), 'SF Mono', 'Cascadia Code', Consolas, monospace;
+        font-size: 12px;
+        color: var(--error-text);
+        white-space: pre-wrap;
+        word-break: break-word;
+        max-height: 200px;
+        overflow-y: auto;
+        line-height: 1.5;
+      }
+      .error-block::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      .error-block::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0);
+      }
+      .error-block::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+      }
+      .error-block::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+      .error-container {
+        margin-top: 8px;
+        position: relative;
+      }
+      .error-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 4px;
+        gap: 4px;
+      }
+      .copy-error-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        color: var(--text-secondary);
+        font-size: 11px;
+        font-family:
+          var(--font-sans),
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .copy-error-btn:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+        border-color: var(--text-secondary);
+      }
+      .copy-error-btn i {
+        font-size: 12px;
+      }
+      .error-block-enhanced {
+        background: var(--error-bg);
+        border: 1px solid var(--error-border);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .error-message {
+        padding: 12px;
+        font-family: var(--font-mono), 'SF Mono', 'Cascadia Code', Consolas, monospace;
+        font-size: 12px;
+        color: var(--error-text);
+        white-space: pre-wrap;
+        word-break: break-word;
+        line-height: 1.5;
+        border-bottom: 1px solid var(--error-border);
+      }
+      .error-diff-container {
+        padding: 12px;
+        background: var(--error-section-bg);
+        border-bottom: 1px solid var(--error-border);
+      }
+      .error-diff-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 4px 0;
+      }
+      .error-diff-row.expected .error-diff-label {
+        color: var(--color-passed);
+        background: var(--color-passed-bg);
+      }
+      .error-diff-row.expected .error-diff-value {
+        color: var(--color-passed);
+      }
+      .error-diff-row.received .error-diff-label {
+        color: var(--color-failed);
+        background: var(--color-failed-bg);
+      }
+      .error-diff-row.received .error-diff-value {
+        color: var(--color-failed);
+      }
+      .error-diff-label {
+        flex-shrink: 0;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 500;
+        font-family:
+          var(--font-sans),
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        min-width: 65px;
+        text-align: center;
+      }
+      .error-diff-value {
+        font-family: var(--font-mono), 'SF Mono', 'Cascadia Code', Consolas, monospace;
+        font-size: 12px;
+        word-break: break-all;
+        background: rgba(0, 0, 0, 0);
+        padding: 2px 0;
+      }
+      .error-diff-full {
+        border-bottom: 1px solid var(--error-border);
+      }
+      .error-diff-title {
+        padding: 8px 12px;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        background: var(--error-header-bg);
+        border-bottom: 1px solid var(--error-border);
+      }
+      .error-diff-content {
+        padding: 12px;
+        margin: 0;
+        font-family: var(--font-mono), 'SF Mono', 'Cascadia Code', Consolas, monospace;
+        font-size: 12px;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        word-break: break-word;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      .error-diff-content::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      .error-diff-content::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0);
+      }
+      .error-diff-content::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+      }
+      .error-diff-content::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+      .error-diff-content .diff-removed {
+        display: block;
+        color: var(--color-failed);
+        background: var(--diff-removed-bg);
+        margin: 0 -12px;
+        padding: 0 12px;
+      }
+      .error-diff-content .diff-added {
+        display: block;
+        color: var(--color-passed);
+        background: var(--diff-added-bg);
+        margin: 0 -12px;
+        padding: 0 12px;
+      }
+      .error-stack {
+        background: var(--error-header-bg);
+      }
+      .error-stack-title {
+        padding: 8px 12px;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        border-bottom: 1px solid var(--error-border);
+      }
+      .error-stack-frames {
+        padding: 8px 12px;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      .error-stack-frames::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      .error-stack-frames::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0);
+      }
+      .error-stack-frames::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+      }
+      .error-stack-frames::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+      .error-stack-frame {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        padding: 3px 0;
+        font-family: var(--font-mono), 'SF Mono', 'Cascadia Code', Consolas, monospace;
+        font-size: 11px;
+        line-height: 1.5;
+        color: var(--text-secondary);
+      }
+      .error-stack-frame.is-node-module {
+        opacity: 0.5;
+      }
+      .stack-at {
+        color: var(--text-muted);
+      }
+      .stack-function {
+        color: var(--text-primary);
+      }
+      .stack-location {
+        display: inline-flex;
+        align-items: baseline;
+        color: var(--color-accent);
+        text-decoration: none;
+        transition: color 0.15s ease;
+      }
+      .stack-location:hover {
+        color: var(--text-primary);
+        text-decoration: underline;
+      }
+      .stack-file {
+        color: inherit;
+      }
+      .stack-line {
+        color: var(--text-muted);
+      }
+      .stack-raw {
+        color: var(--text-secondary);
+      }
+      .error-stack-hidden {
+        border-top: 1px dashed var(--border-color);
+        padding-top: 4px;
+        margin-top: 4px;
+      }
+      .error-stack-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 0;
+        background: rgba(0, 0, 0, 0);
+        border: none;
+        color: var(--color-accent);
+        font-size: 11px;
+        font-family:
+          var(--font-sans),
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        cursor: pointer;
+        transition: color 0.15s ease;
+      }
+      .error-stack-toggle:hover {
+        color: var(--text-primary);
+      }
+      .error-stack-toggle i {
+        font-size: 10px;
+        transition: transform 0.15s ease;
+      }
+      .error-stack-toggle.expanded i {
+        transform: rotate(180deg);
+      }
+      .empty-state {
+        text-align: center;
+        padding: 60px 24px;
+        color: var(--text-muted);
+      }
+      .empty-state i {
+        font-size: 48px;
+        margin-bottom: 16px;
+        opacity: 0.5;
+      }
+      :root {
+        --font-sans: 'Google Sans';
+        --font-mono: 'Google Sans Code';
+      }
+      :root,
+      .theme-dark {
+        --bg-primary: #1e1e1e;
+        --bg-secondary: #252526;
+        --bg-hover: #2d2d2d;
+        --bg-input: #3c3c3c;
+        --text-primary: #d4d4d4;
+        --text-secondary: #a0a0a0;
+        --text-muted: #707070;
+        --border-color: #404040;
+        --color-passed: #4ec950;
+        --color-passed-bg: rgba(78, 201, 80, 0.15);
+        --color-failed: #e5534b;
+        --color-failed-bg: rgba(229, 83, 75, 0.15);
+        --color-skipped: #cca700;
+        --color-skipped-bg: rgba(204, 167, 0, 0.15);
+        --color-flaky: #e09956;
+        --color-flaky-bg: rgba(224, 153, 86, 0.15);
+        --color-accent: #0078d4;
+        --error-bg: rgba(229, 83, 75, 0.1);
+        --error-border: rgba(229, 83, 75, 0.25);
+        --error-text: #f48771;
+        --error-section-bg: rgba(0, 0, 0, 0.15);
+        --error-header-bg: rgba(0, 0, 0, 0.1);
+        --diff-removed-bg: rgba(229, 83, 75, 0.12);
+        --diff-added-bg: rgba(78, 201, 80, 0.12);
+      }
+      .theme-light {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f6f8fa;
+        --bg-hover: #eaeef2;
+        --bg-input: #ffffff;
+        --text-primary: #1f2328;
+        --text-secondary: #656d76;
+        --text-muted: #8b949e;
+        --border-color: #d0d7de;
+        --color-passed: #1a7f37;
+        --color-passed-bg: rgba(26, 127, 55, 0.12);
+        --color-failed: #cf222e;
+        --color-failed-bg: rgba(207, 34, 46, 0.12);
+        --color-skipped: #9a6700;
+        --color-skipped-bg: rgba(154, 103, 0, 0.12);
+        --color-flaky: #bc4c00;
+        --color-flaky-bg: rgba(188, 76, 0, 0.12);
+        --color-accent: #0969da;
+        --error-bg: rgba(207, 34, 46, 0.06);
+        --error-border: rgba(207, 34, 46, 0.25);
+        --error-text: #a40e26;
+        --error-section-bg: rgba(207, 34, 46, 0.04);
+        --error-header-bg: rgba(207, 34, 46, 0.06);
+        --diff-removed-bg: rgba(207, 34, 46, 0.12);
+        --diff-added-bg: rgba(26, 127, 55, 0.12);
+      }
+      .theme-github {
+        --bg-primary: #0d1117;
+        --bg-secondary: #161b22;
+        --bg-hover: #21262d;
+        --bg-input: #0d1117;
+        --text-primary: #c9d1d9;
+        --text-secondary: #8b949e;
+        --text-muted: #6e7681;
+        --border-color: #30363d;
+        --color-passed: #3fb950;
+        --color-passed-bg: rgba(63, 185, 80, 0.15);
+        --color-failed: #f85149;
+        --color-failed-bg: rgba(248, 81, 73, 0.15);
+        --color-skipped: #d29922;
+        --color-skipped-bg: rgba(210, 153, 34, 0.15);
+        --color-flaky: #db6d28;
+        --color-flaky-bg: rgba(219, 109, 40, 0.15);
+        --color-accent: #58a6ff;
+        --error-bg: rgba(248, 81, 73, 0.1);
+        --error-border: rgba(248, 81, 73, 0.4);
+        --error-text: #f85149;
+        --error-section-bg: rgba(0, 0, 0, 0.15);
+        --error-header-bg: rgba(0, 0, 0, 0.1);
+        --diff-removed-bg: rgba(248, 81, 73, 0.15);
+        --diff-added-bg: rgba(63, 185, 80, 0.15);
+      }
+      .theme-monokai {
+        --bg-primary: #272822;
+        --bg-secondary: #2d2e27;
+        --bg-hover: #3e3d32;
+        --bg-input: #1e1f1c;
+        --text-primary: #f8f8f2;
+        --text-secondary: #a6a69c;
+        --text-muted: #75715e;
+        --border-color: #49483e;
+        --color-passed: #a6e22e;
+        --color-passed-bg: rgba(166, 226, 46, 0.15);
+        --color-failed: #f92672;
+        --color-failed-bg: rgba(249, 38, 114, 0.15);
+        --color-skipped: #e6db74;
+        --color-skipped-bg: rgba(230, 219, 116, 0.15);
+        --color-flaky: #fd971f;
+        --color-flaky-bg: rgba(253, 151, 31, 0.15);
+        --color-accent: #66d9ef;
+        --error-bg: rgba(249, 38, 114, 0.1);
+        --error-border: rgba(249, 38, 114, 0.4);
+        --error-text: #f92672;
+        --error-section-bg: rgba(0, 0, 0, 0.15);
+        --error-header-bg: rgba(0, 0, 0, 0.1);
+        --diff-removed-bg: rgba(249, 38, 114, 0.15);
+        --diff-added-bg: rgba(166, 226, 46, 0.15);
+      }
+      .theme-dracula {
+        --bg-primary: #282a36;
+        --bg-secondary: #21222c;
+        --bg-hover: #343746;
+        --bg-input: #1e1f29;
+        --text-primary: #f8f8f2;
+        --text-secondary: #bfbfbf;
+        --text-muted: #6272a4;
+        --border-color: #44475a;
+        --color-passed: #50fa7b;
+        --color-passed-bg: rgba(80, 250, 123, 0.15);
+        --color-failed: #ff5555;
+        --color-failed-bg: rgba(255, 85, 85, 0.15);
+        --color-skipped: #f1fa8c;
+        --color-skipped-bg: rgba(241, 250, 140, 0.15);
+        --color-flaky: #ffb86c;
+        --color-flaky-bg: rgba(255, 184, 108, 0.15);
+        --color-accent: #bd93f9;
+        --error-bg: rgba(255, 85, 85, 0.1);
+        --error-border: rgba(255, 85, 85, 0.4);
+        --error-text: #ff5555;
+        --error-section-bg: rgba(0, 0, 0, 0.15);
+        --error-header-bg: rgba(0, 0, 0, 0.1);
+        --diff-removed-bg: rgba(255, 85, 85, 0.15);
+        --diff-added-bg: rgba(80, 250, 123, 0.15);
+      }
+      .theme-nord {
+        --bg-primary: #2e3440;
+        --bg-secondary: #3b4252;
+        --bg-hover: #434c5e;
+        --bg-input: #2e3440;
+        --text-primary: #eceff4;
+        --text-secondary: #d8dee9;
+        --text-muted: #4c566a;
+        --border-color: #4c566a;
+        --color-passed: #a3be8c;
+        --color-passed-bg: rgba(163, 190, 140, 0.15);
+        --color-failed: #bf616a;
+        --color-failed-bg: rgba(191, 97, 106, 0.15);
+        --color-skipped: #ebcb8b;
+        --color-skipped-bg: rgba(235, 203, 139, 0.15);
+        --color-flaky: #d08770;
+        --color-flaky-bg: rgba(208, 135, 112, 0.15);
+        --color-accent: #88c0d0;
+        --error-bg: rgba(191, 97, 106, 0.1);
+        --error-border: rgba(191, 97, 106, 0.4);
+        --error-text: #bf616a;
+        --error-section-bg: rgba(0, 0, 0, 0.15);
+        --error-header-bg: rgba(0, 0, 0, 0.1);
+        --diff-removed-bg: rgba(191, 97, 106, 0.15);
+        --diff-added-bg: rgba(163, 190, 140, 0.15);
+      }
+      .progress-bar-container {
+        margin-bottom: 16px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 12px 16px;
+      }
+      .progress-bar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+      .progress-bar-stats {
+        display: flex;
+        gap: 16px;
+      }
+      .progress-bar-stats .stat {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .progress-bar-stats .stat .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      .progress-bar-stats .stat .dot.passed {
+        background: var(--color-passed);
+      }
+      .progress-bar-stats .stat .dot.failed {
+        background: var(--color-failed);
+      }
+      .progress-bar-stats .stat .dot.skipped {
+        background: var(--color-skipped);
+      }
+      .progress-bar {
+        height: 8px;
+        background: var(--bg-hover);
+        border-radius: 4px;
+        overflow: hidden;
+        display: flex;
+      }
+      .progress-bar .segment {
+        height: 100%;
+        transition: width 0.3s ease;
+      }
+      .progress-bar .segment.passed {
+        background: var(--color-passed);
+      }
+      .progress-bar .segment.failed {
+        background: var(--color-failed);
+      }
+      .progress-bar .segment.skipped {
+        background: var(--color-skipped);
+      }
+      .theme-toggle,
+      .jump-to-top {
+        position: fixed;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+        z-index: 1000;
+      }
+      .theme-toggle:hover,
+      .jump-to-top:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+        transform: scale(1.05);
+      }
+      .theme-toggle:active,
+      .jump-to-top:active {
+        transform: scale(0.95);
+      }
+      .theme-toggle i,
+      .jump-to-top i {
+        pointer-events: none;
+      }
+      .theme-toggle {
+        bottom: 20px;
+      }
+      .jump-to-top {
+        bottom: 20px;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          all 0.2s ease,
+          opacity 0.3s ease,
+          visibility 0.3s ease;
+        z-index: 999;
+      }
+      .jump-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+      }
+      .jump-to-top.with-theme-toggle {
+        bottom: calc(20px + 44px + 16px);
+      }
+      .theme-menu {
+        position: fixed;
+        bottom: calc(20px + 52px);
+        right: 20px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 4px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 1001;
+        min-width: 140px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.2s ease;
+      }
+      .theme-menu.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .theme-menu .theme-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-size: 13px;
+        transition: background 0.15s ease;
+      }
+      .theme-menu .theme-option:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+      }
+      .theme-menu .theme-option.active {
+        color: var(--color-accent);
+      }
+      .theme-menu .theme-option.active::before {
+        content: '✓';
+        margin-right: 4px;
+      }
+      .theme-menu .theme-option .color-preview {
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+        border: 1px solid var(--border-color);
+      }
+      .report-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+        gap: 16px;
+      }
+      .report-header .report-branding {
+        flex: 1;
+      }
+      .report-header .report-title-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+      .report-header .report-title-row .header-logo {
+        height: 32px;
+        width: auto;
+        flex-shrink: 0;
+      }
+      .report-header .report-title-row .report-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0;
+      }
+      .report-header .report-subtitle {
+        font-size: 13px;
+        color: var(--text-secondary);
+        margin: 0;
+      }
+      .report-header .meta-info {
+        flex-shrink: 0;
+        text-align: right;
+        font-size: 13px;
+        color: var(--text-secondary);
+        white-space: nowrap;
+      }
+      @media (max-width: 640px) {
+        .report-header {
+          flex-direction: column;
+          gap: 8px;
+        }
+        .report-header .meta-info {
+          text-align: left;
+          order: -1;
+        }
+      }
+      @media (max-width: 640px) {
+        .progress-bar-stats {
+          flex-wrap: wrap;
+          gap: 8px 12px;
+        }
+        .theme-toggle,
+        .jump-to-top {
+          right: 12px;
+          width: 40px;
+          height: 40px;
+        }
+        .theme-toggle {
+          bottom: 12px;
+        }
+        .jump-to-top {
+          bottom: 12px;
+        }
+        .jump-to-top.with-theme-toggle {
+          bottom: calc(12px + 40px + 12px);
+        }
+        .theme-menu {
+          bottom: calc(12px + 48px);
+          right: 12px;
+        }
+        .report-header .report-title-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+      }
+      :root {
+        --font-sans: 'Google Sans';
+        --font-mono: 'Google Sans Code';
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="report-header" data-testid="report-header">
+        <div class="report-branding">
+          <div class="report-title-row" data-testid="report-title-row">
+            <img
+              src="data:image/png;base64,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"
+              alt="Logo"
+              class="header-logo"
+              data-testid="header-logo"
+              style="height: 32px"
+            />
+            <h1 class="report-title" data-testid="report-title">Jest HTML Reporter</h1>
+          </div>
+          <p class="report-subtitle" data-testid="report-subtitle">
+            Unit tests for Jest HTML Reporter
+          </p>
+        </div>
+        <div class="meta-info" data-testid="meta-info">
+          1/2/2026, 5:57:34 PM&nbsp;&nbsp;&nbsp;Total time: 6.2s
+        </div>
+      </div>
+      <div class="header" data-testid="header">
+        <div class="search-box" data-testid="search-box">
+          <i class="bi bi-search"></i
+          ><input
+            type="text"
+            id="search-input"
+            data-testid="search-input"
+            placeholder="Filter tests"
+          />
+        </div>
+        <div class="subnav-container" data-testid="subnav-container">
+          <nav class="subnav" data-testid="subnav">
+            <a
+              class="subnav-item active"
+              data-filter="all"
+              data-testid="filter-chip-all"
+              href="#"
+              role="button"
+              ><span class="subnav-item-label">All</span><span class="counter">164</span></a
+            ><a
+              class="subnav-item"
+              data-filter="passed"
+              data-testid="filter-chip-passed"
+              href="#"
+              role="button"
+              ><svg
+                aria-hidden="true"
+                height="16"
+                viewBox="0 0 16 16"
+                width="16"
+                class="subnav-icon passed"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"
+                ></path></svg
+              ><span class="subnav-item-label">Passed</span><span class="counter">164</span></a
+            ><a
+              class="subnav-item"
+              data-filter="failed"
+              data-testid="filter-chip-failed"
+              href="#"
+              role="button"
+              ><svg
+                aria-hidden="true"
+                height="16"
+                viewBox="0 0 16 16"
+                width="16"
+                class="subnav-icon failed"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"
+                ></path></svg
+              ><span class="subnav-item-label">Failed</span><span class="counter">0</span></a
+            ><a
+              class="subnav-item"
+              data-filter="flaky"
+              data-testid="filter-chip-flaky"
+              href="#"
+              role="button"
+              ><svg
+                aria-hidden="true"
+                height="16"
+                viewBox="0 0 16 16"
+                width="16"
+                class="subnav-icon flaky"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM8 0a8 8 0 100 16A8 8 0 008 0zm.75 4a.75.75 0 00-1.5 0v3.5a.75.75 0 00.22.53l2.25 2.25a.75.75 0 001.06-1.06L8.75 7.19V4z"
+                ></path></svg
+              ><span class="subnav-item-label">Flaky</span><span class="counter">0</span></a
+            ><a
+              class="subnav-item"
+              data-filter="pending"
+              data-testid="filter-chip-skipped"
+              href="#"
+              role="button"
+              ><svg
+                aria-hidden="true"
+                height="16"
+                viewBox="0 0 16 16"
+                width="16"
+                class="subnav-icon skipped"
+              >
+                <path
+                  d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM8 0a8 8 0 100 16A8 8 0 008 0zm3.28 5.78a.75.75 0 00-1.06-1.06l-5.5 5.5a.75.75 0 101.06 1.06l5.5-5.5z"
+                ></path></svg
+              ><span class="subnav-item-label">Skipped</span><span class="counter">0</span></a
+            >
+          </nav>
+        </div>
+      </div>
+      <div class="progress-bar-container" data-testid="progress-bar">
+        <div class="progress-bar-header" data-testid="progress-bar-header">
+          <div class="progress-bar-stats" data-testid="progress-bar-stats">
+            <span class="stat"><span class="dot passed"></span> 164 passed</span
+            ><span class="stat"><span class="dot failed"></span> 0 failed</span
+            ><span class="stat"><span class="dot skipped"></span> 0 skipped</span>
+          </div>
+          <span data-testid="progress-bar-passed-percentage">100% passed</span>
+        </div>
+        <div class="progress-bar" data-testid="progress-bar-track">
+          <div class="segment passed" style="width: 100%"></div>
+          <div class="segment failed" style="width: 0%"></div>
+          <div class="segment skipped" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="environment-info" id="env-info" data-testid="environment-info">
+        <div class="env-header clickable" data-testid="environment-header">
+          <i class="bi bi-chevron-down"></i><span>Environment</span>
+        </div>
+        <div class="env-grid" data-testid="environment-grid">
+          <div class="env-item">
+            <span class="env-label">Node.js</span><span class="env-value">v22.13.1</span>
+          </div>
+          <div class="env-item">
+            <span class="env-label">Platform</span><span class="env-value">darwin 20.6.0</span>
+          </div>
+          <div class="env-item">
+            <span class="env-label">CPU Cores</span><span class="env-value">8</span>
+          </div>
+          <div class="env-item">
+            <span class="env-label">Memory</span><span class="env-value">16GB</span>
+          </div>
+        </div>
+      </div>
+      <div id="test-suites">
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/displays-test-information.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name"
+              >displays-test-information.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >4.4s</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes test suites in generated report</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">106ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes test items within suites</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >shows test duration when enabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >hides test duration when disabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >shows full file path when show file path is set to full</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >shows filename only when show file path is set to filename</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should show filename only when path has no slashes</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">20ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes progress bar when enabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >excludes progress bar when disabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes environment information when enabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">17ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >excludes environment information when disabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes subtitle when provided</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title">includes logo when provided</span>
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders report header with title and timestamp when logo and subtitle are not
+                  provided</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders header with title but no subtitle element when subtitle not
+                  provided</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >collapses all test suites when collapse all is set to true</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >collapses only passed test suites when collapse passed is set to true</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not collapse suites by default</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should collapse suites based on the provided expand level</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders todo test count in summary</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders flaky test count in summary</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles tests with no ancestor titles</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders test with multiple ancestor titles</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles test with failure details</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">18ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles suite with failure message</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title">renders failed suite status</span>
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders pending suite status</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles multiple test suites with mixed statuses</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >displays empty state message when no tests exist</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/sorts-test-results.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">sorts-test-results.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >4.5s</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >sorts test suites by duration when sort is set to duration</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">148ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >sorts test suites by name when sort is set to name</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">9ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >sorts test suites by status when sort is set to status</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">4ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should sort individual tests within a suite based on the selected criteria</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">12ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should handle invalid sort options gracefully without failing</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">3ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/error-display.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">error-display.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >4.6s</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders error container with enhanced error block</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">82ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title">renders copy error button</span>
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title">renders main error message</span>
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders expected and received values when present</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title">renders expected label</span>
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles expected/received with complex values</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">93ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders diff section when differences are present</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">10ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >adds diff-removed class for removed lines</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >adds diff-added class for added lines</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders stack trace section when stack frames are present</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders individual stack frames</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders VS Code links for stack frames with file paths</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders function name when present in stack frame</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >marks node_modules frames with special class</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not mark non-node_modules frames with node module class</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >shows only first 3 stack frames by default</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">32ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders toggle button for hidden frames</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >pluralizes frame count correctly for multiple hidden frames</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not render toggle button when 3 or fewer frames</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">4ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders multiple error blocks for multiple failure messages</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >concatenates all messages for copy button</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">6ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >strips ANSI codes from error messages</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >escapes HTML in error messages</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >escapes HTML in expected/received values</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles stack frame with function and file path</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles stack frame with only file path (no function name)</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles stack frame with only function name (no file path)</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">8ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles empty failure message</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">16ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles error message with only whitespace</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles very long file paths in stack traces</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >skips bullet point lines in Jest output</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/generates-json-output.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">generates-json-output.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >4.6s</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >generates json file when output json option is enabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">291ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes flaky test count in json output</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">34ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles tests with missing performance stats</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">5ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >parses failure messages into structured format</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">38ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should extract test failure messages from the suite-level failure message</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">7ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/handles-custom-assets.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">handles-custom-assets.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >4.7s</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >warns when custom css file does not exist</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">290ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >warns when custom javascript file does not exist</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">7ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >loads custom css when file exists</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">16ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >loads custom javascript when file exists</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">3ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles relative paths for custom css files</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">3ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes custom css in generated html</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">29ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes custom javascript in generated html</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >embeds logo as base 64 when file exists and embed assets option is true</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">4ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles logo as absolute path even if it does not exist at that exact path but
+                  exists relative to cwd</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">12ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should log a warning when the specified logo file does not exist</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">87ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/coverage-booster.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">coverage-booster.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >4.8s</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should render report header correctly with or without logo and subtitle</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">7ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should handle zero total tests in the progress bar</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should set group status to pending when all tests are pending or skipped</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">5ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should return empty string when rendering an unknown node type in the test
+                  tree</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should correctly identify visible tests for all pending statuses</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should handle default configuration and status-based sorting correctly</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">251ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should handle various configuration options like logo embedding and custom
+                  fonts</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">180ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should use fallback icons and statuses when test data is incomplete</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should display suite-level failure messages when individual test errors are
+                  missing</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should return raw string when a stack frame cannot be parsed</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should render stack frames correctly even when column or function name is
+                  missing</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/generates-html-report.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">generates-html-report.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >4.9s</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >creates html report file when tests complete</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">393ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should render pending suite status correctly when tests are completed</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">3ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >creates output directory if it does not exist</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">11ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >generates valid html document structure</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">11ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes page title in both head and body</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes bootstrap icons cdn link</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title">can be parsed as valid html</span>
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/renders-themes.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">renders-themes.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >480ms</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >applies dark theme by default</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >applies light theme when selected</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >applies github theme when selected</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >applies monokai theme when selected</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >applies dracula theme when selected</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >applies nord theme when selected</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes theme toggle when enabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not include theme toggle when disabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes custom color overrides in css</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should not include custom color overrides in the css when none are
+                  specified</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">17ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/opens-report-on-failure.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">opens-report-on-failure.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >524ms</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not open browser when tests pass</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">179ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >opens browser when tests fail and open on failure is enabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">4ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles browser open errors gracefully without crashing</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">4ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should use the correct system command to open the report on different
+                  platforms</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">6ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/minification.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">minification.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >325ms</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should minify HTML by default</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should minify HTML when minify option is true</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should not minify HTML when minify option is false</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should preserve content inside &lt;pre&gt; tags during minification</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should remove HTML comments during minification</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">20ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/displays-additional-info.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name"
+              >displays-additional-info.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >276ms</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not render section when additional information is undefined</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not render section when additional information has no valid entries</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not render information with undefined values</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not render entries with null values</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not render entries with empty string values</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders with default title when title not provided</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders with custom title when provided</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders key-value pairs correctly</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders URLs as clickable links</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title">renders http URLs as links</span>
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not render non-URL strings as links</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">27ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title">escapes HTML in values</span>
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title">escapes HTML in keys</span>
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >escapes HTML in custom title</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders collapsible header with chevron icon</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >uses environment-info class for consistent styling</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders grid layout with env-grid class</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >renders multiple entries in grid</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/formats-test-data.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">formats-test-data.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >263ms</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >formats milliseconds correctly in test duration</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >formats seconds correctly in test duration</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >formats date in locale format by default</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">27ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >formats date in iso format when specified</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >formats date in relative format when specified</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should format test duration in minutes correctly</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should display relative date as &quot;just now&quot; when appropriate</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should display relative date as &quot;minutes ago&quot; when appropriate</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should display relative date as &quot;hours ago&quot; when appropriate</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >escapes special characters in test titles</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles very long test names without breaking layout</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">4ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >handles special characters and emojis in test names</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/displays-interrupted-banner.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name"
+              >displays-interrupted-banner.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >120ms</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >displays interrupted banner when test run was stopped early</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not display interrupted banner when test run completed normally</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/filters-test-visibility.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">filters-test-visibility.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >156ms</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >hides passed tests when show passed is set to false</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >hides failed tests when show failed is set to false</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >hides pending tests when show pending is set to false</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should hide skipped and todo tests when pending tests are hidden</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should show skipped and todo tests when pending tests are visible</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should hide groups that do not contain any visible tests</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes filter chips for all test statuses</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >includes search box for filtering tests</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/path-utils.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">path-utils.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >70ms</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should extract the filename from a given path</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">2ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should return the full path if it contains no slashes</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should return the path as is when it ends in a slash</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >should return an empty string when an empty path is provided</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">0ms</span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="suite"
+          data-status="passed"
+          data-has-failed="false"
+          data-name="tests/unit/jump-to-top.test.js"
+          data-testid="test-suite"
+          data-collapsed="false"
+        >
+          <div class="suite-header" data-testid="suite-header">
+            <i class="bi bi-chevron-down suite-chevron"></i
+            ><span class="suite-name" data-testid="suite-name">jump-to-top.test.js</span
+            ><span class="test-duration" data-testid="suite-duration" style="margin-left: auto"
+              >123ms</span
+            >
+          </div>
+          <div class="suite-body" data-testid="suite-body">
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title">renders jump to top button</span>
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >adds &quot;with-theme-toggle&quot; class when theme toggle is enabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+            <div class="test-item" data-status="passed" data-flaky="false" data-testid="test-item">
+              <i class="bi bi-check-lg test-status-icon passed"></i>
+              <div class="test-content">
+                <span class="test-title" data-testid="test-title"
+                  >does not add &quot;with-theme-toggle&quot; class when theme toggle is
+                  disabled</span
+                >
+              </div>
+              <span class="test-duration" data-testid="test-duration">1ms</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" data-testid="theme-toggle" title="Change theme">
+      <i class="bi bi-palette"></i>
+    </button>
+    <div class="theme-menu" id="theme-menu" data-testid="theme-menu">
+      <div class="theme-option active" data-theme="dark" data-testid="theme-option-dark">
+        <span class="color-preview" style="background: #1e1e1e"></span> Dark
+      </div>
+      <div class="theme-option" data-theme="light" data-testid="theme-option-light">
+        <span class="color-preview" style="background: #ffffff"></span> Light
+      </div>
+      <div class="theme-option" data-theme="github" data-testid="theme-option-github">
+        <span class="color-preview" style="background: #0d1117"></span> Github
+      </div>
+      <div class="theme-option" data-theme="monokai" data-testid="theme-option-monokai">
+        <span class="color-preview" style="background: #272822"></span> Monokai
+      </div>
+      <div class="theme-option" data-theme="dracula" data-testid="theme-option-dracula">
+        <span class="color-preview" style="background: #282a36"></span> Dracula
+      </div>
+      <div class="theme-option" data-theme="nord" data-testid="theme-option-nord">
+        <span class="color-preview" style="background: #2e3440"></span> Nord
+      </div>
+    </div>
+    <button
+      class="jump-to-top with-theme-toggle"
+      id="jump-to-top"
+      data-testid="jump-to-top"
+      title="Jump to top"
+      aria-label="Jump to top"
+    >
+      <i class="bi bi-chevron-up"></i>
+    </button>
+    <script>
+      (function () {
+        let currentFilter = 'all';
+        let currentSearch = '';
+        function updateVisibility() {
+          const testItems = document.querySelectorAll('.test-item');
+          testItems.forEach(item => {
+            const status = item.dataset.status;
+            const isFlaky = item.dataset.flaky === 'true';
+            const text = item.textContent.toLowerCase();
+            let matchesFilter = false;
+            if (currentFilter === 'all') {
+              matchesFilter = true;
+            } else if (currentFilter === 'flaky') {
+              matchesFilter = isFlaky;
+            } else {
+              matchesFilter =
+                currentFilter === 'pending'
+                  ? ['pending', 'skipped', 'todo', 'disabled'].includes(status)
+                  : status === currentFilter;
+            }
+            const matchesSearch = !currentSearch || text.includes(currentSearch);
+            item.style.display = matchesFilter && matchesSearch ? 'flex' : 'none';
+          });
+          Array.from(document.querySelectorAll('.describe-group'))
+            .reverse()
+            .forEach(group => {
+              const hasVisible = Array.from(
+                group.querySelectorAll(':scope > .describe-body > .test-item'),
+              ).some(t => t.style.display !== 'none');
+              const hasVisibleNested = Array.from(
+                group.querySelectorAll(':scope > .describe-body > .describe-group'),
+              ).some(g => g.style.display !== 'none');
+              const isVisible = hasVisible || hasVisibleNested;
+              group.style.display = isVisible ? 'block' : 'none';
+              if (isVisible && currentSearch) {
+                group.classList.remove('collapsed');
+              }
+            });
+          document.querySelectorAll('.suite').forEach(suite => {
+            const hasVisible = Array.from(suite.querySelectorAll('.test-item')).some(
+              t => t.style.display !== 'none',
+            );
+            suite.style.display = hasVisible ? 'block' : 'none';
+            if (hasVisible && currentSearch) {
+              suite.classList.remove('collapsed');
+            }
+          });
+        }
+        document.querySelectorAll('.suite-header').forEach(header => {
+          header.addEventListener('click', () => {
+            header.closest('.suite').classList.toggle('collapsed');
+          });
+        });
+        document.querySelectorAll('.describe-header').forEach(header => {
+          header.addEventListener('click', e => {
+            e.stopPropagation();
+            header.closest('.describe-group').classList.toggle('collapsed');
+          });
+        });
+        document.querySelectorAll('.env-header.clickable').forEach(header => {
+          header.addEventListener('click', () => {
+            header.parentElement.classList.toggle('collapsed');
+          });
+        });
+        document.querySelectorAll('.subnav-item').forEach(navItem => {
+          navItem.addEventListener('click', e => {
+            e.preventDefault();
+            currentFilter = navItem.dataset.filter;
+            document.querySelectorAll('.subnav-item').forEach(c => c.classList.remove('active'));
+            navItem.classList.add('active');
+            updateVisibility();
+          });
+        });
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+          searchInput.addEventListener('input', e => {
+            currentSearch = e.target.value.toLowerCase();
+            updateVisibility();
+          });
+        }
+        document.querySelectorAll('.copy-error-btn').forEach(btn => {
+          btn.addEventListener('click', async e => {
+            e.stopPropagation();
+            const errorText = btn.dataset.error;
+            try {
+              await navigator.clipboard.writeText(errorText);
+              const icon = btn.querySelector('i');
+              const text = btn.querySelector('span');
+              const originalIcon = icon.className;
+              const originalText = text.textContent;
+              icon.className = 'bi bi-check';
+              text.textContent = 'Copied!';
+              setTimeout(() => {
+                icon.className = originalIcon;
+                text.textContent = originalText;
+              }, 2000);
+            } catch (err) {
+              console.error('Failed to copy:', err);
+            }
+          });
+        });
+        document.querySelectorAll('.error-stack-toggle').forEach(btn => {
+          btn.addEventListener('click', e => {
+            e.stopPropagation();
+            const targetId = btn.dataset.target;
+            const hiddenSection = document.getElementById(targetId);
+            const icon = btn.querySelector('i');
+            const text = btn.querySelector('span');
+            if (hiddenSection.style.display === 'none') {
+              hiddenSection.style.display = 'block';
+              icon.className = 'bi bi-chevron-up';
+              text.textContent = 'Show less';
+              btn.classList.add('expanded');
+            } else {
+              hiddenSection.style.display = 'none';
+              icon.className = 'bi bi-chevron-down';
+              const frameCount = hiddenSection.querySelectorAll('.error-stack-frame').length;
+              text.textContent = 'Show ' + frameCount + ' more frame' + (frameCount > 1 ? 's' : '');
+              btn.classList.remove('expanded');
+            }
+          });
+        });
+        const jumpToTop = document.getElementById('jump-to-top');
+        if (jumpToTop) {
+          jumpToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            jumpToTop.blur();
+          });
+          const toggleJumpToTop = () => {
+            if (window.scrollY > 300) {
+              jumpToTop.classList.add('visible');
+            } else {
+              jumpToTop.classList.remove('visible');
+            }
+          };
+          let isScrolling;
+          window.addEventListener('scroll', () => {
+            if (!isScrolling) {
+              window.requestAnimationFrame(() => {
+                toggleJumpToTop();
+                isScrolling = false;
+              });
+              isScrolling = true;
+            }
+          });
+          /* Initial check */ toggleJumpToTop();
+        }
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeMenu = document.getElementById('theme-menu');
+        if (themeToggle && themeMenu) {
+          themeToggle.addEventListener('click', e => {
+            e.stopPropagation();
+            themeMenu.classList.toggle('visible');
+          });
+          document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', () => {
+              const newTheme = option.dataset.theme;
+              document.documentElement.className = 'theme-' + newTheme;
+              document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
+              option.classList.add('active');
+              try {
+                localStorage.setItem('jest-reporter-theme', newTheme);
+              } catch (e) {}
+              themeMenu.classList.remove('visible');
+            });
+          });
+          document.addEventListener('click', () => {
+            themeMenu.classList.remove('visible');
+          });
+          const savedTheme = localStorage.getItem('jest-reporter-theme') || 'dark';
+          document.querySelectorAll('.theme-option').forEach(o => {
+            o.classList.toggle('active', o.dataset.theme === savedTheme);
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

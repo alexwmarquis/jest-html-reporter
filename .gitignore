@@ -1,6 +1,6 @@
 node_modules/
 dist/
-*.html
+/jest-report.html
 jest-report.json
 !README.md
 .idea/
