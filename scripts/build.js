@@ -26,10 +26,11 @@ function step(name) {
 }
 
 function clearDist() {
-  step('Clearing the dist directory');
+  step('Remove build artifacts');
   if (fs.existsSync(DIST)) {
     fs.rmSync(DIST, { recursive: true, force: true });
   }
+  success('Removed build artifacts');
 }
 
 function success(message) {

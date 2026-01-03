@@ -12,7 +12,7 @@ const STYLES = path.join(SRC, 'styles');
 console.log('🔧 Development build...\n');
 
 function clearDist() {
-  console.log('▶ Clearing the dist directory...');
+  console.log('▶ Removing build artifacts...');
   if (fs.existsSync(DIST)) {
     fs.rmSync(DIST, { recursive: true, force: true });
   }
