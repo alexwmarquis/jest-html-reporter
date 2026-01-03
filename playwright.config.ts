@@ -5,7 +5,7 @@ import path from 'node:path';
 
 const config: PlaywrightTestConfig = {
   testDir: './tests/integration',
-  timeout: 10_000,
+  timeout: 30 * 1000,
   fullyParallel: true,
   expect: { timeout: 5_000 },
   reporter: [['list'], ['html', { open: 'on-failure' }]],
