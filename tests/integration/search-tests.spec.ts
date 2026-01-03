@@ -27,3 +27,22 @@ test('should display no tests when the search term does not match any', async ()
 
   await expect(visibleTests).toHaveCount(0);
 });
+
+test('should be able to search for suites by file name', async () => {
+  const searchTerm = 'filters-test-visibility';
+
+  await report.searchInput.fill(searchTerm);
+
+  const visibleTests = report.testItem.filter({ visible: true });
+
+  expect(await visibleTests.count()).toBeGreaterThan(0);
+
+  const visibleSuiteNames = await report.testSuite
+    .filter({ has: report.testItem.filter({ visible: true }) })
+    .locator(report.suiteName)
+    .allTextContents();
+
+  for (const name of visibleSuiteNames) {
+    expect(name.toLowerCase()).toContain(searchTerm);
+  }
+});

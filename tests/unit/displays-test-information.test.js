@@ -171,8 +171,12 @@ test('should collapse suites based on the provided expand level', () => {
 
   const html = renderReport(data, { expandLevel: 1 });
 
-  expect(html).toContain('data-name="suite1.js" data-testid="test-suite" data-collapsed="false"');
-  expect(html).toContain('data-name="suite2.js" data-testid="test-suite" data-collapsed="true"');
+  expect(html).toContain(
+    'data-name="suite1.js" data-file="suite1.js" data-testid="test-suite" data-collapsed="false"',
+  );
+  expect(html).toContain(
+    'data-name="suite2.js" data-file="suite2.js" data-testid="test-suite" data-collapsed="true"',
+  );
 });
 
 test('renders todo test count in summary', () => {

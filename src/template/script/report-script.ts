@@ -16,6 +16,8 @@ export function generateScript(options: {
         const testItems = document.querySelectorAll('.test-item');
         
         testItems.forEach(item => {
+          const suite = item.closest('.suite');
+          const suiteFileName = suite ? (suite.dataset.file || '').toLowerCase() : '';
           const status = item.dataset.status;
           const isFlaky = item.dataset.flaky === 'true';
           const text = item.textContent.toLowerCase();
@@ -31,7 +33,7 @@ export function generateScript(options: {
               : status === currentFilter;
           }
 
-          const matchesSearch = !currentSearch || text.includes(currentSearch);
+          const matchesSearch = !currentSearch || suiteFileName.includes(currentSearch) || text.includes(currentSearch);
           
           item.style.display = (matchesFilter && matchesSearch) ? 'flex' : 'none';
         });
