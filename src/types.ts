@@ -1,53 +1,54 @@
 export interface CustomColors {
-  bgPrimary?: string;
-  bgSecondary?: string;
-  bgHover?: string;
-  textPrimary?: string;
-  textSecondary?: string;
-  borderColor?: string;
-  colorPassed?: string;
-  colorFailed?: string;
-  colorSkipped?: string;
-  colorAccent?: string;
+  bgPrimary?: string | undefined;
+  bgSecondary?: string | undefined;
+  bgHover?: string | undefined;
+  textPrimary?: string | undefined;
+  textSecondary?: string | undefined;
+  borderColor?: string | undefined;
+  colorPassed?: string | undefined;
+  colorFailed?: string | undefined;
+  colorSkipped?: string | undefined;
+  colorAccent?: string | undefined;
 }
 
 export type ThemePreset = 'dark' | 'light' | 'github' | 'monokai' | 'dracula' | 'nord';
 
 export interface ReporterOptions {
-  outputPath?: string;
-  outputJson?: boolean;
-  openOnFailure?: boolean;
-  pageTitle?: string;
-  subtitle?: string;
-  logo?: string;
-  logoHeight?: number;
-  showPassed?: boolean;
-  showFailed?: boolean;
-  showPending?: boolean;
-  showDuration?: boolean;
-  showFilePath?: 'full' | 'filename';
-  hideEmptySuites?: boolean;
-  includeEnvironment?: boolean;
-  additionalInfo?: AdditionalInfo;
-  minify?: boolean;
-  showProgressBar?: boolean;
-  sort?: 'default' | 'status' | 'duration' | 'name';
-  collapsePassed?: boolean;
-  collapseAll?: boolean;
-  expandLevel?: number;
-  dateFormat?: 'locale' | 'iso' | 'relative';
-  theme?: ThemePreset;
-  customColors?: CustomColors;
-  enableThemeToggle?: boolean;
-  customCssPath?: string;
-  customJsPath?: string;
-  embedAssets?: boolean;
+  outputPath?: string | undefined;
+  outputJson?: boolean | undefined;
+  openOnFailure?: boolean | undefined;
+  pageTitle?: string | undefined;
+  subtitle?: string | undefined;
+  logo?: string | undefined;
+  logoHeight?: number | undefined;
+  showPassed?: boolean | undefined;
+  showFailed?: boolean | undefined;
+  showPending?: boolean | undefined;
+  showDuration?: boolean | undefined;
+  showFilePath?: 'full' | 'filename' | undefined;
+  hideEmptySuites?: boolean | undefined;
+  includeEnvironment?: boolean | undefined;
+  additionalInfo?: AdditionalInfo | undefined;
+  minify?: boolean | undefined;
+  showProgressBar?: boolean | undefined;
+  sort?: 'default' | 'status' | 'duration' | 'name' | undefined;
+  collapsePassed?: boolean | undefined;
+  collapseAll?: boolean | undefined;
+  expandLevel?: number | undefined;
+  dateFormat?: 'locale' | 'iso' | 'relative' | undefined;
+  theme?: ThemePreset | undefined;
+  customColors?: CustomColors | undefined;
+  enableThemeToggle?: boolean | undefined;
+  customCssPath?: string | undefined;
+  customJsPath?: string | undefined;
+  embedAssets?: boolean | undefined;
   fonts?:
     | {
-        sans?: string;
-        mono?: string;
+        sans?: string | undefined;
+        mono?: string | undefined;
       }
-    | false;
+    | false
+    | undefined;
 }
 
 export interface TestSummary {
@@ -96,8 +97,8 @@ export interface ReportData {
 
 export interface TemplateOptions {
   pageTitle: string;
-  subtitle?: string;
-  logo?: string;
+  subtitle?: string | undefined;
+  logo?: string | undefined;
   logoHeight: number;
   showPassed: boolean;
   showFailed: boolean;
@@ -106,17 +107,17 @@ export interface TemplateOptions {
   showFilePath: 'full' | 'filename';
   showProgressBar: boolean;
   theme: ThemePreset;
-  customColors?: CustomColors;
+  customColors?: CustomColors | undefined;
   enableThemeToggle: boolean;
-  customCss?: string;
-  customJs?: string;
+  customCss?: string | undefined;
+  customJs?: string | undefined;
   sort: 'default' | 'status' | 'duration' | 'name';
   collapsePassed: boolean;
   collapseAll: boolean;
   expandLevel: number;
   includeEnvironment: boolean;
-  additionalInfo?: AdditionalInfo;
-  minify?: boolean;
+  additionalInfo?: AdditionalInfo | undefined;
+  minify?: boolean | undefined;
   dateFormat: 'locale' | 'iso' | 'relative';
   embedAssets: boolean;
   fonts:
@@ -138,7 +139,7 @@ export interface EnvironmentInfo {
 }
 
 export interface AdditionalInfo {
-  title?: string;
+  title?: string | undefined;
   [key: string]: string | undefined;
 }
 

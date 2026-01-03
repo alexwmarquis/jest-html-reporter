@@ -16,8 +16,7 @@ export function parseErrorMessage(rawMessage: string): ParsedError {
   const mainMessageLines: string[] = [];
   let foundStackTrace = false;
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+  for (const line of lines) {
     const trimmed = line.trim();
 
     if (trimmed.startsWith('Expected:')) {
@@ -76,11 +75,11 @@ export function parseStackFrame(line: string): StackFrame {
   if (match) {
     return {
       raw: trimmed,
-      functionName: match[1],
-      filePath: match[2],
-      lineNumber: parseInt(match[3], 10),
-      columnNumber: parseInt(match[4], 10),
-      isNodeModule: match[2].includes('node_modules'),
+      functionName: match[1]!,
+      filePath: match[2]!,
+      lineNumber: parseInt(match[3]!, 10),
+      columnNumber: parseInt(match[4]!, 10),
+      isNodeModule: match[2]!.includes('node_modules'),
     };
   }
 
@@ -88,10 +87,10 @@ export function parseStackFrame(line: string): StackFrame {
   if (match) {
     return {
       raw: trimmed,
-      filePath: match[1],
-      lineNumber: parseInt(match[2], 10),
-      columnNumber: parseInt(match[3], 10),
-      isNodeModule: match[1].includes('node_modules'),
+      filePath: match[1]!,
+      lineNumber: parseInt(match[2]!, 10),
+      columnNumber: parseInt(match[3]!, 10),
+      isNodeModule: match[1]!.includes('node_modules'),
     };
   }
 
@@ -99,7 +98,7 @@ export function parseStackFrame(line: string): StackFrame {
   if (match) {
     return {
       raw: trimmed,
-      functionName: match[1],
+      functionName: match[1]!,
       isNodeModule: false,
     };
   }
