@@ -25,6 +25,14 @@ function step(name) {
   log(`\n▶ ${name}`, colors.cyan);
 }
 
+function clearDist() {
+  step('Remove build artifacts');
+  if (fs.existsSync(DIST)) {
+    fs.rmSync(DIST, { recursive: true, force: true });
+  }
+  success('Removed build artifacts');
+}
+
 function success(message) {
   log(`  ✓ ${message}`, colors.green);
 }
@@ -76,7 +84,7 @@ function compileTypeScript() {
   step('Compiling TypeScript');
 
   try {
-    execSync('npx tsc', {
+    execSync('npx tsc -p tsconfig.build.json', {
       cwd: ROOT,
       stdio: 'inherit',
     });
@@ -91,6 +99,7 @@ function build() {
   log('\n🔨 Building @awmarquis/jest-html-reporter\n', colors.yellow);
 
   try {
+    clearDist();
     ensureDistDir();
     const css = compileSass();
     compileTypeScript();

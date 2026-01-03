@@ -1,14 +1,14 @@
 @use 'sass:map';
 @use 'sass:list';
-@use 'variables' as *;
-@use 'mixins' as *;
+@use 'variables' as vars;
+@use 'mixins' as mix;
 
 .test-item {
   display: flex;
   align-items: flex-start;
-  padding: $spacing-md $spacing-lg $spacing-md 40px;
-  gap: $spacing-md;
-  @include transition(background);
+  padding: vars.$spacing-md vars.$spacing-lg vars.$spacing-md 2.5rem;
+  gap: vars.$spacing-md;
+  @include mix.transition(background);
   border-bottom: 1px solid var(--border-color);
 
   &:last-child {
@@ -19,16 +19,16 @@
     background: rgba(255, 255, 255, 0.02);
   }
 
-  @include mobile {
-    padding-left: $spacing-lg;
+  @include mix.mobile {
+    padding-left: vars.$spacing-lg;
   }
 }
 
 .test-status-icon {
   flex-shrink: 0;
-  font-size: $font-size-lg;
-  margin-top: 1px;
-  width: 18px;
+  font-size: vars.$font-size-lg;
+  margin-top: 0.0625rem;
+  width: 1.125rem;
 
   &.passed {
     color: var(--color-passed);
@@ -52,18 +52,18 @@
 .flaky-badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
   background: var(--color-flaky-bg);
   color: var(--color-flaky);
-  border-radius: 10px;
-  font-size: 11px;
+  border-radius: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 500;
-  margin-left: $spacing-sm;
+  margin-left: vars.$spacing-sm;
   flex-shrink: 0;
 
   i {
-    font-size: 10px;
+    font-size: 0.625rem;
   }
 }
 
@@ -73,311 +73,89 @@
 }
 
 .test-title-row {
-  @include flex-center;
+  @include mix.flex-center;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 2px;
+  gap: 0.375rem;
+  margin-bottom: 0.125rem;
 }
 
 .test-title {
-  font-size: $font-size-base;
+  font-size: vars.$font-size-base;
   color: var(--text-primary);
   font-weight: 400;
 }
 
 .test-tag {
-  @include flex-center;
-  padding: 2px $spacing-sm;
-  border-radius: 10px;
-  font-size: 11px;
+  @include mix.flex-center;
+  padding: 0.125rem vars.$spacing-sm;
+  border-radius: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 500;
 }
 
-@each $index, $colors in $tag-colors {
+@each $index, $colors in vars.$tag-colors {
   .test-tag-#{$index} {
     background: list.nth($colors, 2);
     color: list.nth($colors, 1);
   }
 }
 
-.test-location {
-  font-size: $font-size-xs;
-  font-family: $font-family-mono;
+.test-meta {
+  font-size: vars.$font-size-xs;
   color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-md;
 }
 
 .test-duration {
-  flex-shrink: 0;
-  font-size: $font-size-sm;
-  color: var(--text-secondary);
-  font-family: $font-family-mono;
-  margin-top: 1px;
-}
-
-.error-block {
-  background: var(--error-bg);
-  border: 1px solid var(--error-border);
-  border-radius: $border-radius;
-  padding: $spacing-md;
-  margin-top: $spacing-sm;
-  font-family: $font-family-mono;
-  font-size: $font-size-xs;
-  color: var(--error-text);
-  white-space: pre-wrap;
-  word-break: break-word;
-  max-height: 200px;
-  overflow-y: auto;
-  line-height: $line-height-base;
-  @include custom-scrollbar;
-}
-
-.error-container {
-  margin-top: $spacing-sm;
-  position: relative;
-}
-
-.error-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: $spacing-xs;
-  gap: $spacing-xs;
-}
-
-.copy-error-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: $border-radius;
-  color: var(--text-secondary);
-  font-size: 11px;
-  font-family: $font-family-sans;
-  cursor: pointer;
-  @include transition(all);
-
-  &:hover {
-    background: var(--bg-hover);
-    color: var(--text-primary);
-    border-color: var(--text-secondary);
-  }
-
-  i {
-    font-size: 12px;
-  }
-}
-
-.error-block-enhanced {
-  background: var(--error-bg);
-  border: 1px solid var(--error-border);
-  border-radius: $border-radius;
-  overflow: hidden;
-}
-
-.error-message {
-  padding: $spacing-md;
-  font-family: $font-family-mono;
-  font-size: $font-size-xs;
-  color: var(--error-text);
-  white-space: pre-wrap;
-  word-break: break-word;
-  line-height: $line-height-base;
-  border-bottom: 1px solid var(--error-border);
-}
-
-.error-diff-container {
-  padding: $spacing-md;
-  background: var(--error-section-bg);
-  border-bottom: 1px solid var(--error-border);
-}
-
-.error-diff-row {
-  display: flex;
-  align-items: flex-start;
-  gap: $spacing-md;
-  padding: $spacing-xs 0;
-
-  &.expected {
-    .error-diff-label {
-      color: var(--color-passed);
-      background: var(--color-passed-bg);
-    }
-
-    .error-diff-value {
-      color: var(--color-passed);
-    }
-  }
-
-  &.received {
-    .error-diff-label {
-      color: var(--color-failed);
-      background: var(--color-failed-bg);
-    }
-
-    .error-diff-value {
-      color: var(--color-failed);
-    }
-  }
-}
-
-.error-diff-label {
-  flex-shrink: 0;
-  padding: 2px 8px;
-  border-radius: $border-radius;
-  font-size: 11px;
-  font-weight: 500;
-  font-family: $font-family-sans;
-  min-width: 65px;
-  text-align: center;
-}
-
-.error-diff-value {
-  font-family: $font-family-mono;
-  font-size: $font-size-xs;
-  word-break: break-all;
-  background: transparent;
-  padding: 2px 0;
-}
-
-.error-diff-full {
-  border-bottom: 1px solid var(--error-border);
-}
-
-.error-diff-title {
-  padding: $spacing-sm $spacing-md;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  background: var(--error-header-bg);
-  border-bottom: 1px solid var(--error-border);
-}
-
-.error-diff-content {
-  padding: $spacing-md;
-  margin: 0;
-  font-family: $font-family-mono;
-  font-size: $font-size-xs;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  word-break: break-word;
-  max-height: 200px;
-  overflow-y: auto;
-  @include custom-scrollbar;
-
-  .diff-removed {
-    display: block;
+  &.slow {
     color: var(--color-failed);
-    background: var(--diff-removed-bg);
-    margin: 0 (-$spacing-md);
-    padding: 0 $spacing-md;
-  }
-
-  .diff-added {
-    display: block;
-    color: var(--color-passed);
-    background: var(--diff-added-bg);
-    margin: 0 (-$spacing-md);
-    padding: 0 $spacing-md;
   }
 }
 
-.error-stack {
-  background: var(--error-header-bg);
-}
+.test-error {
+  margin-top: vars.$spacing-sm;
+  background: var(--bg-error);
+  border: 1px solid var(--border-error);
+  border-radius: vars.$border-radius;
+  overflow: hidden;
 
-.error-stack-title {
-  padding: $spacing-sm $spacing-md;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  border-bottom: 1px solid var(--error-border);
-}
-
-.error-stack-frames {
-  padding: $spacing-sm $spacing-md;
-  max-height: 300px;
-  overflow-y: auto;
-  @include custom-scrollbar;
-}
-
-.error-stack-frame {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  padding: 3px 0;
-  font-family: $font-family-mono;
-  font-size: 11px;
-  line-height: 1.5;
-  color: var(--text-secondary);
-
-  &.is-node-module {
-    opacity: 0.5;
+  pre {
+    margin: 0;
+    padding: vars.$spacing-md;
+    font-family: vars.$font-family-mono;
+    font-size: vars.$font-size-xs;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--color-failed);
   }
 }
 
-.stack-at {
-  color: var(--text-muted);
-}
+.test-details {
+  margin-top: vars.$spacing-sm;
+  background: var(--bg-hover);
+  border-radius: vars.$border-radius;
+  padding: vars.$spacing-md;
 
-.stack-function {
-  color: var(--text-primary);
-}
+  .detail-row {
+    display: flex;
+    gap: vars.$spacing-md;
+    font-size: vars.$font-size-xs;
+    margin-bottom: 0.25rem;
 
-.stack-location {
-  display: inline-flex;
-  align-items: baseline;
-  color: var(--color-accent);
-  text-decoration: none;
-  @include transition(color);
+    &:last-child {
+      margin-bottom: 0;
+    }
 
-  &:hover {
-    color: var(--text-primary);
-    text-decoration: underline;
-  }
-}
+    .label {
+      color: var(--text-muted);
+      min-width: 5rem;
+    }
 
-.stack-file {
-  color: inherit;
-}
-
-.stack-line {
-  color: var(--text-muted);
-}
-
-.stack-raw {
-  color: var(--text-secondary);
-}
-
-.error-stack-hidden {
-  border-top: 1px dashed var(--border-color);
-  padding-top: $spacing-xs;
-  margin-top: $spacing-xs;
-}
-
-.error-stack-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 0;
-  background: transparent;
-  border: none;
-  color: var(--color-accent);
-  font-size: 11px;
-  font-family: $font-family-sans;
-  cursor: pointer;
-  @include transition(color);
-
-  &:hover {
-    color: var(--text-primary);
-  }
-
-  i {
-    font-size: 10px;
-    @include transition(transform);
-  }
-
-  &.expanded i {
-    transform: rotate(180deg);
+    .value {
+      color: var(--text-primary);
+      @include mix.truncate;
+    }
   }
 }

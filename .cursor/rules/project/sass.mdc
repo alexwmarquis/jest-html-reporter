@@ -1,0 +1,137 @@
+---
+alwaysApply: true
+description: "Scss best practices."
+globs:
+  - "**/*.scss"
+---
+
+# Scss rules
+
+## Priorities
+- Prioritize readability, maintainability, and predictability over cleverness.
+- Refactor toward smaller, composable partials with clear ownership.
+- Keep selector specificity low, consistent, and intentional.
+- Prefer platform features (modern css) over custom abstractions when they are widely supported.
+- Do not introduce new dependencies or frameworks unless explicitly requested.
+
+## Architecture
+- Prefer a layered structure:
+  - Settings (tokens): design tokens as maps and custom property definitions.
+  - Tools: functions and mixins with no emitted styles.
+  - Generic: normalize/resets (only if the repo already uses them).
+  - Elements: base element styles and typographic defaults.
+  - Objects: layout primitives (stack, cluster, grid, container).
+  - Components: ui pieces and their variants.
+  - Utilities: single-purpose overrides with clear naming and limited scope.
+- Each component owns its styles in one primary file. Avoid “misc” buckets.
+- Split partials by responsibility, not by page.
+- Prefer css cascade layers (`@layer`) if the codebase already uses them. Do not introduce layering systems mid-refactor unless requested.
+
+## Module system and imports
+- Prefer `@use` and `@forward`. Do not introduce new `@import`.
+- Keep tools and settings namespaced via `@use ... as <namespace>`. Avoid `as *` except in tightly scoped legacy migration files.
+- Forward only what should be public from a folder’s entrypoint (for example, `_index.scss`).
+
+## Naming and scope
+- Use consistent, semantic class naming.
+- Follow one convention across the repo (for example, bem-like or component-scoped). Do not mix conventions.
+- Prefer low-collision names for utilities and objects (for example, `u-` and `o-` prefixes) if that convention exists in the repo.
+- Avoid styling by ids.
+- Avoid styling based on dom structure that is likely to change.
+
+## Nesting and composition
+- Keep nesting shallow (max 2 levels). Prefer flat selectors and component roots.
+- Do not nest purely to mirror the dom. Nest only when it expresses a real relationship (state, variant, or scoped child).
+- Prefer explicit modifiers or attributes over deep descendant chains.
+
+## Specificity and selectors
+- Keep selector specificity as low as possible.
+- Avoid `!important` except inside utilities or as a temporary migration guardrail. Remove it before finalizing.
+- Avoid qualifying classes with elements (for example, `button.btn`) unless required for legacy constraints.
+- Prefer `:where()` to reduce specificity when appropriate.
+- Prefer scoping under an explicit component root rather than relying on broad selectors that can leak.
+- Avoid overly broad selectors (for example, `.container a { ... }`) unless scoped to a component root and justified.
+- Avoid expensive selector patterns (deep descendants, broad `:not()`, universal selectors). Prefer direct class-based targeting.
+
+## Tokens, variables, and custom properties
+- Prefer design tokens over ad hoc literals.
+- Use maps for token families (spacing, colors, z-index, breakpoints) and access through functions.
+- Prefer css custom properties for runtime theming and contextual overrides.
+- Use scss variables for build-time structure and to generate css custom properties, not as the only theme mechanism.
+- Do not hardcode colors or spacing values when tokens exist.
+- Use a constrained spacing scale. Avoid arbitrary values (for example, 13px, 29px) unless they are promoted into tokens.
+
+## Mixins, functions, and reuse
+- Use mixins for patterns (media queries, container queries, focus rings, truncation), not for single-property shortcuts.
+- Prefer functions for computing values (token lookup, color manipulation) and keep them pure.
+- Avoid `@extend`. If used, restrict it to placeholders (`%`) within the same domain and understand cascade impact.
+- Avoid global side effects in tools and settings partials. Tools and settings should not emit styles.
+
+## Rule organization
+- Keep declaration ordering consistent within a rule. If the repo has a standard (stylelint order or established convention), follow it.
+- Group related declarations and use a single blank line between groups when it improves scanability.
+- Keep shorthands intentional. Do not use shorthands that obscure intent.
+
+## Units and sizing
+- Prefer `rem` for typography and spacing unless a fixed px value is required (hairlines, borders, 1px outlines).
+- Prefer logical properties (`margin-inline`, `padding-block`, `inset-inline`) when directionality matters.
+- Avoid magic numbers. If unavoidable, promote them to tokens with a meaningful name.
+
+## Responsiveness
+- Use mobile-first rules by default.
+- Define breakpoints as tokens and use a single mixin or function (for example, `mq(md)`).
+- Do not scatter arbitrary pixel breakpoints. Reuse tokenized breakpoints.
+- Prefer container queries for truly component-driven responsiveness when the codebase already supports them.
+- Avoid “one-off” responsive rules. Keep responsive behavior within the component that owns it.
+
+## Theming and dark mode
+- Keep theme overrides centralized (theme partials) and shallow.
+- Prefer css custom properties for runtime theming, including dark mode.
+- Prefer `@media (prefers-color-scheme: dark)` only when it matches product requirements and existing patterns in the repo.
+
+## State and variants
+- Co-locate variants with the base component:
+  - Modifier classes (for example, `.button--primary`).
+  - Data attributes (for example, `[data-variant="primary"]`).
+- Keep state styles explicit:
+  - `:hover`, `:focus-visible`, `:active`, `:disabled`.
+  - Aria states (for example, `[aria-expanded="true"]`).
+- Do not encode state purely via dom location (for example, `.parent:hover .child`) unless there is no safer alternative.
+
+## Accessibility
+- Preserve visible focus indicators and prefer `:focus-visible`.
+- Ensure interactive targets have adequate hit area via padding tokens.
+- Avoid hiding content in a way that breaks screen readers unless using a vetted visually-hidden utility.
+- Respect user preferences:
+  - Prefer reduced motion fallbacks via `@media (prefers-reduced-motion: reduce)` for non-essential animation.
+  - Avoid motion that conveys essential information without a non-motion alternative.
+
+## Animation and motion
+- Prefer animating transform and opacity over layout-affecting properties where possible.
+- Keep transitions scoped to the component and avoid global transition rules.
+
+## Performance and safety
+- Avoid global element styling that can cause regressions unless it belongs in the elements layer.
+- Do not rely on source-order hacks to “win” the cascade. Fix scope and specificity instead.
+- Avoid coupling styles to transient markup. Prefer stable class hooks owned by the component.
+
+## Refactor guidance (legacy scss)
+- Make incremental, low-risk changes:
+  - First: isolate scope by adding or using a component root class.
+  - Second: reduce nesting and specificity.
+  - Third: replace duplicated literals with tokens.
+  - Fourth: consolidate repeated patterns into objects and utilities.
+- Preserve visual behavior unless explicitly instructed to change it.
+- Remove dead code only when verified unused. Do not guess.
+- Keep diffs small and logically grouped.
+
+## Linting expectations (if present)
+- Adhere to existing stylelint and sass guidelines in the repo.
+- If rules conflict, follow the repo’s linters and document deviations in the pr summary.
+
+## Output expectations
+- When changing scss, include:
+  - What layer and file it belongs to.
+  - Why the selector scope is safe.
+  - Any token additions and where they are used.
+- Avoid large rewrites without a clear boundary and rollback path.

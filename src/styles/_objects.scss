@@ -1,0 +1,12 @@
+@use 'variables' as vars;
+@use 'mixins' as mix;
+
+.container {
+  max-width: vars.$container-max-width;
+  margin: 0 auto;
+  padding: vars.$spacing-xl vars.$spacing-xxl;
+
+  @include mix.mobile {
+    padding: vars.$spacing-lg;
+  }
+}
