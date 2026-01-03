@@ -64,7 +64,9 @@ test('opens browser when tests fail and open on failure is enabled', () => {
 });
 
 test('handles browser open errors gracefully without crashing', () => {
-  const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+  const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
+    /* mock */
+  });
 
   execSpy.mockImplementation((cmd, callback) => {
     callback(new Error('Browser not found'));

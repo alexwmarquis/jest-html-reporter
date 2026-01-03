@@ -1,5 +1,7 @@
 export function escapeHtml(text: string | null | undefined): string {
-  if (!text) return '';
+  if (!text) {
+    return '';
+  }
   const htmlEntities: Record<string, string> = {
     '&': '&amp;',
     '<': '&lt;',

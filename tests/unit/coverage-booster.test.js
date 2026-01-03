@@ -142,7 +142,9 @@ test('should handle default configuration and status-based sorting correctly', (
       },
     ],
   };
+  // eslint-disable-next-line @typescript-eslint/dot-notation
   reporter['sortResults'](data, 'invalid');
+  expect(data.testSuites).toHaveLength(2);
 });
 
 test('should handle various configuration options like logo embedding and custom fonts', () => {

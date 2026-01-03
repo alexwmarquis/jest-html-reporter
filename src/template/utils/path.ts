@@ -1,3 +1,4 @@
 export function getFileName(filePath: string): string {
-  return filePath.split('/').pop() || filePath;
+  const lastPart = filePath.split('/').pop();
+  return lastPart && lastPart !== '' ? lastPart : filePath;
 }

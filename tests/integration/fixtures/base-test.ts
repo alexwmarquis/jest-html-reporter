@@ -12,7 +12,9 @@ export const test = base.extend<{}>({
 
     page.on('console', async msg => {
       if (msg.type() === 'error') {
-        const consoleArgs = await Promise.all(msg.args().map(async arg => arg.jsonValue()));
+        const consoleArgs = await Promise.all(
+          msg.args().map(async arg => (await arg.jsonValue()) as unknown),
+        );
         const message = consoleArgs.join(' ').trim();
 
         const errorMessage = message.replace(/^Error: /, '');

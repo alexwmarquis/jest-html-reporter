@@ -45,9 +45,9 @@ export function parseErrorMessage(rawMessage: string): ParsedError {
     }
 
     const stackMatch =
-      line.match(/^\s*at\s+(.+?)\s+\((.+?):(\d+):(\d+)\)/) ||
-      line.match(/^\s*at\s+(.+?):(\d+):(\d+)/) ||
-      line.match(/^\s*at\s+(.+)/);
+      /^\s*at\s+(.+?)\s+\((.+?):(\d+):(\d+)\)/.exec(line) ??
+      /^\s*at\s+(.+?):(\d+):(\d+)/.exec(line) ??
+      /^\s*at\s+(.+)/.exec(line);
 
     if (stackMatch) {
       foundStackTrace = true;
@@ -71,7 +71,7 @@ export function parseErrorMessage(rawMessage: string): ParsedError {
 export function parseStackFrame(line: string): StackFrame {
   const trimmed = line.trim();
 
-  let match = trimmed.match(/^at\s+(.+?)\s+\((.+?):(\d+):(\d+)\)$/);
+  let match = /^at\s+(.+?)\s+\((.+?):(\d+):(\d+)\)$/.exec(trimmed);
   if (match) {
     return {
       raw: trimmed,
@@ -83,7 +83,7 @@ export function parseStackFrame(line: string): StackFrame {
     };
   }
 
-  match = trimmed.match(/^at\s+(.+?):(\d+):(\d+)$/);
+  match = /^at\s+(.+?):(\d+):(\d+)$/.exec(trimmed);
   if (match) {
     return {
       raw: trimmed,
@@ -94,7 +94,7 @@ export function parseStackFrame(line: string): StackFrame {
     };
   }
 
-  match = trimmed.match(/^at\s+(.+)$/);
+  match = /^at\s+(.+)$/.exec(trimmed);
   if (match) {
     return {
       raw: trimmed,

@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { exec } from 'child_process';
 import type { Config, AggregatedResult, TestResult } from '@jest/reporters';
 import type { AssertionResult } from '@jest/test-result';
 import { generateHtmlReport } from './template';
@@ -116,9 +117,9 @@ class JestHtmlReporter {
       fonts === false
         ? false
         : {
-            sans: fonts.sans || DEFAULT_SANS,
-            mono: fonts.mono || DEFAULT_MONO,
-            url: this.buildGoogleFontsUrl(fonts.sans || DEFAULT_SANS, fonts.mono || DEFAULT_MONO),
+            sans: fonts.sans ?? DEFAULT_SANS,
+            mono: fonts.mono ?? DEFAULT_MONO,
+            url: this.buildGoogleFontsUrl(fonts.sans ?? DEFAULT_SANS, fonts.mono ?? DEFAULT_MONO),
           };
 
     const templateOptions: TemplateOptions = {
@@ -175,8 +176,6 @@ class JestHtmlReporter {
   }
 
   private openInBrowser(filePath: string): void {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { exec } = require('child_process');
     const { platform } = process;
 
     let command: string;
@@ -216,8 +215,8 @@ class JestHtmlReporter {
         switch (sort) {
           case 'status':
             return (
-              (statusOrder[a.status as keyof typeof statusOrder] ?? 1) -
-              (statusOrder[b.status as keyof typeof statusOrder] ?? 1)
+              statusOrder[a.status as keyof typeof statusOrder] -
+              statusOrder[b.status as keyof typeof statusOrder]
             );
           case 'duration':
             return b.duration - a.duration;
@@ -277,9 +276,10 @@ class JestHtmlReporter {
       name: relativePath,
       path: suitePath,
       status: this.getSuiteStatus(suite),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       duration: suite.perfStats ? suite.perfStats.end - suite.perfStats.start : 0,
       tests: suite.testResults.map(test => this.processTest(test, errorSections)),
-      failureMessage: suite.failureMessage || null,
+      failureMessage: suite.failureMessage ?? null,
     };
   }
 
@@ -288,7 +288,9 @@ class JestHtmlReporter {
     testResults: AssertionResult[],
   ): Map<string, string> {
     const errorMap = new Map<string, string>();
-    if (!failureMessage) return errorMap;
+    if (!failureMessage) {
+      return errorMap;
+    }
 
     const failedTests = testResults.filter(t => t.status === 'failed');
 
@@ -298,7 +300,7 @@ class JestHtmlReporter {
         'g',
       );
       const match = failureMessage.match(testPattern);
-      if (match && match[0]) {
+      if (match?.[0]) {
         errorMap.set(test.fullName, match[0].trim());
       }
     }
@@ -317,26 +319,30 @@ class JestHtmlReporter {
   }
 
   private getSuiteStatus(suite: TestResult): 'passed' | 'failed' | 'pending' {
-    if (suite.numFailingTests > 0) return 'failed';
-    if (suite.numPendingTests === suite.testResults.length) return 'pending';
+    if (suite.numFailingTests > 0) {
+      return 'failed';
+    }
+    if (suite.numPendingTests === suite.testResults.length) {
+      return 'pending';
+    }
     return 'passed';
   }
 
   private processTest(test: AssertionResult, errorSections: Map<string, string>): ProcessedTest {
-    const invocations = ((test as unknown as { invocations?: number })?.invocations ?? 1) as number;
-    const isFlaky = test.status === 'passed' && ((invocations > 1) as boolean);
+    const invocations = (test as unknown as { invocations: number }).invocations;
+    const isFlaky = test.status === 'passed' && invocations > 1;
 
     const detailedError = errorSections.get(test.fullName);
-    const failureMessages = detailedError ? [detailedError] : test.failureMessages || [];
+    const failureMessages = detailedError ? [detailedError] : test.failureMessages;
 
     return {
       title: test.title,
       fullName: test.fullName,
       ancestorTitles: test.ancestorTitles,
       status: test.status as ProcessedTest['status'],
-      duration: test.duration || 0,
+      duration: test.duration ?? 0,
       failureMessages,
-      failureDetails: test.failureDetails || [],
+      failureDetails: test.failureDetails,
       invocations,
       isFlaky,
     };

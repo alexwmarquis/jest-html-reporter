@@ -1,6 +1,5 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
-import process from 'node:process';
 import path from 'node:path';
 
 const config: PlaywrightTestConfig = {
@@ -9,7 +8,6 @@ const config: PlaywrightTestConfig = {
   fullyParallel: true,
   expect: { timeout: 5_000 },
   reporter: [['list'], ['html', { open: 'on-failure' }]],
-  workers: process.env.CI ? 1 : undefined,
   use: {
     baseURL: `file://${path.join(__dirname, 'jest-report.html')}`,
     video: 'on-first-retry',

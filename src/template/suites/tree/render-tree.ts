@@ -13,13 +13,13 @@ export function generateTreeHtml(
     collapsePassed: boolean;
     collapseAll: boolean;
   },
-  depth: number = 0,
+  depth = 0,
 ): string {
   return nodes
     .map(node => {
       if (node.type === 'describe') {
         return generateDescribeGroupHtml(node, options, depth);
-      } else if (node.type === 'test' && node.test) {
+      } else if (node.test) {
         return generateTestItemHtml(node.test, options);
       }
       return '';
@@ -40,7 +40,9 @@ export function generateDescribeGroupHtml(
   depth: number,
 ): string {
   const hasVisibleTests = hasVisibleTestsInTree(node, options);
-  if (!hasVisibleTests) return '';
+  if (!hasVisibleTests) {
+    return '';
+  }
 
   const hasFailed = hasFailedTestsInTree(node);
   let shouldCollapse = false;
@@ -57,7 +59,7 @@ export function generateDescribeGroupHtml(
   }
 
   return `
-    <div class="describe-group${shouldCollapse ? ' collapsed' : ''}" data-status="${node.status || 'passed'}" data-depth="${depth}" data-testid="describe-group" data-collapsed="${shouldCollapse}">
+    <div class="describe-group${shouldCollapse ? ' collapsed' : ''}" data-status="${node.status ?? 'passed'}" data-depth="${depth}" data-testid="describe-group" data-collapsed="${shouldCollapse}">
       <div class="describe-header" data-testid="describe-header">
         <i class="bi bi-chevron-down describe-chevron"></i>
         <span class="describe-name" data-testid="describe-name">${escapeHtml(node.name)}</span>
@@ -79,13 +81,18 @@ export function generateTestItemHtml(
     showDuration: boolean;
   },
 ): string {
-  if (test.status === 'passed' && !options.showPassed) return '';
-  if (test.status === 'failed' && !options.showFailed) return '';
+  if (test.status === 'passed' && !options.showPassed) {
+    return '';
+  }
+  if (test.status === 'failed' && !options.showFailed) {
+    return '';
+  }
   if (
     (test.status === 'pending' || test.status === 'skipped' || test.status === 'todo') &&
     !options.showPending
-  )
+  ) {
     return '';
+  }
 
   const statusIcon: Record<string, string> = {
     passed: 'bi-check-lg',
@@ -95,7 +102,7 @@ export function generateTestItemHtml(
     todo: 'bi-skip-forward-fill',
   };
 
-  const icon = test.isFlaky ? 'bi-arrow-repeat' : statusIcon[test.status] || 'bi-circle';
+  const icon = test.isFlaky ? 'bi-arrow-repeat' : (statusIcon[test.status] ?? 'bi-circle');
   const iconClass = test.isFlaky ? 'flaky' : test.status;
 
   const flakyBadge = test.isFlaky
