@@ -7,5 +7,5 @@ export function escapeHtml(text: string | null | undefined): string {
     '"': '&quot;',
     "'": '&#39;',
   };
-  return String(text).replace(/[&<>"']/g, char => htmlEntities[char]);
+  return String(text).replace(/[&<>"']/g, char => htmlEntities[char] ?? char);
 }

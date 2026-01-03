@@ -13,7 +13,7 @@ import type {
 } from './types';
 
 class JestHtmlReporter {
-  private globalConfig: Config.GlobalConfig;
+  public globalConfig: Config.GlobalConfig;
   private options: ReporterOptions;
 
   constructor(globalConfig: Config.GlobalConfig, options: ReporterOptions = {}) {
