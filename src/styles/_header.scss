@@ -108,8 +108,24 @@
     font-weight: 500;
   }
 
-  i {
-    font-size: vars.$font-size-xs;
+  .subnav-icon {
+    flex-shrink: 0;
+
+    &.passed {
+      fill: var(--color-passed);
+    }
+
+    &.failed {
+      fill: var(--color-failed);
+    }
+
+    &.skipped {
+      fill: var(--color-skipped);
+    }
+
+    &.flaky {
+      fill: var(--color-flaky);
+    }
   }
 }
 

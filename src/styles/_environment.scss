@@ -1,0 +1,68 @@
+@use 'variables' as vars;
+@use 'mixins' as mix;
+
+.environment-info {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: vars.$border-radius;
+  padding: vars.$spacing-md vars.$spacing-lg;
+  margin-bottom: vars.$spacing-lg;
+  font-size: vars.$font-size-sm;
+
+  .env-header {
+    @include mix.flex-center;
+    gap: vars.$spacing-sm;
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+
+    i {
+      @include mix.transition(transform);
+    }
+  }
+
+  &.collapsed .env-header i {
+    transform: rotate(-90deg);
+  }
+
+  .env-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+    gap: vars.$spacing-sm vars.$spacing-lg;
+    margin-top: vars.$spacing-md;
+    padding-top: vars.$spacing-md;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .env-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+
+    .env-label {
+      color: var(--text-muted);
+      font-size: vars.$font-size-xs;
+      text-transform: uppercase;
+      letter-spacing: 0.03125rem;
+    }
+
+    .env-value {
+      color: var(--text-primary);
+      font-family: vars.$font-family-mono;
+
+      a {
+        color: var(--color-accent);
+        text-decoration: none;
+        word-break: break-all;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  &.collapsed .env-grid {
+    display: none;
+  }
+}

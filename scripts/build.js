@@ -25,6 +25,13 @@ function step(name) {
   log(`\n▶ ${name}`, colors.cyan);
 }
 
+function clearDist() {
+  step('Clearing the dist directory');
+  if (fs.existsSync(DIST)) {
+    fs.rmSync(DIST, { recursive: true, force: true });
+  }
+}
+
 function success(message) {
   log(`  ✓ ${message}`, colors.green);
 }
@@ -91,6 +98,7 @@ function build() {
   log('\n🔨 Building @awmarquis/jest-html-reporter\n', colors.yellow);
 
   try {
+    clearDist();
     ensureDistDir();
     const css = compileSass();
     compileTypeScript();

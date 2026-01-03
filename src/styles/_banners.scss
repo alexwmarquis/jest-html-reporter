@@ -1,0 +1,20 @@
+@use 'variables' as vars;
+@use 'mixins' as mix;
+
+.interrupted-banner {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+  background: var(--color-failed-bg);
+  border: 1px solid var(--color-failed);
+  border-radius: vars.$border-radius;
+  padding: vars.$spacing-md vars.$spacing-lg;
+  margin-bottom: vars.$spacing-lg;
+  font-size: vars.$font-size-sm;
+  color: var(--color-failed);
+
+  i {
+    font-size: vars.$font-size-base;
+    flex-shrink: 0;
+  }
+}

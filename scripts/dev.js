@@ -11,6 +11,15 @@ const STYLES = path.join(SRC, 'styles');
 
 console.log('🔧 Development build...\n');
 
+function clearDist() {
+  console.log('▶ Clearing the dist directory...');
+  if (fs.existsSync(DIST)) {
+    fs.rmSync(DIST, { recursive: true, force: true });
+  }
+}
+
+clearDist();
+
 if (!fs.existsSync(DIST)) {
   fs.mkdirSync(DIST, { recursive: true });
 }

@@ -8,6 +8,8 @@
 
 @use 'header';
 @use 'report-header';
+@use 'environment';
+@use 'banners';
 @use 'progress-bar';
 @use 'suite';
 @use 'test';
