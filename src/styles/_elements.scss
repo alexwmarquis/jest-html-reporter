@@ -1,0 +1,15 @@
+@use 'variables' as vars;
+@use 'mixins' as mix;
+
+body {
+  font-family: vars.$font-family-sans;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: vars.$line-height-base;
+  min-height: 100vh;
+  font-size: vars.$font-size-base;
+}
+
+html {
+  @include mix.custom-scrollbar;
+}

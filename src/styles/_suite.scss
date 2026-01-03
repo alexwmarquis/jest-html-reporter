@@ -1,11 +1,11 @@
-@use 'variables' as *;
-@use 'mixins' as *;
+@use 'variables' as vars;
+@use 'mixins' as mix;
 
 .suite {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: $border-radius;
-  margin-bottom: $spacing-sm;
+  border-radius: vars.$border-radius;
+  margin-bottom: vars.$spacing-sm;
   overflow: hidden;
 
   &.collapsed .suite-body {
@@ -18,11 +18,11 @@
 }
 
 .suite-header {
-  @include flex-center;
-  padding: $spacing-md $spacing-lg;
+  @include mix.flex-center;
+  padding: vars.$spacing-md vars.$spacing-lg;
   cursor: pointer;
-  gap: $spacing-sm;
-  @include transition(background);
+  gap: vars.$spacing-sm;
+  @include mix.transition(background);
 
   &:hover {
     background: var(--bg-hover);
@@ -31,14 +31,14 @@
 
 .suite-chevron {
   color: var(--text-muted);
-  font-size: $font-size-xs;
-  @include transition(transform, 0.2s);
-  width: $spacing-lg;
+  font-size: vars.$font-size-xs;
+  @include mix.transition(transform, 0.2s);
+  width: vars.$spacing-lg;
   flex-shrink: 0;
 }
 
 .suite-name {
-  font-size: $font-size-base;
+  font-size: vars.$font-size-base;
   font-weight: 500;
   color: var(--text-primary);
 }
@@ -49,16 +49,16 @@
 
 .describe-group {
   border-left: 2px solid var(--border-color);
-  margin-left: $spacing-lg;
-  margin-top: $spacing-sm;
-  margin-bottom: $spacing-sm;
+  margin-left: vars.$spacing-lg;
+  margin-top: vars.$spacing-sm;
+  margin-bottom: vars.$spacing-sm;
 
   &:first-child {
-    margin-top: $spacing-sm;
+    margin-top: vars.$spacing-sm;
   }
 
   &:last-child {
-    margin-bottom: $spacing-sm;
+    margin-bottom: vars.$spacing-sm;
   }
 
   &.collapsed .describe-body {
@@ -70,18 +70,18 @@
   }
 
   .describe-group {
-    margin-left: $spacing-md;
+    margin-left: vars.$spacing-md;
   }
 }
 
 .describe-header {
-  @include flex-center;
-  padding: $spacing-sm $spacing-md;
+  @include mix.flex-center;
+  padding: vars.$spacing-sm vars.$spacing-md;
   cursor: pointer;
-  gap: $spacing-sm;
-  @include transition(background);
-  border-radius: $border-radius;
-  margin: 2px 0;
+  gap: vars.$spacing-sm;
+  @include mix.transition(background);
+  border-radius: vars.$border-radius;
+  margin: 0.125rem 0;
 
   &:hover {
     background: var(--bg-hover);
@@ -90,32 +90,18 @@
 
 .describe-chevron {
   color: var(--text-muted);
-  font-size: 10px;
-  @include transition(transform, 0.2s);
-  width: 14px;
+  font-size: 0.625rem;
+  @include mix.transition(transform, 0.2s);
+  width: 0.875rem;
   flex-shrink: 0;
 }
 
 .describe-name {
-  font-size: $font-size-sm;
+  font-size: vars.$font-size-sm;
   font-weight: 500;
   color: var(--text-primary);
 }
 
-.describe-count {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-left: auto;
-}
-
 .describe-body {
-  > .test-item {
-    padding-left: $spacing-lg;
-    border-bottom: none;
-    border-top: 1px solid rgba(var(--border-color), 0.5);
-
-    &:first-child {
-      border-top: none;
-    }
-  }
+  padding-left: 0;
 }

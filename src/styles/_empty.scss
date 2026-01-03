@@ -1,13 +1,13 @@
-@use 'variables' as *;
+@use 'variables' as vars;
 
 .empty-state {
   text-align: center;
-  padding: 60px $spacing-xxl;
+  padding: 3.75rem vars.$spacing-xxl;
   color: var(--text-muted);
 
   i {
-    font-size: 48px;
-    margin-bottom: $spacing-lg;
+    font-size: 3rem;
+    margin-bottom: vars.$spacing-lg;
     opacity: 0.5;
   }
 }

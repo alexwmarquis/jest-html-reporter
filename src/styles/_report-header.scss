@@ -1,0 +1,58 @@
+@use 'variables' as vars;
+@use 'mixins' as mix;
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: vars.$spacing-lg;
+  gap: vars.$spacing-lg;
+
+  @include mix.mobile {
+    flex-direction: column;
+    gap: vars.$spacing-sm;
+  }
+}
+
+.report-branding {
+  flex: 1;
+}
+
+.report-title-row {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-md;
+  margin-bottom: vars.$spacing-sm;
+
+  @include mix.mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: vars.$spacing-sm;
+  }
+}
+
+.report-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.report-subtitle {
+  font-size: vars.$font-size-sm;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.meta-info {
+  flex-shrink: 0;
+  text-align: right;
+  font-size: vars.$font-size-sm;
+  color: var(--text-secondary);
+  white-space: nowrap;
+
+  @include mix.mobile {
+    text-align: left;
+    order: -1;
+  }
+}

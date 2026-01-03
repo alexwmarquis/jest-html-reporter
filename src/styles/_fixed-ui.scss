@@ -1,0 +1,138 @@
+@use 'variables' as vars;
+@use 'mixins' as mix;
+
+.theme-toggle,
+.jump-to-top {
+  position: fixed;
+  right: vars.$spacing-xl;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  z-index: 1000;
+
+  &:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  i {
+    pointer-events: none;
+  }
+
+  @include mix.mobile {
+    right: vars.$spacing-md;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+.theme-toggle {
+  bottom: vars.$spacing-xl;
+
+  @include mix.mobile {
+    bottom: vars.$spacing-md;
+  }
+}
+
+.jump-to-top {
+  bottom: vars.$spacing-xl;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    all 0.2s ease,
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  z-index: 999;
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &.with-theme-toggle {
+    bottom: calc(#{vars.$spacing-xl} + 2.75rem + #{vars.$spacing-lg});
+  }
+
+  @include mix.mobile {
+    bottom: vars.$spacing-md;
+
+    &.with-theme-toggle {
+      bottom: calc(#{vars.$spacing-md} + 2.5rem + #{vars.$spacing-md});
+    }
+  }
+}
+
+.theme-menu {
+  position: fixed;
+  bottom: calc(#{vars.$spacing-xl} + 3.25rem);
+  right: vars.$spacing-xl;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: vars.$border-radius;
+  padding: vars.$spacing-xs 0;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  min-width: 8.75rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.625rem);
+  transition: all 0.2s ease;
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  @include mix.mobile {
+    bottom: calc(#{vars.$spacing-md} + 3rem);
+    right: vars.$spacing-md;
+  }
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-sm;
+  padding: vars.$spacing-sm vars.$spacing-md;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: vars.$font-size-sm;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+
+  &.active {
+    color: var(--color-accent);
+
+    &::before {
+      content: '✓';
+      margin-right: vars.$spacing-xs;
+    }
+  }
+}
+
+.color-preview {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.125rem;
+  border: 1px solid var(--border-color);
+}

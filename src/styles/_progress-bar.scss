@@ -1,0 +1,78 @@
+@use 'variables' as vars;
+@use 'mixins' as mix;
+
+.progress-bar-container {
+  margin-bottom: vars.$spacing-lg;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: vars.$border-radius;
+  padding: vars.$spacing-md vars.$spacing-lg;
+}
+
+.progress-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: vars.$spacing-sm;
+  font-size: vars.$font-size-sm;
+  color: var(--text-secondary);
+}
+
+.progress-bar-stats {
+  display: flex;
+  gap: vars.$spacing-lg;
+
+  @include mix.mobile {
+    flex-wrap: wrap;
+    gap: vars.$spacing-sm vars.$spacing-md;
+  }
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-xs;
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+
+  &.passed {
+    background: var(--color-passed);
+  }
+
+  &.failed {
+    background: var(--color-failed);
+  }
+
+  &.skipped {
+    background: var(--color-skipped);
+  }
+}
+
+.progress-bar {
+  height: 0.5rem;
+  background: var(--bg-hover);
+  border-radius: 0.25rem;
+  overflow: hidden;
+  display: flex;
+}
+
+.segment {
+  height: 100%;
+  transition: width 0.3s ease;
+
+  &.passed {
+    background: var(--color-passed);
+  }
+
+  &.failed {
+    background: var(--color-failed);
+  }
+
+  &.skipped {
+    background: var(--color-skipped);
+  }
+}
