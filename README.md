@@ -5,7 +5,7 @@ A beautiful, modern Jest HTML reporter with Bootstrap styling and customizable t
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178c6.svg)
 
-## [Live Demo](https://example.com)
+## [Live Demo](https://alexwmarquis.github.io/jest-html-reporter/)
 
 ## Features
 
