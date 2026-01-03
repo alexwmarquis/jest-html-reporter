@@ -7,7 +7,7 @@ export function generateReportHeader(
   logo?: string,
   logoHeight = 32,
 ): string {
-  const hasBranding = subtitle || logo;
+  const hasBranding = Boolean(subtitle ?? logo);
 
   return `
     <div class="report-header" data-testid="report-header">

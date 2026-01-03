@@ -1,4 +1,4 @@
-import { CustomColors } from '../../types';
+import type { CustomColors } from '../../types';
 
 export function generateCustomColorsCss(colors: CustomColors): string {
   const mappings: Record<keyof CustomColors, string> = {
@@ -22,7 +22,9 @@ export function generateCustomColorsCss(colors: CustomColors): string {
     }
   }
 
-  if (rules.length === 0) return '';
+  if (rules.length === 0) {
+    return '';
+  }
 
   return `:root {\n${rules.join('\n')}\n}`;
 }

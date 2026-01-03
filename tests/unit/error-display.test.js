@@ -263,7 +263,7 @@ test('renders multiple error blocks for multiple failure messages', () => {
   const data = createMockDataWithFailure(['Error: First failure', 'Error: Second failure']);
   const html = renderReport(data, { showFailed: true });
 
-  const errorBlockCount = (html.match(/data-testid="error-block-enhanced"/g) || []).length;
+  const errorBlockCount = (html.match(/data-testid="error-block-enhanced"/g) ?? []).length;
   expect(errorBlockCount).toBe(2);
 });
 

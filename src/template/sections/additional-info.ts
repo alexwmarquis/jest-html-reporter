@@ -2,7 +2,7 @@ import type { AdditionalInfo } from '../../types';
 import { escapeHtml } from '../utils';
 
 export function generateAdditionalInfoHtml(info: AdditionalInfo): string {
-  const title = info.title || 'Additional Information';
+  const title = info.title ?? 'Additional Information';
   const entries = Object.entries(info)
     .filter(
       ([key, value]) => key !== 'title' && value !== undefined && value !== null && value !== '',

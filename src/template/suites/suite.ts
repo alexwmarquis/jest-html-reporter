@@ -50,9 +50,7 @@ export function generateSuiteHtml(
     collapseAll: options.collapseAll,
   };
 
-  const testsHaveFailureMessages = suite.tests.some(
-    t => t.failureMessages && t.failureMessages.length > 0,
-  );
+  const testsHaveFailureMessages = suite.tests.some(t => t.failureMessages.length > 0);
   const showSuiteFailureMessage = suite.failureMessage && !testsHaveFailureMessages;
 
   return `
@@ -68,7 +66,7 @@ export function generateSuiteHtml(
             ? `
           <div class="test-item">
             <div class="test-content">
-              <div class="error-block">${escapeHtml(stripAnsi(suite.failureMessage || ''))}</div>
+              <div class="error-block">${escapeHtml(stripAnsi(suite.failureMessage ?? ''))}</div>
             </div>
           </div>
         `

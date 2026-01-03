@@ -14,7 +14,9 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
-  consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+  consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
+    /* mock */
+  });
 });
 
 afterEach(() => {

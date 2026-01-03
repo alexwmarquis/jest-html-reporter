@@ -8,7 +8,7 @@ const projectRoot = path.join(__dirname, '..', '..');
 const htmlReportPath = path.join(projectRoot, 'jest-report.html');
 const jsonReportPath = path.join(projectRoot, 'jest-report.json');
 
-teardown('should delete existing test results', async () => {
+teardown('should delete existing test results', () => {
   const reportPaths = [htmlReportPath, jsonReportPath];
 
   for (const reportPath of reportPaths) {

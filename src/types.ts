@@ -140,7 +140,7 @@ export interface EnvironmentInfo {
 
 export interface AdditionalInfo {
   title?: string | undefined;
-  [key: string]: string | undefined;
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 export interface TestTreeNode {

@@ -1,4 +1,4 @@
-import { ThemePreset } from '../../types';
+import type { ThemePreset } from '../../types';
 
 export function generateScript(options: {
   collapsePassed: boolean;

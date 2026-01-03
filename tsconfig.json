@@ -24,8 +24,19 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "allowJs": true
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "**/*.spec.ts", "**/*.test.ts"],
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "tests/**/*.js",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "*.config.js",
+    "*.config.mjs",
+    "*.config.ts",
+    "scripts/**/*.js"
+  ],
   "exclude": ["node_modules", "dist"]
 }
