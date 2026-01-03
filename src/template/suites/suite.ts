@@ -54,7 +54,7 @@ export function generateSuiteHtml(
   const showSuiteFailureMessage = suite.failureMessage && !testsHaveFailureMessages;
 
   return `
-    <div class="suite${shouldCollapse ? ' collapsed' : ''}" data-status="${suite.status}" data-has-failed="${hasFailed}" data-name="${escapeHtml(suite.name)}" data-testid="test-suite" data-collapsed="${shouldCollapse}">
+    <div class="suite${shouldCollapse ? ' collapsed' : ''}" data-status="${suite.status}" data-has-failed="${hasFailed}" data-name="${escapeHtml(suite.name)}" data-file="${escapeHtml(getFileName(suite.name))}" data-testid="test-suite" data-collapsed="${shouldCollapse}">
       <div class="suite-header" data-testid="suite-header">
         <i class="bi bi-chevron-down suite-chevron"></i>
         <span class="suite-name" data-testid="suite-name">${escapeHtml(displayName)}</span>
