@@ -76,7 +76,7 @@ function compileTypeScript() {
   step('Compiling TypeScript');
 
   try {
-    execSync('npx tsc', {
+    execSync('npx tsc -p tsconfig.build.json', {
       cwd: ROOT,
       stdio: 'inherit',
     });
